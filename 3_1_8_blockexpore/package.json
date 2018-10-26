@@ -1,0 +1,14 @@
+{
+  "name": "3_1_8_blockexpore",
+  "version": "1.0.0",
+  "description": "no desc",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "me",
+  "license": "ISC",
+  "dependencies": {
+    "blockexplorer": "^1.0.1"
+  }
+}
