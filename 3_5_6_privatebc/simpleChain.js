@@ -4,17 +4,58 @@
 
 const SHA256 = require('crypto-js/sha256');
 
+// -----------------------SPECIFICATION 1) Configure levelDB to persist dataset
+let level = require('level');
+let chainDB = './simplechaindata2';
+let db = level(chainDB);
+
+
+/* ===== Level DB Utilities ============================
+|  LevelDB utilities                                   |
+|  ====================================================*/
+
+// Add data to levelDB with key/value pair
+function addLevelDBData(key, value) {
+  db.put(key, value, function (err) {
+    if (err) return console.log('Block ' + key + ' submission failed', err);
+  })
+}
+
+// Get data from levelDB with key
+function getLevelDBData(key) {
+  db.get(key, function (err, value) {
+    if (err) return console.log('Not found!', err);
+    console.log('Value = ' + value);
+  })
+}
+
+// Add data to levelDB with value
+function addDataToLevelDB(value) {
+  let i = 0;
+  db.createReadStream().on('data', function (data) {
+    i++;
+  }).on('error', function (err) {
+    return console.log('Unable to read data stream!', err)
+  }).on('close', function () {
+    console.log('addData.on readstream close; Block #' + i);
+    addLevelDBData(i, value);
+  });
+}
+
+
 /* ===== Block Class ===================================
 |  Class with a constructor for block data model       |
 |  ====================================================*/
 
 class Block {
-  constructor(data){
+  constructor(data) {
     this.height = '';
     this.timeStamp = '';
     this.data = data;
     this.previousHash = '0x';
     this.hash = '';
+    console.log('Created new block with data: ' + data);
+
   }
 }
 
@@ -29,29 +70,127 @@ class Block {
 |     - validateChain()                                |
 |  ====================================================*/
 
-class Blockchain{
-    constructor(){
-      // new chain array
-      this.chain = [];
-      // add first genesis block
-      this.addBlock(this.createGenesisBlock());
-   }
-
-  createGenesisBlock(){
-    return new Block("First block in the chain - Genesis block");
+class Blockchain {
+  constructor() {
+    // new chain array
+    this.chain = [];
+    // add first genesis block
+    // this.addBlock(this.createGenesisBlock());
   }
 
-// addBlock method
-  addBlock(newBlock){
-    newBlock.height = this.chain.length;
-    newBlock.timeStamp = new Date().getTime().toString().slice(0,-3);
-    if (this.chain.length>0) {
+  createGenesisBlock() {
+    let genesisBlk = new Block("First block in the chain - Genesis block");
+    genesisBlk.height = 0
+    return genesisBlk;
+  }
+
+  // General method to add blocks 
+  addBlock(thisBlock) {
+    console.log('Adding block at height: ' + thisBlock.height)
+    let rawBlockText = JSON.stringify(thisBlock);
+
+    thisBlock.timeStamp = new Date().getTime().toString().slice(0, -3);
+    if (this.chain.length > 0) {
       // previous block hash
-      newBlock.previousHash = this.chain[this.chain.length-1].hash;
+      thisBlock.previousHash = this.chain[this.chain.length - 1].hash;
     }
     // SHA256 requires a string of data
-    newBlock.hash = SHA256(JSON.stringify(newBlock)).toString();
+    thisBlock.hash = SHA256(JSON.stringify(thisBlock)).toString();
+
     // add block to chain
-    this.chain.push(newBlock);
+
+    console.log('Ready to add raw block:' + rawBlockText);
+    this.chain.push(thisBlock);
+
+    // -----------------------SPECIFICATION 2) Modify to persist in LDB
+    console.log('Adding block ' + thisBlock.height + ' to DB');
+    addLevelDBData(thisBlock.height, rawBlockText)
+
+
   }
+
+  // addNewBlock method 
+  addNewBlock(newBlock) {
+    // Check if the chain is empty
+    if (Array.isArray(this.chain) && this.chain.length) {
+      // array exists and is not empty
+      newBlock.height = this.chain.length;
+    } else {
+      // array does not exist, create the genesis block first
+      console.log('Need to create genesis block!');
+      let genesisBlock = this.createGenesisBlock()
+      genesisBlock.height = 0
+      this.addBlock(genesisBlock)
+
+      // And now add the block
+      newBlock.height = this.chain.length;
+      this.addBlock(newBlock)
+    }
+  }
+
+  getAllBlocks(readStream) {
+    return new Promise((resolve, reject) => {
+      let blocks = []
+      readStream.on('data', function (data) {
+        let blockText = data.value
+        let block_obj = JSON.parse(blockText)
+        blocks.push(block_obj)
+      }).on('end', () => resolve(blocks))
+    })
+  }
+
+  loadBlocks() {
+    var readStream = db.createReadStream();
+
+    this.getAllBlocks(readStream).then(function (data) {
+      console.log(data);
+      console.log('Finished');
+    });
+  }
+
 }
+// TEST 1
+// let sample_block = new Block('Hi')
+// console.log("This is a block: " + sample_block.data);
+
+
+let myBlockChain = new Blockchain;
+
+myBlockChain.loadBlocks()
+
+/*
+// Get existing blocks from DB
+var readStream = db.createReadStream();
+// console.log(readStream);
+
+let raw_blocks = []
+let simplearray = []
+readstream.on('data', function (data) {
+  // each key/value is returned as a 'data' event
+  let blocktext = data.value
+  let block_obj = json.parse(blocktext)
+  console.log('found following blocks in db:');
+  console.log(data.key + ' = ' + block_obj + ' height: ' + block_obj.height, ', data: ' + block_obj.data);
+  raw_blocks.push(block_obj)
+  simplearray.push(1)
+});
+console.log(raw_blocks);
+console.log(simplearray);
+
+(function theLoop(i) {
+  setTimeout(function () {
+    let blockTest = new Block("Test Block - " + (i + 1));
+    // myBlockChain.addNewBlock(blockTest).then((result) => {
+    //     console.log(result);
+    //     i++;
+    //     if (i < 10) theLoop(i);
+    // });
+
+    myBlockChain.addNewBlock(blockTest);
+  }, 1000);
+})(0);
+
+
+
+
+*/

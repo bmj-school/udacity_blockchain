@@ -29,11 +29,27 @@ function addDataToLevelDB(value) {
         }).on('error', function(err) {
             return console.log('Unable to read data stream!', err)
         }).on('close', function() {
-          console.log('Block #' + i);
+          console.log('addData.on readstream close; Block #' + i);
           addLevelDBData(i, value);
         });
 }
 
+
+
+// Add data to levelDB with value
+function getMyData(value) {
+    let i = 0;
+    db.createReadStream().on('data', function(data) {
+          i++;
+        }).on('error', function(err) {
+            return console.log('Unable to read data stream!', err)
+        }).on('close', function() {
+          console.log('getData.on readstream close; Block #' + i);
+          res = getLevelDBData(i);
+          console.log('Res'+res);
+          
+        });
+}
 /* ===== Testing ==============================================================|
 |  - Self-invoking function to add blocks to chain                             |
 |  - Learn more:                                                               |
@@ -46,9 +62,17 @@ function addDataToLevelDB(value) {
 |  ===========================================================================*/
 
 
+// (function theLoop (i) {
+//   setTimeout(function () {
+//     addDataToLevelDB('Testing data');
+//     if (--i) theLoop(i);
+//   }, 100);
+// })(10);
+let i = 50
 (function theLoop (i) {
   setTimeout(function () {
-    addDataToLevelDB('Testing data');
+    getMyData('Testing data');
     if (--i) theLoop(i);
   }, 100);
 })(10);
+
