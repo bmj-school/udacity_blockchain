@@ -7,6 +7,7 @@ function fetchAvaterUrl(userId){
 }
 
 const result = fetchAvaterUrl(123)
+console.log(result)
 console.log('result ' + result);
 console.log('Type is a: '+ result.constructor.name);
 
@@ -14,3 +15,6 @@ console.log('Type is a: ' + typeof result);
 
 console.log(result)
 
+result.then(function() {
+    console.log(result);
+})

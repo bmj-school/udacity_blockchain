@@ -68,7 +68,7 @@ function getMyData(value) {
 //     if (--i) theLoop(i);
 //   }, 100);
 // })(10);
-let i = 50
+let i = 50;
 (function theLoop (i) {
   setTimeout(function () {
     getMyData('Testing data');
