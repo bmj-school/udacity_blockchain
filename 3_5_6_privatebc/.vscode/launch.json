@@ -4,18 +4,23 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "readChain",
+            "program": "${workspaceFolder}/src/readChain.js"
+        },
         {
             "type": "node",
             "request": "launch",
             "name": "Level SB",
-            "program": "${workspaceFolder}/levelSandbox.js"
+            "program": "${workspaceFolder}/src/levelSandbox.js"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "simpleChain",
-            "program": "${workspaceFolder}/simpleChain.js"
+            "program": "${workspaceFolder}/src/simpleChain.js"
         }
     ]
 }
