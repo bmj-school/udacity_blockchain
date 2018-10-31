@@ -42,7 +42,7 @@ function addLevelDBData(key, value) {
   })
 }
 
-
+for(0,10,)
 addLevelDBData(0, 'test1').then(
   console.log('Finished')
 )
