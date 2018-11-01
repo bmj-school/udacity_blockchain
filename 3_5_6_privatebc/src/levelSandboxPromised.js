@@ -21,7 +21,7 @@ function addLevelDBData(key, value) {
         reject(err)
       }
       else {
-        console.log(`|Promise resolved| Adding key:value [${key}:${value}]`)
+        // console.log(`|Promise resolved| Adding key:value [${key}:${value}]`)
         resolve(value)
       }
     })
@@ -36,7 +36,7 @@ function getLevelDBData(key) {
       if (err) {
         reject(err)
       } else {
-        console.log(`|Promise resolved| Retrieving key:${key}`);
+        //console.log(`|Promise resolved| Retrieving key:${key}`);
         resolve(value)
       }
     })
@@ -53,7 +53,7 @@ function getNumElements() {
     }).on('error', (error) => {
       reject(error)
     }).on('close', () => {
-      console.log(`|Promise resolved| Number elements:${num}`);
+      // console.log(`|Promise resolved| Number elements:${num}`);
       resolve(num)
     })
   })
