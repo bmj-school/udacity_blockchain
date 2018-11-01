@@ -9,6 +9,8 @@ const chainDB = './chaindata';
 const db = level(chainDB);
 
 exports.addLevelDBData = addLevelDBData;
+exports.getLevelDBData = getLevelDBData;
+exports.getNumElements = getNumElements;
 
 // Add data to levelDB with key/value pair PROMISED
 function addLevelDBData(key, value) {
@@ -52,14 +54,13 @@ function getNumElements() {
       reject(error)
     }).on('close', () => {
       console.log(`|Promise resolved| Number elements:${num}`);
-      
       resolve(num)
     })
   })
 }
 
 
-
+/* FOR TESTING
 
 // for (var i = 1; i < 11; i += 1) {
 //   console.log(i);
@@ -85,3 +86,6 @@ for (var i = 1; i < 10; i++) {
     console.log(`\t${value}`)
   })
 }
+
+
+*/
