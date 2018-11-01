@@ -1,5 +1,5 @@
 // Use LDB to load all JSON values
-// Utility to check what is in the DB
+// Utility to check what is in the DB!
 
 let level = require('level');
 let chainDB = './chaindata';

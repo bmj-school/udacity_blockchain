@@ -84,7 +84,7 @@ class Blockchain {
   async validateBlock(blockHeight) {
     // get block object
     let block = await this.getBlock(blockHeight);
-    
+
     // get block hash
     let blockHash = block.hash;
 
@@ -102,7 +102,7 @@ class Blockchain {
       return false;
     }
   }
-  
+
   // CRITERIA - Validate persisted blockchain
   // Validate blockchain
   async validateChain() {
@@ -113,13 +113,13 @@ class Blockchain {
     for (var i = 0; i < blockHeight; i++) {
       console.log(`Checking block ${i} ...`);
       this.getBlock(i).then((block) => {
-          this.validateBlock(block.height).then((isValid)=> {
-            console.log(isValid);
-            if (!isValid) { errorLog.push(i) } 
-            if (block.previousBlockHash !== previousHash) { errorLog.push(i) }
-            previousHash = block.hash 
-          })
+        this.validateBlock(block.height).then((isValid) => {
+          console.log(isValid);
+          if (!isValid) { errorLog.push(i) }
+          if (block.previousBlockHash !== previousHash) { errorLog.push(i) }
+          previousHash = block.hash
         })
+      })
     }
     if (errorLog.length > 0) {
       console.log('Block errors = ' + errorLog.length);
@@ -149,7 +149,7 @@ class Blockchain {
 
 let blockchain = new Blockchain();
 
-(function theLoop (i) {
+(function theLoop(i) {
   setTimeout(() => {
     blockchain.addBlock(new Block(`Test data ${i}`)).then(() => {
       if (--i) {
