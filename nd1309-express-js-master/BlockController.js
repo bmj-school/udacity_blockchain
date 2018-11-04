@@ -24,15 +24,27 @@ class BlockController {
     getBlockByIndex() {
         this.app.get("/api/block/:index", (req, res) => {
             // Add your code here
+            var blockHeight =req.params.index;
+            console.log('Got request to get block height ' + blockHeight);
+
+            var block = this.blocks[blockHeight]
+            var block_text = JSON.stringify(block)
+            res.status(200).send('Got request to get block height ' + blockHeight + '\n' + block_text);
+            // return res;
+            
         });
     }
-
     /**
      * Implement a POST Endpoint to add a new Block, url: "/api/block"
      */
-    postNewBlock() {
+    postNewBlock() { 
         this.app.post("/api/block", (req, res) => {
             // Add your code here
+            var blockData = req.body
+            console.log(blockData);
+            
+            res.status(200).send('Adding block ' + blockData)
+
         });
     }
 
