@@ -42,8 +42,14 @@ class BlockController {
             // Add your code here
             var blockData = req.body
             console.log(blockData);
+            console.dir(blockData)
+            console.log(JSON.stringify(blockData));
             
-            res.status(200).send('Adding block ' + blockData)
+            res.status(200).send('Adding block ' + JSON.stringify(blockData))
+
+            // Get the height
+            // Add the height, time, hash
+            // Push to list
 
         });
     }
