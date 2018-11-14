@@ -3,14 +3,14 @@
 |  =========================================================*/
 
 const SHA256 = require('crypto-js/sha256');
-const dbtools = require('./levelSandboxPromised')
-
+const dbtools = require('./levelSandboxPromised');
 console.log(`Level DB tools module loaded`);
-// These utility functions are loaded: 
-dbtools.addLevelDBData; // Promised version
-dbtools.getLevelDBData; // Promised version
-dbtools.getNumElements; // Promised version
 
+
+// These utility functions are loaded: 
+// dbtools.addLevelDBData (Promised version)
+// dbtools.getLevelDBData (Promised version)
+// dbtools.getNumElements (Promised version)
 
 /* ===== Block Class ==============================
 |  Class with a constructor for block 			   |
@@ -147,16 +147,18 @@ class Blockchain {
 
 
 
-let blockchain = new Blockchain();
+// let blockchain = new Blockchain();
 
-(function theLoop(i) {
-  setTimeout(() => {
-    blockchain.addBlock(new Block(`Test data ${i}`)).then(() => {
-      if (--i) {
-        theLoop(i)
-      }
-    })
-  }, 100);
-})(10);
+// (function theLoop(i) {
+//   setTimeout(() => {
+//     blockchain.addBlock(new Block(`Test data ${i}`)).then(() => {
+//       if (--i) {
+//         theLoop(i)
+//       }
+//     })
+//   }, 100);
+// })(10);
 
-setTimeout(() => blockchain.validateChain(), 2000)
+// setTimeout(() => blockchain.validateChain(), 2000)
+
+module.exports.Blockchain = Blockchain

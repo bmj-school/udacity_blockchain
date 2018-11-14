@@ -1,9 +1,16 @@
 const SHA256 = require('crypto-js/sha256');
 const BlockClass = require('./Block.js');
 
+const blockchain = require('./simpleChain');
+console.log(`Blockchain module loaded`);
+console.log('Blockchain = ' + typeof blockchain.Blockchain);
+// bc = new blockchain.blockchain
+// console.log(bc);
+
 /**
  * Controller Definition to encapsulate routes to work with blocks
  */
+
 class BlockController {
 
     /**
@@ -18,6 +25,7 @@ class BlockController {
         this.postNewBlock();
         this.helloGet();
         this.helloPost();
+        this.helloPostUser();
     }
 
     helloGet(){
@@ -31,7 +39,17 @@ class BlockController {
             }
         });
     }
-
+    helloGet2(){
+        // Test route
+        this.server.route({
+            method:'GET',
+            path:'/api/hellox',
+            handler:function(request,h) {
+                console.log(request.payload);
+                return'hello world2';
+            }
+        });
+    }
     helloPost(){
         // Test route
         this.server.route({
@@ -46,14 +64,38 @@ class BlockController {
         });
     }
 
+    testGetParam(){
+        this.server.route({
+            method: 'GET',
+            path: '/get/{name}',
+            handler: (request, h) => {
+        
+                return 'Hello, ' + encodeURIComponent(request.params.name) + '!';
+            }
+        });
+    }
+    testGetParam2(){
+        this.server.route({
+            method: 'GET',
+            path: '/get/one',
+            handler: (request, h) => {
+        
+                return 'Hello, one';
+            }
+        });
+    }
+
+
     helloPostUser(){
         // Test route
         this.server.route({
             method:'GET',
-            path:'/api/greet/{user}',
+            path:'/api/greet/{user}', 
             handler:function(request,h) {
-                // console.log(request.payload);
+                            // console.log(request.payload);
                 // console.log(JSON.stringify(request.payload));
+                console.log('greet/user');
+                
                 var usr = encodeURIComponent(request.params.user)
                 return `hello ${usr}`;
             }
