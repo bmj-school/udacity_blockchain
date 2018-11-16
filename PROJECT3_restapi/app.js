@@ -21,7 +21,8 @@ class BlockAPI {
      * Initilization of all the controllers
      */
 	initControllers() {
-		require("./BlockController.js")(this.server);
+        require("./TestController.js")(this.server); // For learning Hapi
+        require("./BlockController.js")(this.server); // For project 3
 	}
     
     async start() {

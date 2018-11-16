@@ -1,5 +1,5 @@
 const SHA256 = require('crypto-js/sha256');
-const BlockClass = require('./Block.js');
+
 
 /**
  * Controller Definition to encapsulate routes to work with blocks
@@ -18,60 +18,7 @@ class BlockController {
         this.postNewBlock();
         this.helloGet();
         this.helloPost();
-    }
-
-    helloGet(){
-        // Test route
-        this.server.route({
-            method:'GET',
-            path:'/api/hello',
-            handler:function(request,h) {
-                console.log(request.payload);
-                return'hello world';
-            }
-        });
-    }
-
-    helloPost(){
-        // Test route
-        this.server.route({
-            method:'POST',
-            path:'/api/hello',
-            handler:function(request,h) {
-                // console.log(request.payload);
-                console.log(JSON.stringify(request.payload));
-                
-                return'hello world';
-            }
-        });
-    }
-
-    helloPostUser(){
-        // Test route
-        this.server.route({
-            method:'GET',
-            path:'/api/greet/{user}',
-            handler:function(request,h) {
-                // console.log(request.payload);
-                // console.log(JSON.stringify(request.payload));
-                var usr = encodeURIComponent(request.params.user)
-                return `hello ${usr}`;
-            }
-        });
-    }
-
-    helloPostIndex(){
-        // Test route
-        this.server.route({
-            method:'GET',
-            path:'/api/number/{index}',
-            handler:function(request,h) {
-                // console.log(request.payload);
-                // console.log(JSON.stringify(request.payload));
-                var idx = encodeURIComponent(request.params.index)
-                return `hello ${idx}`;
-            }
-        });
+        this.helloGreetUser();
     }
     /**
      * Implement a GET Endpoint to retrieve a block by index, url: "/api/block/:index"
@@ -81,6 +28,8 @@ class BlockController {
             method: 'GET',
             path: '/api/block/{index}',
             handler: (request, h) => {
+                
+
                
             }
         });
@@ -104,6 +53,8 @@ class BlockController {
      */
     initializeMockData() {
         if(this.blocks.length === 0){
+            console.log('No blocks found - creating mock data');
+            
             for (let index = 0; index < 10; index++) {
                 let blockAux = new BlockClass.Block(`Test Data #${index}`);
                 blockAux.height = index;

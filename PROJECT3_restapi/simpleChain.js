@@ -7,9 +7,9 @@ const dbtools = require('./levelSandboxPromised')
 
 console.log(`Level DB tools module loaded`);
 // These utility functions are loaded: 
-dbtools.addLevelDBData; // Promised version
-dbtools.getLevelDBData; // Promised version
-dbtools.getNumElements; // Promised version
+// dbtools.addLevelDBData; // Promised version
+// dbtools.getLevelDBData; // Promised version
+// dbtools.getNumElements; // Promised version
 
 
 /* ===== Block Class ==============================
