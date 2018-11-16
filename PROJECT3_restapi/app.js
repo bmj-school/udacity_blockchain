@@ -1,5 +1,5 @@
 const Hapi = require('hapi');
-
+const boom = require('boom');
 /**
  * Class Definition for the REST API
  */

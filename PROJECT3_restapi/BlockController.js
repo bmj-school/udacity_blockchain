@@ -61,8 +61,22 @@ class BlockController {
             method: 'POST',
             path: '/api/block',
             handler: (request, h) => {
-                // var data = JSON.stringify(request.payload)
-                // console.log(request.payload.data);
+                // var body = JSON.parse(JSON.stringify(request.body));
+
+
+                // ERROR: No data key
+                //TODO: This doesn't work!
+                if (request.body && Object.prototype.hasOwnProperty.call(request.body, 'data')) {
+                    return boom.badRequest('API requires a \'data\' key-value pair in x-www-form-urlencoded');
+                }
+                // if (!body.hasOwnProperty('data')) {
+                //     return boom.badRequest('API requires a \'data\' key-value pair in x-www-form-urlencoded');
+                // }
+                if (!request.payload.hasOwnProperty('data')){
+                    console.log('Missing data field');
+                }
+
+                
                 var data = request.payload.data;
                 console.log('POST /block data=' + data);
                 var block = new blockchain.Block(data)
