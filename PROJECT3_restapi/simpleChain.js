@@ -52,21 +52,35 @@ class Blockchain {
   // CRITERIA - Add persisted block 
   // Add new block
   async addBlock(newBlock) {
+    
     // Block height
     const cur_height = await this.getBlockHeight()
     newBlock.height = cur_height //+ 1
-
+    console.log('addBlock at height ' + newBlock.height);
+    
     // UTC timestamp
     newBlock.time = new Date().getTime().toString().slice(0, -3);
 
     // previous block hash
-    if (this.chain.length > 0) {
-      newBlock.previousBlockHash = this.chain[this.chain.length - 1].hash;
+    if (cur_height > 1) {
+      
+      newBlock.previousBlockHash = this.getBlock(cur_height-1).hash;
+      console.log('Prev hash added ' + newBlock.previousBlockHash);
+      // this.chain[cur_height - 1].hash;
     }
+
+    if (newBlock.height > 0) {
+      const prevBlock = await this.getBlock(height)
+      newBlock.previousBlockHash = prevBlock.hash
+      console.log(`Previous hash: ${newBlock.previousBlockHash}`)
+    }
+
+
 
     // Block hash with SHA256 using newBlock and converting to a string
     newBlock.hash = SHA256(JSON.stringify(newBlock)).toString();
 
+    console.log('Complete new block: ' + JSON.stringify(newBlock));
     // Adding block object to chain
     await dbtools.addLevelDBData(newBlock.height, JSON.stringify(newBlock))
   }
@@ -163,3 +177,4 @@ class Blockchain {
 // setTimeout(() => blockchain.validateChain(), 2000)
 
 module.exports.Blockchain = Blockchain
+module.exports.Block = Block
