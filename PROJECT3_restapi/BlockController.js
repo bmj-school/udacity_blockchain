@@ -1,9 +1,7 @@
 const SHA256 = require('crypto-js/sha256');
-
-
 const blockchain = require('./simpleChain');
 console.log(`Blockchain module loaded`);
-console.log('Blockchain = ' + typeof blockchain.Blockchain);
+// console.log('Blockchain = ' + typeof blockchain.Blockchain);
 // bc = new blockchain.blockchain
 // console.log(bc);
 
@@ -20,11 +18,9 @@ class BlockController {
     constructor(server) {
         this.server = server;
         this.blocks = [];
-        this.initializeMockData();
+        // this.initializeMockData();
         this.getBlockByIndex();
         this.postNewBlock();
-        this.helloGet();
-        this.helloPost();
 
     }
     /**
@@ -50,6 +46,7 @@ class BlockController {
             method: 'POST',
             path: '/api/block',
             handler: (request, h) => {
+                
                 
             }
         });
