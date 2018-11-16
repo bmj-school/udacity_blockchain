@@ -1,9 +1,16 @@
 const SHA256 = require('crypto-js/sha256');
 
 
+const blockchain = require('./simpleChain');
+console.log(`Blockchain module loaded`);
+console.log('Blockchain = ' + typeof blockchain.Blockchain);
+// bc = new blockchain.blockchain
+// console.log(bc);
+
 /**
  * Controller Definition to encapsulate routes to work with blocks
  */
+
 class BlockController {
 
     /**
@@ -18,7 +25,7 @@ class BlockController {
         this.postNewBlock();
         this.helloGet();
         this.helloPost();
-        this.helloGreetUser();
+
     }
     /**
      * Implement a GET Endpoint to retrieve a block by index, url: "/api/block/:index"
