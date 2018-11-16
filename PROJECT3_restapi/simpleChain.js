@@ -62,15 +62,8 @@ class Blockchain {
     newBlock.time = new Date().getTime().toString().slice(0, -3);
 
     // previous block hash
-    if (cur_height > 1) {
-      
-      newBlock.previousBlockHash = this.getBlock(cur_height-1).hash;
-      console.log('Prev hash added ' + newBlock.previousBlockHash);
-      // this.chain[cur_height - 1].hash;
-    }
-
     if (newBlock.height > 0) {
-      const prevBlock = await this.getBlock(height)
+      const prevBlock = await this.getBlock(cur_height-1)
       newBlock.previousBlockHash = prevBlock.hash
       console.log(`Previous hash: ${newBlock.previousBlockHash}`)
     }
