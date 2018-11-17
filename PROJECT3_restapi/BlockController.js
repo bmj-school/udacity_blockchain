@@ -30,7 +30,7 @@ class BlockController {
     /**
      * Implement a GET Endpoint to retrieve a block by index, url: "/api/block/:index"
      */
-    // POST - REVIEW CORRECTION 
+    // POST-REVIEW CORRECTION 
     // This endpoint should be /block/{index}
     getBlockByIndex() {
         this.server.route({
@@ -41,15 +41,15 @@ class BlockController {
                 console.log('GET /block/' + idx);
                 let idx_num = Number(idx);
                 if (!Number.isInteger(idx_num)) {
-                    return boom.badRequest('Invalid query, non-integer index was passed: '+idx)
+                    return boom.badRequest('Invalid query, non-integer index was passed: ' + idx)
                 }
                 let height = await this.blockchain.getBlockHeight();
-                if (idx_num >= height){
+                if (idx_num >= height) {
                     console.log(idx_num, '>=', height);
-                    return boom.badRequest('Invalid query, the greatest block index (zero-indexed!) is: ' + (height-1));
-                } 
+                    return boom.badRequest('Invalid query, the greatest block index (zero-indexed!) is: ' + (height - 1));
+                }
                 let block = await this.blockchain.getBlock(idx);
-                return block 
+                return block
             }
         });
     }
@@ -71,8 +71,8 @@ class BlockController {
      * Implement a POST Endpoint to add a new Block, url: "/api/block"
      * Uses x-www-form-urlencoded POST
     */
-    // POST - REVIEW CORRECTION 
-    // This endpoint should be /block/{index}/
+    // POST-REVIEW CORRECTION 
+    // This endpoint should be /block
     postNewBlock() {
         this.server.route({
             method: 'POST',
@@ -89,23 +89,31 @@ class BlockController {
                 // if (!body.hasOwnProperty('data')) {
                 //     return boom.badRequest('API requires a \'data\' key-value pair in x-www-form-urlencoded');
                 // }
-                if (!request.payload.hasOwnProperty('data')){
-                    console.log('Missing data field');
-                }
+
                 ****************/
-                console.log();
-                
-                try {
-                    var data = request.payload.data;
-                    console.log('POST /block data=' + data);
-                    var block = new blockchain.Block(data);
-                    console.log(block);
-                    
-                    block = await this.blockchain.addBlock(block);
-                    return h.response(block).code(201);
-                } catch (err)  {
-                    console.log(err);
-                    return boom.badImplementation('Error ', err);
+                var data = request.payload.data;
+                console.log('POST /block data=' + data);
+
+                // POST-REVIEW CORRECTION
+                // Check if the data parameter is present and then create block only if the data is a non-empty string.
+                // Otherwise, respond with an error.
+                if (typeof data === 'undefined') {
+                    console.log('Missing data key');
+                    return boom.badData('Missing data key')
+                } else if (data === "") {
+                    console.log('Empty data value');
+                    return boom.badData('Empty data value')
+                } else {
+                    try {
+                        let block = new blockchain.Block(data);
+                        // console.log(block);
+                        console.log('Block added');
+                        block = await this.blockchain.addBlock(block);
+                        return h.response(block).code(201);
+                    } catch (err) {
+                        console.log(err);
+                        return boom.badImplementation('Error ', err);
+                    }
                 }
             }
         });
@@ -122,7 +130,7 @@ class BlockController {
                 var valid = await this.blockchain.validateChain();
                 console.log(valid);
                 return h.response(valid).code(200)
-                
+
             }
         })
     }
@@ -130,9 +138,9 @@ class BlockController {
      * Help method to inizialized Mock dataset, adds 10 test blocks to the blocks array
      */
     initializeMockData() {
-        if(this.blocks.length === 0){
+        if (this.blocks.length === 0) {
             console.log('No blocks found - creating mock data');
-            
+
             for (let index = 0; index < 10; index++) {
                 let blockAux = new BlockClass.Block(`Test Data #${index}`);
                 blockAux.height = index;
@@ -149,4 +157,4 @@ class BlockController {
  * Exporting the BlockController class
  * @param {*} server 
  */
-module.exports = (server) => { return new BlockController(server);}
+module.exports = (server) => { return new BlockController(server); }
