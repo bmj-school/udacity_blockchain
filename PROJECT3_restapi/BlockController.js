@@ -77,7 +77,7 @@ class BlockController {
                 // var body = JSON.parse(JSON.stringify(request.body));
 
 
-                /*********** TODO: This doesn't work! How to assert body?
+                /*********** TODO: This doesn't work! How to assert valid body?
                 // ERROR: No data key
                 if (request.body && Object.prototype.hasOwnProperty.call(request.body, 'data')) {
                     return boom.badRequest('API requires a \'data\' key-value pair in x-www-form-urlencoded');

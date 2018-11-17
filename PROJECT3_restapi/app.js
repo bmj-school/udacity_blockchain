@@ -1,5 +1,4 @@
 const Hapi = require('hapi');
-const boom = require('boom');
 /**
  * Class Definition for the REST API
  */
@@ -10,7 +9,7 @@ class BlockAPI {
      */
     constructor() {
 		this.server = Hapi.Server({
-            port: 3000,
+            port: 8000,
             host: 'localhost'
         });
         this.initControllers();
