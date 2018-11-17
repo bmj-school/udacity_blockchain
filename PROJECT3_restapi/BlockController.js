@@ -40,12 +40,12 @@ class BlockController {
                 if (!Number.isInteger(idx_num)) {
                     return boom.badRequest('Invalid query, non-integer index was passed: '+idx)
                 }
-                var height = await this.blockchain.getBlockHeight()
+                var height = await this.blockchain.getBlockHeight();
                 if (idx_num >= height){
                     console.log(idx_num, '>=', height);
                     return boom.badRequest('Invalid query, the greatest block index (zero-indexed!) is: ' + (height-1));
                 } 
-                var block = this.blockchain.getBlock(idx)
+                var block = await this.blockchain.getBlock(idx);
                 return block 
             }
         });
@@ -87,11 +87,14 @@ class BlockController {
                     console.log('Missing data field');
                 }
                 ****************/
-
+                console.log();
+                
                 try {
                     var data = request.payload.data;
                     console.log('POST /block data=' + data);
                     var block = new blockchain.Block(data);
+                    console.log(block);
+                    
                     block = await this.blockchain.addBlock(block);
                     return h.response(block).code(201);
                 } catch (err)  {
@@ -102,6 +105,20 @@ class BlockController {
         });
     }
 
+
+    validateChain() {
+        this.server.route({
+            method: 'GET',
+            path: '/api/validate',
+            handler: async (request, h) => {
+                console.log('GET /api/validate');
+                valid = await this.blockchain.validateChain();
+                console.log(valid);
+                return h.response(valid).code(200)
+                
+            }
+        })
+    }
     /**
      * Help method to inizialized Mock dataset, adds 10 test blocks to the blocks array
      */

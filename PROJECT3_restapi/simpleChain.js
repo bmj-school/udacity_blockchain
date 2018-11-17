@@ -19,7 +19,8 @@ console.log(`Level DB tools module loaded`);
 
 class Block {
   constructor(data) {
-    this.hash = "",
+    this.data = data,
+      this.hash = "",
       this.height = 0,
       this.body = data,
       this.time = 0,
@@ -52,18 +53,18 @@ class Blockchain {
   // CRITERIA - Add persisted block 
   // Add new block
   async addBlock(newBlock) {
-    
+
     // Block height
     const cur_height = await this.getBlockHeight()
     newBlock.height = cur_height //+ 1
     console.log('addBlock at height ' + newBlock.height);
-    
+
     // UTC timestamp
     newBlock.time = new Date().getTime().toString().slice(0, -3);
 
     // previous block hash
     if (newBlock.height > 0) {
-      const prevBlock = await this.getBlock(cur_height-1)
+      const prevBlock = await this.getBlock(cur_height - 1)
       newBlock.previousBlockHash = prevBlock.hash
       console.log(`Previous hash: ${newBlock.previousBlockHash}`)
     }
