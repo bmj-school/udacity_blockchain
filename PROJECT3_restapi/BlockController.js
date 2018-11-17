@@ -124,7 +124,7 @@ class BlockController {
     validateChain() {
         this.server.route({
             method: 'GET',
-            path: '/api/validate',
+            path: '/validate',
             handler: async (request, h) => {
                 console.log('GET /api/validate');
                 var valid = await this.blockchain.validateChain();
