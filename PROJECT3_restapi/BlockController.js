@@ -1,6 +1,8 @@
 const SHA256 = require('crypto-js/sha256');
 const blockchain = require('./simpleChain');
 console.log(`Blockchain module loaded`);
+const boom = require('boom');
+
 // console.log('Blockchain = ' + typeof blockchain.Blockchain);
 // bc = new blockchain.Blockchain
 // console.log(bc);
@@ -31,9 +33,18 @@ class BlockController {
         this.server.route({
             method: 'GET',
             path: '/api/block/{index}',
-            handler: (request, h) => {
+            handler: async (request, h) => {
                 var idx = encodeURIComponent(request.params.index)
                 console.log('GET /block/' + idx);
+                var idx_num = Number(idx);
+                if (!Number.isInteger(idx_num)) {
+                    return boom.badRequest('Invalid query, non-integer index was passed: '+idx)
+                }
+                var height = await this.blockchain.getBlockHeight()
+                if (idx_num >= height){
+                    console.log(idx_num, '>=', height);
+                    return boom.badRequest('Invalid query, the greatest block index (zero-indexed!) is: ' + (height-1));
+                } 
                 var block = this.blockchain.getBlock(idx)
                 return block 
             }
@@ -44,9 +55,9 @@ class BlockController {
         this.server.route({
             method: 'GET',
             path: '/api/blockheight',
-            handler: (request, h) => {
+            handler: async (request, h) => {
                 console.log('GET /blockheight');
-                return this.blockchain.getBlockHeight()
+                return await this.blockchain.getBlockHeight()
             }
 
         })
@@ -60,12 +71,12 @@ class BlockController {
         this.server.route({
             method: 'POST',
             path: '/api/block',
-            handler: (request, h) => {
+            handler: async (request, h) => {
                 // var body = JSON.parse(JSON.stringify(request.body));
 
 
+                /*********** TODO: This doesn't work! How to assert body?
                 // ERROR: No data key
-                //TODO: This doesn't work!
                 if (request.body && Object.prototype.hasOwnProperty.call(request.body, 'data')) {
                     return boom.badRequest('API requires a \'data\' key-value pair in x-www-form-urlencoded');
                 }
@@ -75,13 +86,18 @@ class BlockController {
                 if (!request.payload.hasOwnProperty('data')){
                     console.log('Missing data field');
                 }
+                ****************/
 
-                
-                var data = request.payload.data;
-                console.log('POST /block data=' + data);
-                var block = new blockchain.Block(data)
-                this.blockchain.addBlock(block)
-                return 'Added block'
+                try {
+                    var data = request.payload.data;
+                    console.log('POST /block data=' + data);
+                    var block = new blockchain.Block(data);
+                    block = await this.blockchain.addBlock(block);
+                    return h.response(block).code(201);
+                } catch (err)  {
+                    console.log(err);
+                    return boom.badImplementation('Error ', err);
+                }
             }
         });
     }

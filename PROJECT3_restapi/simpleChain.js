@@ -76,6 +76,7 @@ class Blockchain {
     console.log('Complete new block: ' + JSON.stringify(newBlock));
     // Adding block object to chain
     await dbtools.addLevelDBData(newBlock.height, JSON.stringify(newBlock))
+    return newBlock
   }
 
 
