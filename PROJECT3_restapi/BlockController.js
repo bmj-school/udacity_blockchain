@@ -25,6 +25,7 @@ class BlockController {
         this.getBlockByIndex();
         this.postNewBlock();
         this.getBlockHeight();
+        this.validateChain();
     }
     /**
      * Implement a GET Endpoint to retrieve a block by index, url: "/api/block/:index"
@@ -51,6 +52,7 @@ class BlockController {
         });
     }
 
+    // Extra
     getBlockHeight() {
         this.server.route({
             method: 'GET',
@@ -106,13 +108,14 @@ class BlockController {
     }
 
 
+    // Extra
     validateChain() {
         this.server.route({
             method: 'GET',
             path: '/api/validate',
             handler: async (request, h) => {
                 console.log('GET /api/validate');
-                valid = await this.blockchain.validateChain();
+                var valid = await this.blockchain.validateChain();
                 console.log(valid);
                 return h.response(valid).code(200)
                 

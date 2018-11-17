@@ -124,7 +124,7 @@ class Blockchain {
       console.log(`Checking block ${i} ...`);
       this.getBlock(i).then((block) => {
         this.validateBlock(block.height).then((isValid) => {
-          console.log(isValid);
+          // console.log(isValid);
           if (!isValid) { errorLog.push(i) }
           if (block.previousBlockHash !== previousHash) { errorLog.push(i) }
           previousHash = block.hash
@@ -134,8 +134,10 @@ class Blockchain {
     if (errorLog.length > 0) {
       console.log('Block errors = ' + errorLog.length);
       console.log('Blocks: ' + errorLog);
+      return false;
     } else {
       console.log('No errors detected');
+      return true;
     }
   }
 }
