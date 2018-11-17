@@ -30,23 +30,25 @@ class BlockController {
     /**
      * Implement a GET Endpoint to retrieve a block by index, url: "/api/block/:index"
      */
+    // POST - REVIEW CORRECTION 
+    // This endpoint should be /block/{index}
     getBlockByIndex() {
         this.server.route({
             method: 'GET',
-            path: '/api/block/{index}',
+            path: '/block/{index}',
             handler: async (request, h) => {
-                var idx = encodeURIComponent(request.params.index)
+                let idx = encodeURIComponent(request.params.index)
                 console.log('GET /block/' + idx);
-                var idx_num = Number(idx);
+                let idx_num = Number(idx);
                 if (!Number.isInteger(idx_num)) {
                     return boom.badRequest('Invalid query, non-integer index was passed: '+idx)
                 }
-                var height = await this.blockchain.getBlockHeight();
+                let height = await this.blockchain.getBlockHeight();
                 if (idx_num >= height){
                     console.log(idx_num, '>=', height);
                     return boom.badRequest('Invalid query, the greatest block index (zero-indexed!) is: ' + (height-1));
                 } 
-                var block = await this.blockchain.getBlock(idx);
+                let block = await this.blockchain.getBlock(idx);
                 return block 
             }
         });
@@ -56,7 +58,7 @@ class BlockController {
     getBlockHeight() {
         this.server.route({
             method: 'GET',
-            path: '/api/blockheight',
+            path: '/blockheight',
             handler: async (request, h) => {
                 console.log('GET /blockheight');
                 return await this.blockchain.getBlockHeight()
@@ -68,11 +70,13 @@ class BlockController {
     /**
      * Implement a POST Endpoint to add a new Block, url: "/api/block"
      * Uses x-www-form-urlencoded POST
-     */
+    */
+    // POST - REVIEW CORRECTION 
+    // This endpoint should be /block/{index}/
     postNewBlock() {
         this.server.route({
             method: 'POST',
-            path: '/api/block',
+            path: '/block',
             handler: async (request, h) => {
                 // var body = JSON.parse(JSON.stringify(request.body));
 
