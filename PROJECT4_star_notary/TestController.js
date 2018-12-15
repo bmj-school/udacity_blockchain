@@ -1,3 +1,5 @@
+// For learning HAPI!
+// Testing and demo endpoints start with `hello`
 
 /**
  * Controller Definition 
