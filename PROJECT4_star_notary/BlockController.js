@@ -1,6 +1,5 @@
 const SHA256 = require('crypto-js/sha256');
 const blockchain = require('./simpleChain');
-console.log(`Blockchain module loaded`);
 const boom = require('boom');
 
 // console.log('Blockchain = ' + typeof blockchain.Blockchain);
@@ -71,7 +70,6 @@ class BlockController {
      * Implement a POST Endpoint to add a new Block, url: "/api/block"
      * Uses x-www-form-urlencoded POST
     */
-    // POST-REVIEW CORRECTION 
     // This endpoint should be /block
     postNewBlock() {
         this.server.route({
@@ -94,7 +92,6 @@ class BlockController {
                 var data = request.payload.data;
                 console.log('POST /block data=' + data);
 
-                // POST-REVIEW CORRECTION
                 // Check if the data parameter is present and then create block only if the data is a non-empty string.
                 // Otherwise, respond with an error.
                 if (typeof data === 'undefined') {
