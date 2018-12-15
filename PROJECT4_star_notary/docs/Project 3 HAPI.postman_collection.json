@@ -1,0 +1,123 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Project 3 HAPI",
+		"_postman_id": "8ab40b82-c2d7-39c2-480a-c75744e9fae9",
+		"description": "# Introduction\nInteract with a simple Blockchain class persisted in LevelDB. \n\n# Overview\nImplemented using the Hapi.js REST API framework. \nContains 2 controllers, the main BlockController, and a TestController for testing Hapi. \n\n# Authentication\nOpen, local. \n\n# Error Codes\nErrors implemented using boom.js. See docstrings. \n\n\n# Rate limit\nN/A",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET /blockheight",
+			"request": {
+				"url": "http://localhost:8000/blockheight\n",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET /validate",
+			"request": {
+				"url": "http://localhost:3000/api/validate\n",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET /block/{index}",
+			"request": {
+				"url": "http://localhost:8000/block/3",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "POST /block",
+			"request": {
+				"url": "http://localhost:3000/api/block",
+				"method": "POST",
+				"header": [
+					{
+						"key": "block",
+						"value": "hello1",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "data2",
+							"value": "what444",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET /api/hello",
+			"request": {
+				"url": "http://localhost:3000/api/hello",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "POST /api/hello",
+			"request": {
+				"url": "http://localhost:3000/api/hello",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "hi"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "POST /api/greet/{user}",
+			"request": {
+				"url": "http://localhost:3000/api/greet/sa",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET /api/number/{index}",
+			"request": {
+				"url": "http://localhost:3000/api/number/2",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
