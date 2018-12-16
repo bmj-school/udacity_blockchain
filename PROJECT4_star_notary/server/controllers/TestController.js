@@ -1,3 +1,6 @@
+/*
+Reviewer ignore, for testing and reference
+*/
 var exported = {
     
     helloGet: function helloGet(request, h) {

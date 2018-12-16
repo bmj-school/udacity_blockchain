@@ -2,10 +2,6 @@ const SHA256 = require('crypto-js/sha256');
 const blockchain = require('./simpleChain');
 const boom = require('boom');
 
-// For Swagger!
-const Inert = require('inert');
-const Vision = require('vision');
-const HapiSwagger = require('hapi-swagger');
 
 // console.log('Blockchain = ' + typeof blockchain.Blockchain);
 // bc = new blockchain.Blockchain

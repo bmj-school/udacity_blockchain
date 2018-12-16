@@ -1,6 +1,13 @@
 // For learning HAPI!
 // Testing and demo endpoints start with `hello`
 controller = require('../controllers/StarController')
+
+// For Swagger!
+// const Inert = require('inert');
+// const Vision = require('vision');
+// const HapiSwagger = require('hapi-swagger');
+
+
 /**
  * Controller Definition 
  */
