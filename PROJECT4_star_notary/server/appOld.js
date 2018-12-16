@@ -2,7 +2,7 @@ const Hapi = require('hapi');
 /**
  * Class Definition for the REST API
  */
-class BlockAPI {
+class TheServer {
 
     /**
      * Constructor that allows initialize the class 
@@ -21,7 +21,7 @@ class BlockAPI {
      */
 	initControllers() {
         // require("./TestController.js")(this.server); // For learning Hapi!
-        require("./TestControllerRefactor.js")(this.server); // For learning Hapi!
+        require("./controllers/TestControllerRefactor.js")(this.server); // For learning Hapi!
         // require("./BlockController.js")(this.server); // For project 3
 	}
     
@@ -32,4 +32,4 @@ class BlockAPI {
 
 }
 
-new BlockAPI();
+new TheServer();

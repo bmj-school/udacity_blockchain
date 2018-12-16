@@ -8,22 +8,9 @@
 //   dbtools.getNumElements (Promised version)
 
 const SHA256 = require('crypto-js/sha256');
-const dbtools = require('./levelSandboxPromised');
+const dbtools = require('../database/levelSandboxPromised');
+const Block = require('')
 
-/* ===== Block Class ==============================
-|  Class with a constructor for Block 			   |
-|  ===============================================*/
-
-class Block {
-  constructor(data) {
-    this.data = data,
-      this.hash = "",
-      this.height = 0,
-      this.body = data,
-      this.time = 0,
-      this.previousBlockHash = ""
-  }
-}
 
 /* ===== Blockchain Class ==========================
 |  Class with a constructor for new blockchain 		|
