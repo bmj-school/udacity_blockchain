@@ -1,81 +1,28 @@
-// For learning HAPI!
-// Testing and demo endpoints start with `hello`
+var exported = {
+    
+    POST_requestValidation: function RequestValidation_POST(request, h) {
+        return 'POST_requestValidation';
+    },
 
-/**
- * Controller Definition 
- */
-function hello_get(request,h) {
-    console.log(request.payload);
-    return'hello world';
+    POST_messageSigValidate: function POST_messageSigValidate(request, h) {
+        return 'POST_messageSigValidate';
+    },
+
+    POST_block: function POST_block(request, h) {
+        return 'POST_block';
+    },
+
+    GET_starByHash: function GET_starByHash(request, h) {
+        return 'GET_starByHash';
+    },
+
+    GET_starByAddress: function GET_starByAddress(request, h) {
+        return 'GET_starByAddress';
+    },
+
+    GET_blockByHeight: function GET_blockByHeight(request, h) {
+        return 'GET_blockByHeight';
+    },        
+
 }
-
-
-class TestController {
-
-    /**
-     * Constructor to create a new BlockController, you need to initialize here all your endpoints
-     * @param {*} server 
-     */
-    constructor(server) {
-        this.server = server;
-        this.blocks = [];
-        // this.helloGet(); // 1
-        // this.helloPost(); // 2
-        // this.helloNumberIndex(); // 3
-        // this.helloGreetUser(); // 4
-    }
-
-    helloGet(){
-        // Test route 1
-        this.server.route({ method:'GET', path:'/api/hello', handler:hello_get});
-    }
-
-    helloPost(){
-        // Test route 2
-        this.server.route({
-            method:'POST',
-            path:'/api/hello',
-            handler:function(request,h) {
-                // console.log(request.payload);
-
-                // console.log(JSON.stringify(request.payload));
-                
-                return `Your string: ${request.payload}`;
-            }
-        });
-    }
-
-    helloGreetUser(){
-        // Test route 3
-        this.server.route({
-            method:'GET',
-            path:'/api/greet/{user}',
-            handler:function(request,h) {
-                // console.log(request.payload);
-                // console.log(JSON.stringify(request.payload));
-                var usr = encodeURIComponent(request.params.user)
-                return `hello ${usr}`;
-            }
-        });
-    }
-
-    helloNumberIndex(){
-        // Test route 4
-        this.server.route({
-            method:'GET',
-            path:'/api/number/{index}',
-            handler:function(request,h) {
-                // console.log(request.payload);
-                // console.log(JSON.stringify(request.payload));
-                var idx = encodeURIComponent(request.params.index)
-                return `hello ${idx}`;
-            }
-        });
-    }
-}
-
-/**
- * Exporting the Testontroller class
- * @param {*} server 
- */
-module.exports = (server) => { return new TestController(server);}
+module.exports = exported
