@@ -19,4 +19,7 @@ N/A
 ## Full API documentation
 See: https://documenter.getpostman.com/view/5905521/RzZDhGkV
 
+## Style
+Refactored project structure according to https://auth0.com/blog/developing-restful-apis-with-hapijs/
+
 

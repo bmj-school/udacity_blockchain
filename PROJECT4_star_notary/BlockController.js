@@ -1,5 +1,5 @@
 const SHA256 = require('crypto-js/sha256');
-const blockchain = require('./simpleChain');
+const blockchain = require('./server/controllers/simpleChain');
 const boom = require('boom');
 
 // For Swagger!
