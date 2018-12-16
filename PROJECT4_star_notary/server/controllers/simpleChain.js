@@ -9,7 +9,7 @@
 
 const SHA256 = require('crypto-js/sha256');
 const dbtools = require('../database/levelSandboxPromised');
-const Block = require('')
+const Block = require('../models/Block')
 
 
 /* ===== Blockchain Class ==========================

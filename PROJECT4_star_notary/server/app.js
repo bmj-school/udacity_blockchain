@@ -12,16 +12,16 @@ class TheServer {
             port: 8000,
             host: 'localhost'
         });
-        this.initControllers();
+        this.initRoutes();
         this.start();
     }
 
     /**
      * Initilization of all the controllers
      */
-	initControllers() {
+	initRoutes() {
         // require("./TestController.js")(this.server); // For learning Hapi!
-        require("./controllers/TestControllerRefactor.js")(this.server); // For learning Hapi!
+        require("./routes/TestRoutes.js")(this.server); // For learning Hapi!
         // require("./BlockController.js")(this.server); // For project 3
 	}
     

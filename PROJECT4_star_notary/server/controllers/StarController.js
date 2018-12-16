@@ -4,6 +4,12 @@
 /**
  * Controller Definition 
  */
+function hello_get(request,h) {
+    console.log(request.payload);
+    return'hello world';
+}
+
+
 class TestController {
 
     /**
@@ -13,22 +19,15 @@ class TestController {
     constructor(server) {
         this.server = server;
         this.blocks = [];
-        this.helloGet(); // 1
-        this.helloPost(); // 2
-        this.helloPostIndex(); // 3
-        this.helloGreetUser(); // 4
+        // this.helloGet(); // 1
+        // this.helloPost(); // 2
+        // this.helloNumberIndex(); // 3
+        // this.helloGreetUser(); // 4
     }
 
     helloGet(){
         // Test route 1
-        this.server.route({
-            method:'GET',
-            path:'/api/hello',
-            handler:function(request,h) {
-                console.log(request.payload);
-                return'hello world';
-            }
-        });
+        this.server.route({ method:'GET', path:'/api/hello', handler:hello_get});
     }
 
     helloPost(){
@@ -38,9 +37,10 @@ class TestController {
             path:'/api/hello',
             handler:function(request,h) {
                 // console.log(request.payload);
-                console.log(JSON.stringify(request.payload));
+
+                // console.log(JSON.stringify(request.payload));
                 
-                return'hello world';
+                return `Your string: ${request.payload}`;
             }
         });
     }
@@ -59,7 +59,7 @@ class TestController {
         });
     }
 
-    helloPostIndex(){
+    helloNumberIndex(){
         // Test route 4
         this.server.route({
             method:'GET',
