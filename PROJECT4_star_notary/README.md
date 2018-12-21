@@ -1,4 +1,4 @@
-# Project 3: Blockchain Restful API 
+# Project 4: Star notary
 
 Interact with a simple Blockchain class persisted in LevelDB.
 

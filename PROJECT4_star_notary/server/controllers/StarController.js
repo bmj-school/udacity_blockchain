@@ -1,6 +1,14 @@
 var exported = {
 
     POST_requestValidation: async function (request, h) {
+        /*
+        1   VALIDATION
+        1.1 A user (address) submits a validation request. They pass their wallet address as data. 
+        1.2 The server calls AddRequestValidation to append the validation request to the mempool
+        1.3 The server returns a requestObject wtih the address, the timestamp of the request, 
+            the message, and the validation windows (300 seconds)
+
+        */
         console.log(`POST validation requested: ${JSON.stringify(request.payload)}`);
         if (!request.payload.hasOwnProperty('address')) {
             return boom.badRequest('Missing payload key. Pass address as JSON.');
