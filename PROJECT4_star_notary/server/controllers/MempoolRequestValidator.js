@@ -4,10 +4,11 @@ const TimeoutRequestsWindowTime = 1500;
 
 // timer = 
 //
-class MemPool {
+class RequestPool {
     constructor() {
-        this.mempool = [];
-        this.timeoutRequests  = [];
+        // A simple dict with address : request time
+        this.mempool = {};
+        // this.timeoutRequests  = [];
     }
 
     requestVaidation(address){
@@ -17,14 +18,15 @@ class MemPool {
     }, TimeoutRequestsWindowTime );
     }
 
-    
-    
+    addRequest(address){
+        this.mempool[address] = 
+    }
 }
 
 // self.timeoutRequests[request.walletAddress]=setTimeout(function(){ self.removeValidationRequest(request.walletAddress) }, TimeoutRequestsWindowTime );
 
 
-mp = new MemPool
+mp = new RequestPool
 mp.requestVaidation("asdfasdf")
 console.log(mp.mempool);
 console.log(mp.timeoutRequests);
