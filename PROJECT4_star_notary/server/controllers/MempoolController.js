@@ -1,6 +1,7 @@
 const SHA256 = require('crypto-js/sha256');
+let d = Date.now()
+console.log(d);
 
-let 
 thisNum = Math.random();
 let thisAddress1 = SHA256(thisNum.toString()).toString();
 console.log(`A1: ${thisAddress1}`);

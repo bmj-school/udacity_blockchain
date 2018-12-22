@@ -1,4 +1,4 @@
-
+Date
 // const TimeoutRequestsWindowTime = 5*60*1000;
 const TimeoutRequestsWindowTime = 1500;
 
@@ -13,9 +13,9 @@ class RequestPool {
 
     requestVaidation(address){
         console.log(address);
-        this.timeoutRequests[address] = setTimeout( function(){
-        self.removeValidationRequest(request.walletAddress) 
-    }, TimeoutRequestsWindowTime );
+            this.timeoutRequests[address] = setTimeout( function(){
+            self.removeValidationRequest(request.walletAddress) 
+        }, TimeoutRequestsWindowTime );
     }
 
     addRequest(address){
