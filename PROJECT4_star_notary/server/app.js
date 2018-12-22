@@ -17,12 +17,11 @@ class TheServer {
     }
 
     /**
-     * Initilization of all the controllers
+     * Initilization of the routes
      */
 	initRoutes() {
-        // require("./TestController.js")(this.server); // For learning Hapi!
         require("./routes/TestRoutes.js")(this.server); // For learning Hapi!
-        require("./routes/StarRoutes.js")(this.server); // For learning Hapi!
+        require("./routes/StarRoutes.js")(this.server); // According to specifications
         // require("./BlockController.js")(this.server); // For project 3
 	}
     
