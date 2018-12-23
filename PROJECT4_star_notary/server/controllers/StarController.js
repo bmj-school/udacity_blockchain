@@ -2,6 +2,8 @@
 const RequestValidator = require('./RequestValidator');
 requestPool = new RequestValidator.RequestPool()
 
+const bitcoinMessage = require('bitcoinjs-message'); 
+
 var exported = {
 
     POST_requestValidation: async function (request, h) {
@@ -35,7 +37,17 @@ var exported = {
             return boom.badRequest('Missing payload key. Pass signature as JSON.');
         }
 
-        return 'POST_messageSigValidate';
+
+        if (thisAddress in requestPool.mempool){
+            return requestPool.mempool[thisAddress].respond();
+            let address = request.payload.address
+            let message = request.payload.message
+            let signature = request.payload.signature
+            let isValid = bitcoinMessage.verify(message, address, signature);
+            return 'POST_messageSigValidate';            
+        } else {
+            return boom.badRequest('This address has not requested validation.'); 
+        }
     },
 
     POST_block: async function (request, h) {
