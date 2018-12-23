@@ -8,7 +8,7 @@ console.log(`A1: ${thisAddress1}`);
 
 thisNum = Math.random();
 let thisAddress2 = SHA256(thisNum.toString()).toString();
-console.log(`A2: ${ thisAddress2 }`);
+console.log(`A2: ${thisAddress2}`);
 
 // A simple object dictionary with address as key
 let mempool = {}
