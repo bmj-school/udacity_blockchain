@@ -1,4 +1,4 @@
-
+const boom = require('boom');
 const RequestValidator = require('./RequestValidator');
 requestPool = new RequestValidator.RequestPool()
 
@@ -15,12 +15,12 @@ var exported = {
             the message, and the validation windows (300 seconds)
 
         */
-        console.log(`POST validation requested: ${JSON.stringify(request.payload)}`);
+        console.log(`POST Validation requested: ${JSON.stringify(request.payload)}`);
         if (!request.payload.hasOwnProperty('address')) {
             return boom.badRequest('Missing payload key. Pass address as JSON.');
         }
         
-        thisAddress =request.payload.address;
+        thisAddress = request.payload.address;
         if (thisAddress in requestPool.mempool){
             return requestPool.mempool[thisAddress].respond()
         }
@@ -29,7 +29,7 @@ var exported = {
     },
 
     POST_messageSigValidate: async function (request, h) {
-        console.log(`POST validation requested: ${JSON.stringify(request.payload)}`);
+        console.log(`POST Signature provided, validate: ${JSON.stringify(request.payload)}`);
         if (!request.payload.hasOwnProperty('address')) {
             return boom.badRequest('Missing payload key. Pass address as JSON.');
         }
@@ -37,21 +37,29 @@ var exported = {
             return boom.badRequest('Missing payload key. Pass signature as JSON.');
         }
 
+        thisAddress = request.payload.address;
 
         if (thisAddress in requestPool.mempool){
-            return requestPool.mempool[thisAddress].respond();
+            requestObject = requestPool.mempool[thisAddress].respond();
             let address = request.payload.address
             
             let signature = request.payload.signature
 
-            let message = requestPool.mempool[thisAddress].respond().message
+            let message = requestObject.message
 
             
             let isValid = bitcoinMessage.verify(message, address, signature);
+            if ( isValid ){
+                console.log('Valid.');
+                
+                return 'POST_messageSigValidate';
+            } else{
+                return boom.badRequest('Invalid signature.');   
+            }
 
             console.log('');
             
-            return 'POST_messageSigValidate';            
+                    
         } else {
             return boom.badRequest('This address has not requested validation.'); 
         }
