@@ -41,9 +41,16 @@ var exported = {
         if (thisAddress in requestPool.mempool){
             return requestPool.mempool[thisAddress].respond();
             let address = request.payload.address
-            let message = request.payload.message
+            
             let signature = request.payload.signature
+
+            let message = requestPool.mempool[thisAddress].respond().message
+
+            
             let isValid = bitcoinMessage.verify(message, address, signature);
+
+            console.log('');
+            
             return 'POST_messageSigValidate';            
         } else {
             return boom.badRequest('This address has not requested validation.'); 
