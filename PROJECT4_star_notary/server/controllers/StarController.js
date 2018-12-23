@@ -1,3 +1,7 @@
+
+const RequestValidator = require('./RequestValidator');
+requestPool = new RequestValidator.RequestPool()
+
 var exported = {
 
     POST_requestValidation: async function (request, h) {
@@ -13,7 +17,13 @@ var exported = {
         if (!request.payload.hasOwnProperty('address')) {
             return boom.badRequest('Missing payload key. Pass address as JSON.');
         }
-        return 'POST_requestValidation';
+        
+        thisAddress =request.payload.address;
+        if (thisAddress in requestPool.mempool){
+            return requestPool.mempool[thisAddress].respond()
+        }
+        response = requestPool.addRequest(thisAddress)
+        return response;
     },
 
     POST_messageSigValidate: async function (request, h) {
