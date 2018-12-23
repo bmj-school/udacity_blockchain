@@ -2,7 +2,7 @@ const boom = require('boom');
 const RequestValidator = require('./RequestValidator');
 requestPool = new RequestValidator.RequestPool()
 
-const bitcoinMessage = require('bitcoinjs-message'); 
+const bitcoinMessage = require('bitcoinjs-message');
 
 var exported = {
 
@@ -19,9 +19,9 @@ var exported = {
         if (!request.payload.hasOwnProperty('address')) {
             return boom.badRequest('Missing payload key. Pass address as JSON.');
         }
-        
+
         thisAddress = request.payload.address;
-        if (thisAddress in requestPool.mempool){
+        if (thisAddress in requestPool.mempool) {
             return requestPool.mempool[thisAddress].respond()
         }
         response = requestPool.addRequest(thisAddress)
@@ -37,31 +37,25 @@ var exported = {
             return boom.badRequest('Missing payload key. Pass signature as JSON.');
         }
 
-        thisAddress = request.payload.address;
+        address = request.payload.address;
 
-        if (thisAddress in requestPool.mempool){
+        if (address in requestPool.mempool) {
             requestObject = requestPool.mempool[thisAddress].respond();
-            let address = request.payload.address
-            
-            let signature = request.payload.signature
 
+            // let address = request.payload.address
+            let signature = request.payload.signature
             let message = requestObject.message
 
-            
             let isValid = bitcoinMessage.verify(message, address, signature);
-            if ( isValid ){
-                console.log('Valid.');
-                
+            if (isValid) {
+                console.log('Valid signature.');
                 return 'POST_messageSigValidate';
-            } else{
-                return boom.badRequest('Invalid signature.');   
+            } else {
+                return boom.badRequest('Invalid signature.');
             }
 
-            console.log('');
-            
-                    
         } else {
-            return boom.badRequest('This address has not requested validation.'); 
+            return boom.badRequest('This address has not requested validation.');
         }
     },
 

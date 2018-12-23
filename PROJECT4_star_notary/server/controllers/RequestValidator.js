@@ -9,17 +9,35 @@ const TimeoutRequestsWindowTime = 5*60*1000; //[ms] 5 minutes window
 /**
  * Data model for Requests
  */
+class Invitation {
+    constructor(requestObj){
+        this.registerStar = true;
+        this.status = {
+           address: requestObj.address,
+           requestTimeStamp: requestObj.requestTimeStamp,
+           message: message,
+           validationWindow: validationWindow,
+           messageSignature: valid
+        };
+        
+    }
+}
+
+
+
+
 class Request {
     constructor(address) {
         this.address = address
         this.requestTimestamp = Date.now();
+        this.message = `${this.address}:${this.requestTimestamp}:starRegistry`
     }
 
     respond() {
         return {
             'address': this.address,
             'requestTimestamp': this.requestTimestamp,
-            'message': `${this.address}:${this.requestTimestamp}:starRegistry`,
+            'message': this.message,
             'validationWindow': Math.ceil((TimeoutRequestsWindowTime + (this.requestTimestamp - Date.now()))/1000)
         }
     }
