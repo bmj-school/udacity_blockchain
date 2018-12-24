@@ -40,7 +40,8 @@ var exported = {
         address = request.payload.address;
 
         if (address in requestPool.mempool) {
-            requestObject = requestPool.mempool[thisAddress].respond();
+            requestInstance = requestPool.mempool[thisAddress]
+            requestObject = requestInstance.respond();
 
             let signature = request.payload.signature
             let message = requestObject.message
@@ -48,10 +49,12 @@ var exported = {
             let isValid = bitcoinMessage.verify(message, address, signature);
             if (isValid) {
                 console.log('Valid signature.');
-                thisInvitation = requestObject.inite()
-
-
-                return 'POST_messageSigValidate';
+                // This will shift the wallet from pending to approved list
+                requestPool.approveWallet(address)
+                resp= requestPool.validRequests[address].respond();
+                console.log(resp);
+                
+                return resp;
             } else {
                 return boom.badRequest('Invalid signature.');
             }
