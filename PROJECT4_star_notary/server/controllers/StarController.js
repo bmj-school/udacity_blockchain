@@ -1,11 +1,19 @@
 const boom = require('boom');
 const RequestValidator = require('./RequestValidator');
-requestPool = new RequestValidator.RequestPool()
-
+const blockchainlib = require('./simpleChain');
+const blocklib = require('../models/Block')
 const bitcoinMessage = require('bitcoinjs-message');
+
+requestPool = new RequestValidator.RequestPool()
+blockchain = new blockchainlib.Blockchain()
 
 var exported = {
 
+    /**
+     * 
+     * @param {*} request 
+     * @param {*} h 
+     */
     POST_requestValidation: async function (request, h) {
         /*
         1   VALIDATION
@@ -28,6 +36,11 @@ var exported = {
         return response;
     },
 
+    /**
+     * 
+     * @param {*} request 
+     * @param {*} h 
+     */
     POST_messageSigValidate: async function (request, h) {
         console.log(`POST Signature provided, validate: ${JSON.stringify(request.payload)}`);
         if (!request.payload.hasOwnProperty('address')) {
@@ -47,14 +60,12 @@ var exported = {
             let message = requestObject.message
 
             let isValid = bitcoinMessage.verify(message, address, signature);
+            
             if (isValid) {
                 console.log('Valid signature.');
                 // This will shift the wallet from pending to approved list
-                requestPool.approveWallet(address)
-                resp= requestPool.validRequests[address].respond();
-                console.log(resp);
-                
-                return resp;
+                requestPool.approveWallet(address);
+                return requestPool.validRequests[address].respond();;
             } else {
                 return boom.badRequest('Invalid signature.');
             }
@@ -64,6 +75,11 @@ var exported = {
         }
     },
 
+    /**
+     * 
+     * @param {*} request 
+     * @param {*} h 
+     */
     POST_block: async function (request, h) {
         console.log(`POST validation requested: ${JSON.stringify(request.payload)}`);
         if (!request.payload.hasOwnProperty('address')) {
@@ -72,14 +88,38 @@ var exported = {
         if (!request.payload.hasOwnProperty('star')) {
             return boom.badRequest('Missing payload key. Pass star as JSON.');
         }
-        return 'POST_block';
+
+        var stardata  = request.payload.star;
+        console.log(request.payload);
+        
+
+        try {
+            let block = new blocklib.Block(stardata);
+            // console.log(block);
+            console.log('Block added');
+            block = await blockchain.addBlock(block);
+            return h.response(block).code(201);
+        } catch (err) {
+            console.log(err);
+            return boom.badImplementation('Error ', err);
+        }
     },
 
+    /**
+     * 
+     * @param {*} request 
+     * @param {*} h 
+     */
     GET_starByHash: async function (request, h) {
         console.log(`GET block by BLOCK_HASH: ${request.params.BLOCK_HASH}`);
         return 'GET_starByHash';
     },
 
+    /**
+     * 
+     * @param {*} request 
+     * @param {*} h 
+     */
     GET_starByAddress: async function (request, h) {
         console.log(`GET block by BLOCK_ADDRESS: ${request.params.BLOCK_ADDRESS}`);
         return 'GET_starByAddress';

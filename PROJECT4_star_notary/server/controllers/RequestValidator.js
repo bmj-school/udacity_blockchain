@@ -114,7 +114,7 @@ class RequestPool {
         // Create the invite, add to the pool
         this.validRequests[address] = this.mempool[address].invite()
         console.log(this.validRequests[address]);
-
+        console.log(`Added ${address} to approved pool.`);
         // Remove the old request
         this.removeValidationRequest(address)
     }

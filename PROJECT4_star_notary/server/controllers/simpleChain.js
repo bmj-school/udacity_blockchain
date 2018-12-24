@@ -153,4 +153,4 @@ class Blockchain {
 // setTimeout(() => blockchain.validateChain(), 2000)
 
 module.exports.Blockchain = Blockchain
-module.exports.Block = Block
+// module.exports.Block = Block
