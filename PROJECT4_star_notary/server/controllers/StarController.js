@@ -88,17 +88,33 @@ var exported = {
         if (!request.payload.hasOwnProperty('star')) {
             return boom.badRequest('Missing payload key. Pass star as JSON.');
         }
+        if (!(request.payload.address in requestPool.validRequests)) {
+            return boom.badRequest('Address not invited to register - validate and sign first!.');
+        }
 
         // var stardata  = request.payload.star;
         console.log('Payload \n' + request.payload);
-        
+         
+        let body = {
+            address: request.payload.address,
+            star: {
+                  ra: request.payload.star.ra,
+                  dec: request.payload.star.dec,
+                  mag: request.payload.star.mag,
+                  cen: request.payload.star.cen,
+                  story: Buffer(request.payload.star.story).toString('hex')
+                  }
+        };
+
 
         try {
-            let block = new Block(request.payload);
+            let block = new Block(body);
             // console.log(block);
             console.log('Block added');
             block = await blockchain.addBlock(block);
-            return h.response(block).code(201);
+            // return h.response(block).code(201);
+            return body;
+            //
         } catch (err) {
             console.log(err);
             return boom.badImplementation('Error ', err);

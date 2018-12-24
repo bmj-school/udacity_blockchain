@@ -79,6 +79,11 @@ class RequestPool {
         console.log(`Removed ${address} from mempool`);
 
     }
+
+    removeInvitation(address) {
+        delete this.validRequests[address]
+        console.log(`Removed ${address} from invitation pool.`);
+    }
     /**
      * 
      * @param {*} address 
