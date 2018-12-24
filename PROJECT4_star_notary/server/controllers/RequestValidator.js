@@ -17,9 +17,10 @@ class Invitation {
            requestTimeStamp: requestObj.requestTimeStamp,
            message: message,
            validationWindow: validationWindow,
-           messageSignature: valid
-        };
+           messageSignatjure: valid
         
+        };
+    console.log('New invitation for a star registry entry.');
     }
 }
 
@@ -41,6 +42,10 @@ class Request {
             'validationWindow': Math.ceil((TimeoutRequestsWindowTime + (this.requestTimestamp - Date.now()))/1000)
         }
     }
+    
+    invite(){
+        return new Invitation(this);
+    }
 }
 
 class RequestPool {
@@ -48,7 +53,7 @@ class RequestPool {
         this.mempool = {}; // address:Request
         this.timeoutRequests = {}; // Storing removal triggers
         this.validRequests = {} // Move a Request here after validation 
-        console.log(`New RequestPool with timemout window of ${TimeoutRequestsWindowTime / 1000} s`);
+        console.log(`New RequestPool with timeout window of ${TimeoutRequestsWindowTime / 1000} s`);
         
     }
 

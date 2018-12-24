@@ -42,13 +42,15 @@ var exported = {
         if (address in requestPool.mempool) {
             requestObject = requestPool.mempool[thisAddress].respond();
 
-            // let address = request.payload.address
             let signature = request.payload.signature
             let message = requestObject.message
 
             let isValid = bitcoinMessage.verify(message, address, signature);
             if (isValid) {
                 console.log('Valid signature.');
+                thisInvitation = requestObject.inite()
+
+
                 return 'POST_messageSigValidate';
             } else {
                 return boom.badRequest('Invalid signature.');
