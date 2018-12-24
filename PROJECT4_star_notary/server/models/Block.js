@@ -4,7 +4,7 @@
 
 class Block {
   constructor(data) {
-    this.data = data,
+    // this.data = data,
       this.hash = '',
       this.height = 0,
       this.body = data,

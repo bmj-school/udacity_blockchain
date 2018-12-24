@@ -1,7 +1,7 @@
 const boom = require('boom');
 const RequestValidator = require('./RequestValidator');
 const blockchainlib = require('./simpleChain');
-const blocklib = require('../models/Block')
+const Block = require('../models/Block')
 const bitcoinMessage = require('bitcoinjs-message');
 
 requestPool = new RequestValidator.RequestPool()
@@ -89,12 +89,12 @@ var exported = {
             return boom.badRequest('Missing payload key. Pass star as JSON.');
         }
 
-        var stardata  = request.payload.star;
-        console.log(request.payload);
+        // var stardata  = request.payload.star;
+        console.log('Payload \n' + request.payload);
         
 
         try {
-            let block = new blocklib.Block(stardata);
+            let block = new Block(request.payload);
             // console.log(block);
             console.log('Block added');
             block = await blockchain.addBlock(block);
