@@ -67,7 +67,9 @@ function getBlockByHash(hash) {
   return new Promise(function (resolve, reject) {
     db.createReadStream()
       .on('data', function (data) {
-        if (data.hash === hash) {
+        blockData = JSON.parse(data)
+        console.log(blockData['hash']);
+        if (blockData['hash'] === hash) {
           block = data;
         }
       })
@@ -94,18 +96,21 @@ function getBlockByHash(hash) {
 //   )
 // }
 
+
+
+/*// PROMISE TESTING! 
 // Query size of DB
 let numElems = getNumElements().then(function (num) {
   console.log(`Number elements in DB: ${num}`);
 });
 
-// Get elem, using .then() .catch()
+// PROMISE TESTING : Get elem, using .then() .catch()
 let getElem = getLevelDBData(11).then(function (elem) {
   console.log(`This elem: ${elem}`);
   return elem;
 });
 
-// async/await v1: Simple function def
+// PROMISE TESTING : async/await v1: Simple function def
 async function getit() {
   result = await getLevelDBData(11);
   console.log(`YOUR RESULT ${result}`);
@@ -114,21 +119,33 @@ getit();
 
 
 // async/await v2: Wrapped function, direct call, with error handling
-(async() => {
+(async () => {
   try {
-      result = await getLevelDBData(11);   
-      console.log('async/await -> ', result);
+    result = await getLevelDBData(11);
+    console.log('async/await -> ', result);
   } catch (err) {
-      console.log(err);
+    console.log(err);
   }
 })();
 
 // async/await v3, WRAPPING INLINE
-(async() => {
-      result = await getLevelDBData(12);
-      console.log('async/await 2 > ', result);
+(async () => {
+  result = await getLevelDBData(12);
+  console.log('async/await 2 > ', result);
 })();
+*/ // PROMISE TESTING!
 
+
+// Get by Hash
+(async () => {
+  result = await getLevelDBData(12);
+  console.log('GET BY HASH');
+  blockData = JSON.parse(result)
+  console.log(blockData);
+  console.log('HASH', blockData['hash']);
+  result = await getBlockByHash(blockData['hash'])
+  console.log('Block by hash: ' + result);
+})();
 // // Get the 10 values back
 // for (var i = 1; i < 10; i++) {
 //   console.log(`Looking for ${i} ...`);
