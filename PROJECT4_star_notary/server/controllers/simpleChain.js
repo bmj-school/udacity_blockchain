@@ -77,6 +77,7 @@ class Blockchain {
     return JSON.parse(await dbtools.getLevelDBData(height))
   }
 
+
   /**
    * Validate persisted block
    * @param {*} blockHeight 

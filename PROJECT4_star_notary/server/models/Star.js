@@ -1,12 +1,6 @@
-// address: request.payload.address,
-//     star: {
-//     ra: request.payload.star.ra,
-//         dec: request.payload.star.dec,
-//             mag: request.payload.star.mag,
-//                 cen: request.payload.star.cen,
-//                     story: Buffer(request.payload.star.story).toString('hex')
-// }
-
+/**
+ * The Star data model.
+ */
 class Star {
     constructor(data) {
         this.data = data;
