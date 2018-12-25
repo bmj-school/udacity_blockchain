@@ -28,12 +28,17 @@ class Blockchain {
     })
   }
 
-  // Retrieve persisted block height
+  /**
+   * Retrieve persisted block height
+   */
   async getBlockHeight() {
     return await dbtools.getNumElements();
   }
 
-  // Add persisted block 
+  /**
+   * Add persisted block 
+   * @param {*} newBlock 
+   */
   async addBlock(newBlock) {
 
     // Block height
@@ -62,15 +67,20 @@ class Blockchain {
     return newBlock
   }
 
-
-  // Get persisted block object
+  /**
+   * Get persisted block object
+   * @param {*} height 
+   */
   async getBlock(height) {
     // return object as a single string
     // return JSON.parse(JSON.stringify(this.chain[blockHeight]));
     return JSON.parse(await dbtools.getLevelDBData(height))
   }
 
-  // Validate persisted block
+  /**
+   * Validate persisted block
+   * @param {*} blockHeight 
+   */
   async validateBlock(blockHeight) {
     // get block object
     let block = await this.getBlock(blockHeight);
@@ -93,7 +103,9 @@ class Blockchain {
     }
   }
 
-  // Validate persisted blockchain
+  /**
+   * Validate persisted blockchain
+   */
   async validateChain() {
     let errorLog = [];
     let previousHash = ''
@@ -103,7 +115,6 @@ class Blockchain {
       console.log(`Checking block ${i} ...`);
       this.getBlock(i).then((block) => {
         this.validateBlock(block.height).then((isValid) => {
-          // console.log(isValid);
           if (!isValid) { errorLog.push(i) }
           if (block.previousBlockHash !== previousHash) { errorLog.push(i) }
           previousHash = block.hash
@@ -153,4 +164,4 @@ class Blockchain {
 // setTimeout(() => blockchain.validateChain(), 2000)
 
 module.exports.Blockchain = Blockchain
-// module.exports.Block = Block
+module.exports.Block = Block

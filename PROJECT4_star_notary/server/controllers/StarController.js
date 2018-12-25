@@ -3,6 +3,8 @@ const RequestValidator = require('./RequestValidator');
 const blockchainlib = require('./simpleChain');
 const Block = require('../models/Block')
 const bitcoinMessage = require('bitcoinjs-message');
+const hex2ascii = require('hex2ascii');
+const Star = require('../models/Star');
 
 requestPool = new RequestValidator.RequestPool()
 blockchain = new blockchainlib.Blockchain()
@@ -71,7 +73,7 @@ var exported = {
             }
 
         } else {
-            return boom.badRequest('This address has not requested validation.');
+            return boom.badRequest('This address has not requested validation, or request has expired.');
         }
     },
 
@@ -80,41 +82,40 @@ var exported = {
      * @param {*} request 
      * @param {*} h 
      */
+    // CRITERION: Star object and properties are stored within the body of the block.
+    // CRITERION: Star properties include the coordinates with encoded story.
+    // CRITERION: Star story supports ASCII text, limited to 250 words (500 bytes), and hex encoded.
     POST_block: async function (request, h) {
         console.log(`POST validation requested: ${JSON.stringify(request.payload)}`);
+
+        // Error handling
         if (!request.payload.hasOwnProperty('address')) {
             return boom.badRequest('Missing payload key. Pass address as JSON.');
         }
         if (!request.payload.hasOwnProperty('star')) {
             return boom.badRequest('Missing payload key. Pass star as JSON.');
         }
-        if (!(request.payload.address in requestPool.validRequests)) {
-            return boom.badRequest('Address not invited to register - validate and sign first!.');
+        // if (!(request.payload.address in requestPool.validRequests)) {
+        //     return boom.badRequest('Address not invited to register - validate and sign first!.');
+        // }
+
+        // The Star block data
+        console.log('Payload \n' + request.payload);
+        thisStar = new Star(request.payload);
+        // Validate here
+        try { 
+            thisStar.validate(); 
+        } catch(err) { 
+            console.log(err); 
+            return boom.badImplementation('Error ', err);
         }
 
-        // var stardata  = request.payload.star;
-        console.log('Payload \n' + request.payload);
-         
-        let body = {
-            address: request.payload.address,
-            star: {
-                  ra: request.payload.star.ra,
-                  dec: request.payload.star.dec,
-                  mag: request.payload.star.mag,
-                  cen: request.payload.star.cen,
-                  story: Buffer(request.payload.star.story).toString('hex')
-                  }
-        };
-
-
+        // Add the star block to the chain
         try {
-            let block = new Block(body);
-            // console.log(block);
-            console.log('Block added');
+            let block = new Block(thisStar.asBlockBody());
             block = await blockchain.addBlock(block);
-            // return h.response(block).code(201);
-            return body;
-            //
+            block.body.star['storyDecoded'] = hex2ascii(block.body.star.story);
+            return block;
         } catch (err) {
             console.log(err);
             return boom.badImplementation('Error ', err);
