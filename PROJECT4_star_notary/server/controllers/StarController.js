@@ -146,8 +146,12 @@ var exported = {
     GET_starByAddress: async function (request, h) {
         console.log(`GET block by BLOCK_ADDRESS: ${request.params.BLOCK_ADDRESS}`);
         // TODO: This can be refactored to be cleaner! 
-        results = await dbtools.getBlockByAddress(request.params.BLOCK_ADDRESS)
 
+
+        
+        
+
+        results = await dbtools.getBlockByAddress(request.params.BLOCK_ADDRESS)
         decodedResults = [];
         for (index = 0; index < results.length; index++) { 
             let resultJson = JSON.parse(results[index]);
@@ -156,7 +160,7 @@ var exported = {
         } 
         return decodedResults;
         },
-    
+
     /**
      * 
      * @param {*} request 
@@ -164,8 +168,23 @@ var exported = {
      */
     GET_blockByHeight: async function (request, h) {
         console.log(`GET block by BLOCK_HEIGHT: ${request.params.BLOCK_HEIGHT}`);
-        return 'GET_blockByHeight';
-    },
+        // TODO: This can be refactored to be cleaner! 
+        thisHeight = request.params.BLOCK_HEIGHT;
+        numBlocks = await dbtools.getNumElements();
+        chainHeight = numBlocks-1;
+        if (thisHeight > chainHeight) {
+            return boom.badRequest(`Your request of blockheight ${thisHeight} is greater than chain height of ${chainHeight}`)
+        }
+        // console.log(request.params.BLOCK_HEIGHT, numBlocks);
+        // console.log('TESTTTTT');
+        result = await blockchain.getBlock(request.params.BLOCK_HEIGHT)
+        // console.log(result);
 
+        resultJson = result;
+        if ('star' in resultJson) {
+            resultJson.body.star['storyDecoded'] = hex2ascii(resultJson.body.star.story);
+        }
+        return resultJson;
+    },
 }
 module.exports = exported

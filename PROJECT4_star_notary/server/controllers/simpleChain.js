@@ -56,8 +56,6 @@ class Blockchain {
       console.log(`Previous hash: ${newBlock.previousBlockHash}`)
     }
 
-
-
     // Block hash with SHA256 using newBlock and converting to a string
     newBlock.hash = SHA256(JSON.stringify(newBlock)).toString();
 
