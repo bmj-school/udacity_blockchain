@@ -96,9 +96,9 @@ var exported = {
         if (!request.payload.hasOwnProperty('star')) {
             return boom.badRequest('Missing payload key. Pass star as JSON.');
         }
-        // if (!(request.payload.address in requestPool.validRequests)) {
-        //     return boom.badRequest('Address not invited to register - validate and sign first!.');
-        // }
+        if (!(request.payload.address in requestPool.validRequests)) {
+            return boom.badRequest('Address not invited to register - validate and sign first!');
+        }
 
         // The Star block data
         console.log('Payload \n' + request.payload);
@@ -146,11 +146,6 @@ var exported = {
     GET_starByAddress: async function (request, h) {
         console.log(`GET block by BLOCK_ADDRESS: ${request.params.BLOCK_ADDRESS}`);
         // TODO: This can be refactored to be cleaner! 
-
-
-        
-        
-
         results = await dbtools.getBlockByAddress(request.params.BLOCK_ADDRESS)
         decodedResults = [];
         for (index = 0; index < results.length; index++) { 
