@@ -45,10 +45,12 @@ function getLevelDBData(key) {
   })
 }
 
-
+/**
+ * Count the number of keys in the database.
+ */
 function getNumElements() {
   return new Promise(function (resolve, reject) {
-    let num = 0
+    let num = 0;
 
     db.createReadStream().on('data', (data) => {
       num++

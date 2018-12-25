@@ -175,12 +175,11 @@ var exported = {
         if (thisHeight > chainHeight) {
             return boom.badRequest(`Your request of blockheight ${thisHeight} is greater than chain height of ${chainHeight}`)
         }
-        // console.log(request.params.BLOCK_HEIGHT, numBlocks);
-        // console.log('TESTTTTT');
         result = await blockchain.getBlock(request.params.BLOCK_HEIGHT)
-        // console.log(result);
-
+        // Already converted to JSON!
         resultJson = result;
+
+        // If you request the genesis block, there is no story!
         if ('star' in resultJson) {
             resultJson.body.star['storyDecoded'] = hex2ascii(resultJson.body.star.story);
         }
