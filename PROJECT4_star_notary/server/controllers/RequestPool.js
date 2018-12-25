@@ -1,72 +1,18 @@
-
-
+const Request = require('../models/Request')
+const Invitation = require('../models/Invitation')
 const SHA256 = require('crypto-js/sha256');
-
-const testingTimeStep = 100; //[ms] set to 1000 for final production
-// const TimeoutRequestsWindowTime = 5 * testingTimeStep; //[ms] 1000;
-const TimeoutRequestsWindowTime = 5 * 60 * 1000; //[ms] 5 minutes window
+const config = require('../config/config')
 
 /**
- * Data model for Requests
+ * Store Requests and Invitations in memory.
+ * Manage and validate.
  */
-class Invitation {
-    constructor(requestObj) {
-        this.registerStar = true;
-        this.address = requestObj.address;
-        this.requestTimeStamp = requestObj.requestTimeStamp;
-        this.message = requestObj.message;
-        this.validationWindow = requestObj.validationWindow;
-        this.messageSignature = 'true';
-        console.log('New invitation for a star registry entry.');
-    }
-
-    respond() {
-        return {
-            'registerStar': 'true',
-            'status': {
-                'address': this.address,
-                'requestTimestamp': this.requestTimestamp,
-                'message': this.message,
-                'validationWindow': Math.ceil((TimeoutRequestsWindowTime + (this.requestTimestamp - Date.now())) / 1000),
-                'messageSignature': this.messageSignature
-            }
-
-        }
-    }
-}
-
-
-class Request {
-    constructor(address) {
-        this.address = address
-        this.requestTimestamp = Date.now();
-
-        // TODO: make this request dynamic for production
-        // this.message = `${this.address}:${this.requestTimestamp}:starRegistry`
-        this.message = `${this.address}:\${this.requestTimestamp}:starRegistry`
-    }
-
-    respond() {
-        return {
-            'address': this.address,
-            'requestTimestamp': this.requestTimestamp,
-            'message': this.message,
-            'validationWindow': Math.ceil((TimeoutRequestsWindowTime + (this.requestTimestamp - Date.now())) / 1000)
-        }
-    }
-
-    invite() {
-        return new Invitation(this);
-    }
-}
-
 class RequestPool {
     constructor() {
         this.mempool = {}; // address:Request
         this.timeoutRequests = {}; // Storing removal triggers
         this.validRequests = {} // Move a Request here after validation
-        console.log(`New RequestPool with timeout window of ${TimeoutRequestsWindowTime / 1000} s`);
-
+        console.log(`New RequestPool with timeout window of ${config.TimeoutRequestsWindowTime / 1000} s`);
     }
 
     /**
@@ -103,7 +49,7 @@ class RequestPool {
             this.timeoutRequests[address] = setTimeout(
                 function () {
                     self.removeValidationRequest(address)
-                }, TimeoutRequestsWindowTime);
+                }, config.TimeoutRequestsWindowTime);
             console.log(`Added ${address} to mempool`);
             return this.mempool[address].respond()
         }
@@ -125,7 +71,7 @@ class RequestPool {
     }
 
     /**
-     * 
+     * Utility.
      */
     listRequests() {
         for (const [key, value] of Object.entries(this.mempool)) {
@@ -134,6 +80,9 @@ class RequestPool {
     }
 }
 
+/** 
+ * IGNORE - initial testing
+ */
 if (0) {
     console.log('\n\n');
     console.log('**** TESTING ****');

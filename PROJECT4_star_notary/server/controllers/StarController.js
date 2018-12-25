@@ -1,5 +1,5 @@
 const boom = require('boom');
-const RequestValidator = require('./RequestValidator');
+const RequestValidator = require('./RequestPool');
 const blockchainlib = require('./simpleChain');
 const Block = require('../models/Block')
 const bitcoinMessage = require('bitcoinjs-message');
@@ -62,7 +62,7 @@ var exported = {
             let message = requestObject.message
 
             let isValid = bitcoinMessage.verify(message, address, signature);
-            
+
             if (isValid) {
                 console.log('Valid signature.');
                 // This will shift the wallet from pending to approved list
@@ -102,23 +102,24 @@ var exported = {
         // The Star block data
         console.log('Payload \n' + request.payload);
         thisStar = new Star(request.payload);
-        // Validate here
-        try { 
-            thisStar.validate(); 
-        } catch(err) { 
-            console.log(err); 
-            return boom.badImplementation('Error ', err);
-        }
 
-        // Add the star block to the chain
-        try {
-            let block = new Block(thisStar.asBlockBody());
-            block = await blockchain.addBlock(block);
-            block.body.star['storyDecoded'] = hex2ascii(block.body.star.story);
-            return block;
-        } catch (err) {
-            console.log(err);
-            return boom.badImplementation('Error ', err);
+        // Check if the star data is valid
+        validReturn = thisStar.validate();
+
+        if (!(validReturn === true)) {
+            console.log(validReturn);
+            return boom.badRequest('Error in star data: ' + validReturn);
+        } else {
+            // Add the star block to the chain
+            try {
+                let block = new Block(thisStar.asBlockBody());
+                block = await blockchain.addBlock(block);
+                block.body.star['storyDecoded'] = hex2ascii(block.body.star.story);
+                return block;
+            } catch (err) {
+                console.log(err);
+                return boom.badImplementation('Error ', err);
+            }
         }
     },
 

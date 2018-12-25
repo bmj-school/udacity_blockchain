@@ -14,14 +14,17 @@ class Star {
     }
 
     validate() {
-        if (!('dec' in this.data['star'])) { throw new Error('Missing dec') }
-        if (this.data['star']['dec'].length > 20) { throw new Error('dec too long') }
+        // TODO: How to properly handle these errors in Hapi???
+        if (!('dec' in this.data['star'])) { return 'Missing dec' }
+        if (this.data['star']['dec'].length > 20) { return 'dec too long' }
 
-        if (!('ra' in this.data['star'])) { throw new Error('Missing ra') }
-        if (this.data['star']['ra'].length > 20) { throw new Error('ra too long') }
+        if (!('ra' in this.data['star'])) { return 'Missing ra' }
+        if (this.data['star']['ra'].length > 20) { return 'ra too long' }
 
-        if (!('story' in this.data['star'])) { throw new Error('Missing story') }
-        if (this.data['star']['story'].length > 250) { throw new Error('story too long') }
+        if (!('story' in this.data['star'])) { return 'Missing story' }
+        if (this.data['star']['story'].length > 250) { return 'story too long' }
+
+        return true
     }
 
     /**
