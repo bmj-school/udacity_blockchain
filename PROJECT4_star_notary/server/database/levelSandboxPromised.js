@@ -12,6 +12,7 @@ exports.addLevelDBData = addLevelDBData;
 exports.getLevelDBData = getLevelDBData;
 exports.getNumElements = getNumElements;
 exports.getBlockByHash = getBlockByHash;
+exports.getBlockByAddress = getBlockByAddress;
 
 // Add data to levelDB with key/value pair PROMISED
 function addLevelDBData(key, value) {
@@ -77,6 +78,29 @@ function getBlockByHash(hash) {
       })
       .on('close', function () {
         resolve(block);
+      });
+  });
+}
+
+
+// Get block by address
+// TODO: Generalize to get block by any parameter?
+function getBlockByAddress(address) {
+  let blocks = [];
+  return new Promise(function (resolve, reject) {
+    db.createReadStream()
+      .on('data', function (data) {
+        thisAddress = JSON.parse(data.value)['body']['address'];
+        if (thisAddress === address) {
+          let block = data.value;
+          blocks.push(block)
+        }
+      })
+      .on('error', function (err) {
+        reject(err)
+      })
+      .on('close', function () {
+        resolve(blocks);
       });
   });
 }

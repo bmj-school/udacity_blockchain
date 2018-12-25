@@ -145,8 +145,17 @@ var exported = {
      */
     GET_starByAddress: async function (request, h) {
         console.log(`GET block by BLOCK_ADDRESS: ${request.params.BLOCK_ADDRESS}`);
-        return 'GET_starByAddress';
-    },
+        // TODO: This can be refactored to be cleaner! 
+        results = await dbtools.getBlockByAddress(request.params.BLOCK_ADDRESS)
+
+        decodedResults = [];
+        for (index = 0; index < results.length; index++) { 
+            let resultJson = JSON.parse(results[index]);
+            resultJson.body.star['storyDecoded'] = hex2ascii(resultJson.body.star.story);
+            decodedResults.push(resultJson);
+        } 
+        return decodedResults;
+        },
     
     /**
      * 
