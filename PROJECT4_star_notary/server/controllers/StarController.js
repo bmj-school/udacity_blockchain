@@ -5,6 +5,7 @@ const Block = require('../models/Block')
 const bitcoinMessage = require('bitcoinjs-message');
 const hex2ascii = require('hex2ascii');
 const Star = require('../models/Star');
+const dbtools = require('../database/levelSandboxPromised');
 
 requestPool = new RequestValidator.RequestPool()
 blockchain = new blockchainlib.Blockchain()
@@ -124,17 +125,21 @@ var exported = {
     },
 
     /**
-     * 
+     * GET_starByHash
      * @param {*} request 
      * @param {*} h 
      */
     GET_starByHash: async function (request, h) {
         console.log(`GET block by BLOCK_HASH: ${request.params.BLOCK_HASH}`);
-        return 'GET_starByHash';
+        // TODO: This can be refactored to be cleaner! 
+        result = await dbtools.getBlockByHash(request.params.BLOCK_HASH)
+        resultJson = JSON.parse(result)
+        resultJson.body.star['storyDecoded'] = hex2ascii(resultJson.body.star.story);
+        return resultJson;
     },
 
     /**
-     * 
+     * GET_starByAddress
      * @param {*} request 
      * @param {*} h 
      */
@@ -142,7 +147,12 @@ var exported = {
         console.log(`GET block by BLOCK_ADDRESS: ${request.params.BLOCK_ADDRESS}`);
         return 'GET_starByAddress';
     },
-
+    
+    /**
+     * 
+     * @param {*} request 
+     * @param {*} h 
+     */
     GET_blockByHeight: async function (request, h) {
         console.log(`GET block by BLOCK_HEIGHT: ${request.params.BLOCK_HEIGHT}`);
         return 'GET_blockByHeight';

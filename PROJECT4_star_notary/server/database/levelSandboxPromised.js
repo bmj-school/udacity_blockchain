@@ -67,10 +67,9 @@ function getBlockByHash(hash) {
   return new Promise(function (resolve, reject) {
     db.createReadStream()
       .on('data', function (data) {
-        blockData = JSON.parse(data)
-        console.log(blockData['hash']);
-        if (blockData['hash'] === hash) {
-          block = data;
+        thisHash = JSON.parse(data.value)['hash'];
+        if (thisHash === hash) {
+          block = data.value;
         }
       })
       .on('error', function (err) {
@@ -136,16 +135,23 @@ getit();
 */ // PROMISE TESTING!
 
 
+
+
+
 // Get by Hash
-(async () => {
-  result = await getLevelDBData(12);
-  console.log('GET BY HASH');
-  blockData = JSON.parse(result)
-  console.log(blockData);
-  console.log('HASH', blockData['hash']);
-  result = await getBlockByHash(blockData['hash'])
-  console.log('Block by hash: ' + result);
-})();
+// (async () => {
+//   result = await getLevelDBData(1);
+//   console.log('GET BY HASH');
+//   blockData = JSON.parse(result)
+//   console.log(blockData);
+//   console.log('HASH', blockData['hash']);
+//   result = await getBlockByHash(blockData['hash'])
+//   console.log('Block by hash: ' + result);
+// })();
+
+
+
+
 // // Get the 10 values back
 // for (var i = 1; i < 10; i++) {
 //   console.log(`Looking for ${i} ...`);
