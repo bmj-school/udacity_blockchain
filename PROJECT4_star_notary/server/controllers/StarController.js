@@ -17,6 +17,7 @@ var exported = {
      * @param {*} request 
      * @param {*} h 
      */
+    // CRITERION: Web API POST endpoint to validate request with JSON response.
     POST_requestValidation: async function (request, h) {
         console.log(`POST Validation requested: ${JSON.stringify(request.payload)}`);
         if (!request.payload.hasOwnProperty('address')) {
@@ -41,6 +42,7 @@ var exported = {
      * @param {*} request 
      * @param {*} h 
      */
+    // CRITERION: Web API POST endpoint validates message signature with JSON response.
     POST_messageSigValidate: async function (request, h) {
         console.log(`POST Signature provided, validate: ${JSON.stringify(request.payload)}`);
         if (!request.payload.hasOwnProperty('address')) {
@@ -91,16 +93,14 @@ var exported = {
 
         // Error handling
         if (!request.payload.hasOwnProperty('address')) {
-            return boom.badRequest('Missing payload key. Pass address as JSON.');
-        }
+            return boom.badRequest('Missing payload key. Pass address as JSON.'); }
         if (!request.payload.hasOwnProperty('star')) {
-            return boom.badRequest('Missing payload key. Pass star as JSON.');
-        }
+            return boom.badRequest('Missing payload key. Pass star as JSON.'); }
         if (!(request.payload.address in requestPool.validRequests)) {
-            return boom.badRequest('Address not invited to register - validate and sign first!');
-        }
+            return boom.badRequest('Address not invited to register - validate and sign first!'); }
+        
 
-        // The Star block data
+        // The Star block data is stored in the Star class
         console.log('Payload \n' + request.payload);
         thisStar = new Star(request.payload);
 
@@ -116,6 +116,8 @@ var exported = {
                 let block = new Block(thisStar.asBlockBody());
                 block = await blockchain.addBlock(block);
                 block.body.star['storyDecoded'] = hex2ascii(block.body.star.story);
+                // Delete the invitation
+                delete requestPool.validRequests[address]
                 return block;
             } catch (err) {
                 console.log(err);
@@ -129,6 +131,7 @@ var exported = {
      * @param {*} request 
      * @param {*} h 
      */
+    // CRITERION: Get Star block by hash with JSON response.
     GET_starByHash: async function (request, h) {
         console.log(`GET block by BLOCK_HASH: ${request.params.BLOCK_HASH}`);
         // TODO: This can be refactored to be cleaner! 
@@ -143,6 +146,7 @@ var exported = {
      * @param {*} request 
      * @param {*} h 
      */
+    // CRITERION: Get Star block by wallet address (blockchain identity) with JSON response.
     GET_starByAddress: async function (request, h) {
         console.log(`GET block by BLOCK_ADDRESS: ${request.params.BLOCK_ADDRESS}`);
         // TODO: This can be refactored to be cleaner! 
@@ -161,6 +165,7 @@ var exported = {
      * @param {*} request 
      * @param {*} h 
      */
+    // CRITERION: Get star block by star block height with JSON response.
     GET_blockByHeight: async function (request, h) {
         console.log(`GET block by BLOCK_HEIGHT: ${request.params.BLOCK_HEIGHT}`);
         // TODO: This can be refactored to be cleaner! 
