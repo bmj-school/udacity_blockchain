@@ -13,19 +13,11 @@ blockchain = new blockchainlib.Blockchain()
 var exported = {
 
     /**
-     * 
+     * Request validation 
      * @param {*} request 
      * @param {*} h 
      */
     POST_requestValidation: async function (request, h) {
-        /*
-        1   VALIDATION
-        1.1 A user (address) submits a validation request. They pass their wallet address as data. 
-        1.2 The server calls AddRequestValidation to append the validation request to the mempool
-        1.3 The server returns a requestObject wtih the address, the timestamp of the request, 
-            the message, and the validation windows (300 seconds)
-
-        */
         console.log(`POST Validation requested: ${JSON.stringify(request.payload)}`);
         if (!request.payload.hasOwnProperty('address')) {
             return boom.badRequest('Missing payload key. Pass address as JSON.');
@@ -33,14 +25,19 @@ var exported = {
 
         thisAddress = request.payload.address;
         if (thisAddress in requestPool.mempool) {
+            // This user already exists in the mempool, return the existing Request!
             return requestPool.mempool[thisAddress].respond()
+        } else{
+            // This is a new request for validation 
+            // Create a new Request in the mempool
+            response = requestPool.addRequest(thisAddress)
+            return response;
         }
-        response = requestPool.addRequest(thisAddress)
-        return response;
+
     },
 
     /**
-     * 
+     * Authenticate, and recieve invitation
      * @param {*} request 
      * @param {*} h 
      */
@@ -56,6 +53,7 @@ var exported = {
         address = request.payload.address;
 
         if (address in requestPool.mempool) {
+            // This user has requested validation, get the Request
             requestInstance = requestPool.mempool[thisAddress]
             requestObject = requestInstance.respond();
 
@@ -64,9 +62,10 @@ var exported = {
 
             let isValid = bitcoinMessage.verify(message, address, signature);
 
+            // Check validation
             if (isValid) {
                 console.log('Valid signature.');
-                // This will shift the wallet from pending to approved list
+                // This will shift the user from the pending to approved list
                 requestPool.approveWallet(address);
                 return requestPool.validRequests[address].respond();;
             } else {
@@ -74,6 +73,7 @@ var exported = {
             }
 
         } else {
+            // This user has not requested validation, there is no Request in mempool
             return boom.badRequest('This address has not requested validation, or request has expired.');
         }
     },

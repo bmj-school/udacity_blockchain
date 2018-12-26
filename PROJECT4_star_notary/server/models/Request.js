@@ -10,9 +10,9 @@ class Request {
         this.address = address
         this.requestTimestamp = Date.now();
 
-        // TODO: make this request dynamic for production
-        // this.message = `${this.address}:${this.requestTimestamp}:starRegistry`
-        this.message = `${this.address}:\${this.requestTimestamp}:starRegistry`
+        this.message = `${this.address}:${this.requestTimestamp}:starRegistry`
+        // TODO: make this request dynamic or statis for testing / production
+        // this.message = `${this.address}:\${this.requestTimestamp}:starRegistry`
     }
 
     respond() {
