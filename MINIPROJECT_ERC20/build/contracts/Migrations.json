@@ -1386,6 +1386,12 @@
     "version": "0.4.24+commit.e67f0147.Linux.g++"
   },
   "networks": {
+    "4": {
+      "events": {},
+      "links": {},
+      "address": "0x2Ef201a06407E9b49fF626f3cdD3a2755eA6135e",
+      "transactionHash": "0x3c994b91daeb16da7b9a8bd83a9d5d57b343d1b01ea8fb511966da3f81a2eea1"
+    },
     "4447": {
       "events": {},
       "links": {},
@@ -1394,7 +1400,7 @@
     }
   },
   "schemaVersion": "3.0.0",
-  "updatedAt": "2019-01-01T21:56:59.767Z",
+  "updatedAt": "2019-01-01T22:32:56.913Z",
   "devdoc": {
     "methods": {}
   },
