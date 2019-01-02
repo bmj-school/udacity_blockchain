@@ -2510,8 +2510,16 @@
       },
       "address": "0x277B1Ab210247CbAd98251761718AC4e57b8170f",
       "transactionHash": "0xf1f07b1fb43822148f1f3f4ebcf6654ab00353e025787ae7e854fadaa6e85974"
+    },
+    "5777": {
+      "events": {},
+      "links": {
+        "ConvertLib": "0xcAa0195EE89ACed83C3A5cbeCbA777552AC3Facd"
+      },
+      "address": "0x3a5C0CD8f467A1E22B34C64809659AE26F04AD77",
+      "transactionHash": "0x30ed9524fc065f31324a4b38a8f96c68995e898bd5b86ee7c5d8fcc5a0d51b43"
     }
   },
   "schemaVersion": "3.0.0",
-  "updatedAt": "2019-01-02T15:24:28.304Z"
+  "updatedAt": "2019-01-02T18:42:51.200Z"
 }

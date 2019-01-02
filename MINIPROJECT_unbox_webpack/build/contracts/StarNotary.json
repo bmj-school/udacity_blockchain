@@ -854,10 +854,16 @@
       "links": {},
       "address": "0xBD9E9DdaBa98845fd4Bbc79841842430a031a77F",
       "transactionHash": "0x69d98be5f7c429f75d11ceb9d8f12b5895321661a987ff866752259f88dc33c0"
+    },
+    "5777": {
+      "events": {},
+      "links": {},
+      "address": "0xBE69407090B3aE74A5faA035d6810F6db5277d79",
+      "transactionHash": "0x54f3744df61e80fbeead53c6c309359a7f71137882c6ce8053774adddb5514a0"
     }
   },
   "schemaVersion": "3.0.0",
-  "updatedAt": "2019-01-02T15:24:28.301Z",
+  "updatedAt": "2019-01-02T18:42:51.196Z",
   "devdoc": {
     "methods": {}
   },
