@@ -10,9 +10,15 @@ contract('StarNotary', async (accs) => {
     accounts = accs;
     owner = accounts[0];
     instance = await StarNotary.deployed();
+    console.log('HELLO! THIS IS THE INSTANCE:');
+    // console.log(instance);
+    console.log('instance.starName' + instance.starName);
+    // console.log(await instance.starName.call()); 
+    
 })
 
 it('has correct name', async () => {
+    console.log('HELLO, inside test.');
     assert.equal(await instance.starName.call(), 'Awesome Udacity Star');
 })
 
