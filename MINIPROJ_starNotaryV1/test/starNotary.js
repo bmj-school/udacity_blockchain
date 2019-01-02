@@ -10,7 +10,7 @@ var owner;
 contract('StarNotary', async (accs) => {
     accounts = accs;
     owner = accounts[0];
-    instance = await  StarNotary.deployed();
+    instance = await StarNotary.deployed();
 })
 
 it('has the correct name', async () => {
