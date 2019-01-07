@@ -92,6 +92,7 @@ it('lets 2 users exchange star tokens', async() => {
   await instance.createStar('user2 star', starTwoID, {from: user2})
   assert.equal(await instance.ownerOf(starTwoID), user2)
 
+  await instance.exchangeStarsNAIVE(starOneID, starTwoID, {from: user1})
 });
 
 // 3) Stars Tokens can be transferred from one address to another.

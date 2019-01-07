@@ -57,6 +57,22 @@ contract StarNotary is ERC721 {
 // Add a function called exchangeStars, so 2 users can exchange their star tokens...
 //Do not worry about the price, just write code to exchange stars between users.
 
+    // First, a request option is created, which another user can accept
+    // function putStarsUpForExchange(uint256 _tokenId, uint256 _price) public {
+    //     require(ownerOf(_tokenId) == msg.sender);
+
+    //     starsForSale[_tokenId] = _price;
+    // }
+
+    function exchangeStarsNAIVE(uint256 _myTokenID, uint256 _theirTokenID) {
+        require(ownerOf(_myTokenID) == msg.sender);
+
+        address theirAddress = ownerOf(_theirTokenID);
+        // require(ownerOf(_theirTokenID) == _theirAddress);
+
+        safeTransferFrom(msg.sender, theirAddress, _myTokenID);
+        safeTransferFrom(theirAddress, msg.sender, _theirTokenID);
+    }
 //
 
 // Write a function to Transfer a Star. The function should transfer a star from the address of the caller.
