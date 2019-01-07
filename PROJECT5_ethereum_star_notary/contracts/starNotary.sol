@@ -4,6 +4,9 @@ import 'openzeppelin-solidity/contracts/token/ERC721/ERC721.sol';
 
 contract StarNotary is ERC721 {
 
+    string public name = "Galaxy";
+    string public symbol = "GLX";
+
     struct Star {
         string name;
     }
