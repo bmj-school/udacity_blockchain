@@ -11,7 +11,7 @@ contract StarNotary is ERC721 {
     
     // CRITERIA: The smart contract tokens should have a name and a symbol.
     string public name = "Galaxy";
-    string public symbol = "GLX";
+    string public symbol = "GLXY";
 
     mapping(uint256 => Star) public tokenIdToStarInfo;
     mapping(uint256 => uint256) public starsForSale;
