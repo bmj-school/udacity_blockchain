@@ -4,16 +4,14 @@ import 'openzeppelin-solidity/contracts/token/ERC721/ERC721.sol';
 
 contract StarNotary is ERC721 {
 
-    string public name = "Galaxy";
-    string public symbol = "GLX";
-
     struct Star {
         string name;
+ 
     }
-
-//  Add a name and a symbol for your starNotary tokens
-
-//
+    
+    // CRITERIA: The smart contract tokens should have a name and a symbol.
+    string public name = "Galaxy";
+    string public symbol = "GLX";
 
     mapping(uint256 => Star) public tokenIdToStarInfo;
     mapping(uint256 => uint256) public starsForSale;
@@ -27,7 +25,9 @@ contract StarNotary is ERC721 {
     }
 
 // Add a function lookUptokenIdToStarInfo, that looks up the stars using the Token ID, and then returns the name of the star.
-
+    function lookUptokenIdToStarInfo(uint256 _tokenId) public view returns (string) {
+        return tokenIdToStarInfo[_tokenId].name;
+    }
 //
 
     function putStarUpForSale(uint256 _tokenId, uint256 _price) public {
