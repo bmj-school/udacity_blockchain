@@ -15,6 +15,12 @@ contract('StarNotary', async (accs) => {
     assert.equal(await instance.tokenIdToStarInfo.call(tokenId), 'Awesome Star!')
   });
 
+  it('returns the name based on the token ID', async() => {
+    let tokenId = 1;
+    thisName = await instance.lookUptokenIdToStarInfo(tokenId)
+    assert.equal(thisName, 'Awesome Star!')
+  });
+
   it('lets user1 put up their star for sale', async() => {
     let user1 = accounts[1]
     let starId = 2;
