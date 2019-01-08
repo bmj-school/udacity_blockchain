@@ -70,7 +70,7 @@ const App = {
   setName: function (message) {
     const name = document.getElementById('foundname')
     name.innerHTML = message
-  }
+  },
 
   createStar: function () {
     createStar();
