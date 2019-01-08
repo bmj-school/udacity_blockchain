@@ -34,7 +34,10 @@ See `./app/index.html`
 
 Front end working in development network:
 
-![Front end working - dev networkt](/PROJECT5_ethereum_star_notary/img/Front end working - dev network.png)
+![Front end working - dev networkt](img/Front end working - dev network.png)
+
+[[PROJECT5_ethereum_star_notary/img/Front end working - dev network.pn]]
+
 
 Token successfully added to MetaMask in development network:
 
