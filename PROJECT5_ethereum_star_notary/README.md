@@ -34,11 +34,11 @@ See `./app/index.html`
 
 Front end working in development network:
 
-![Alt text](img/Front end working - dev network.png)
+![Front end working - dev networkt](PROJECT5_ethereum_star_notary/img/Front end working - dev network.png)
 
 Token successfully added to MetaMask in development network:
 
-![1546968336574](/home/batman/.config/Typora/typora-user-images/1546968336574.png)
+![Token in MetaMask - dev networ](PROJECT5_ethereum_star_notary/img/Token in MetaMask - dev network.png)
 
 ## Project Criteria Section 6: Add a Readme.md file
 
