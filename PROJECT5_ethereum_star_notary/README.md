@@ -34,14 +34,12 @@ See `./app/index.html`
 
 Front end working in development network:
 
-![Front end working - dev networkt](img/Front end working - dev network.png)
-
-[[PROJECT5_ethereum_star_notary/img/Front end working - dev network.pn]]
+![Front end working - dev networkt](img/Front%20end%20working%20-%20dev%20network.png)
 
 
 Token successfully added to MetaMask in development network:
 
-![Token in MetaMask - dev networ](/PROJECT5_ethereum_star_notary/img/Token in MetaMask - dev network.png)
+![Token in MetaMask - dev networ](/PROJECT5_ethereum_star_notary/img/Token%20in%20MetaMask%20-%20dev%20network.png)
 
 ## Project Criteria Section 6: Add a Readme.md file
 
