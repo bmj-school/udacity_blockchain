@@ -1,3 +1,4 @@
 **/chaindata/
 **/node_modules/
 **/.vscode/
+**/*/.secret
