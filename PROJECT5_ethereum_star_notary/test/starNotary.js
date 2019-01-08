@@ -71,13 +71,13 @@ contract('StarNotary', async (accs) => {
 
   // Write Tests for:
 
-// 1) The token name and token symbol are added properly.
+// CRITERIA: 1) The token name and token symbol are added properly.
   it('has a name and symbol', async() => {
     assert.equal(await instance.name(), "Galaxy"); 
     assert.equal(await instance.symbol(), "GLXY"); 
   });
 
-// 2) 2 users can exchange their stars.
+// CRITERIA: 2) 2 users can exchange their stars.
 it('lets 2 users exchange star tokens', async() => {
   let user1 = accounts[1]
   let user2 = accounts[2]
@@ -92,7 +92,36 @@ it('lets 2 users exchange star tokens', async() => {
   await instance.createStar('user2 star', starTwoID, {from: user2})
   assert.equal(await instance.ownerOf(starTwoID), user2)
 
-  await instance.exchangeStarsNAIVE(starOneID, starTwoID, {from: user1})
+  // User 1 offers an exchange; star 100 for star 200
+  let offerkey; 
+  offerKey = await instance.offerExchange(starOneID, starTwoID, 0, 0, 0, {from: user1});
+  
+  // The offer exists
+  assert.equal(await instance.offerExists(starOneID, starTwoID), true);
+ 
+  // Make the swap
+  await instance.exchangeStars(starOneID, starTwoID, {from: user2})
+
+  // The offer is deleted
+  assert.equal(await instance.offerExists(starOneID, starTwoID), false);
+
+  // Check that they are swapped
+  assert.equal(await instance.ownerOf(starOneID), user2)
+  assert.equal(await instance.ownerOf(starTwoID), user1)
 });
 
-// 3) Stars Tokens can be transferred from one address to another.
+// CRITERIA: 3) Stars Tokens can be transferred from one address to another.
+it('lets Tokens be transferred from one address to another', async function() {
+  let user1 = accounts[1];
+  let user2 = accounts[2];
+
+  let starOneID = 999;
+
+  // User 1 has a star
+  await instance.createStar("user1 star", starOneID, {from: user1});
+  assert.equal(await instance.ownerOf(starOneID), user1);
+
+  // User 2 gets the star
+  await instance.transferStar(user2, starOneID, {from: user1});
+  assert.equal(await instance.ownerOf(starOneID), user2);
+});
