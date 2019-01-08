@@ -25,6 +25,10 @@ const createStar = async () => {
   App.setStatus("New Star Owner is " + account + ".");
 }
 
+const lookupStar = async () => {
+  const instance = await StarNotary.deployed(); 
+}
+
 // Add a function lookUp to Lookup a star by ID using tokenIdToStarInfo()
 
 //
@@ -62,6 +66,10 @@ const App = {
   createStar: function () {
     createStar();
   },
+
+  lookupStar: function () {
+    lookupStar();
+  }
 
 }
 
