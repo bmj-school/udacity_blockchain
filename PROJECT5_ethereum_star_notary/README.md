@@ -32,12 +32,12 @@ See `./app/index.html`
 
 ## Project Criteria Section 5: Add Your Token to your Metamask Wallet
 
-Front end working in development network:
+*Front end working in development network:*
 
 ![Front end working - dev networkt](img/Front%20end%20working%20-%20dev%20network.png)
 
 
-Token successfully added to MetaMask in development network:
+*Token successfully added to MetaMask in development network:*
 
 ![Token in MetaMask - dev networ](/PROJECT5_ethereum_star_notary/img/Token%20in%20MetaMask%20-%20dev%20network.png)
 
