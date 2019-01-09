@@ -147,7 +147,6 @@ contract StarNotary is ERC721 {
                                                         0);
     }    
     
-    //TODO: CRUD functions for ExchangeOffers (delete, update)
     
     /* Utility function, check if there is a proposed swap for these tokens
     */
@@ -161,40 +160,6 @@ contract StarNotary is ERC721 {
         
     }
     
-    /* REVIEWER IGNORE - FOR DEVELOPMENT ONLY
-    For debugging, ensure 2 tokens exist and get their owners
-    */
-    function checkExchangeAddresses(uint256 _tokenOneID, uint256 _tokenTwoID) public view returns (address, address){
-        require(_exists(_tokenOneID));
-        require(_exists(_tokenTwoID));
-        
-        address address1 = ownerOf(_tokenOneID);
-        address address2 = ownerOf(_tokenTwoID);
-        
-        return(address1, address2);
-    }
-
-    /* REVIEWER IGNORE - FOR DEVELOPMENT ONLY
-    FAILS, See note: `Requires the msg sender to be the owner, approved, or operator`
-    Super naive and insecure, for debugging
-    */
-    function exchangeStarsNAIVE(uint256 _tokenOneID, uint256 _tokenTwoID) public {
-        
-        require(_exists(_tokenOneID));
-        require(_exists(_tokenTwoID));
-        
-        require(msg.sender==ownerOf(_tokenOneID));
-        
-        address address1 = ownerOf(_tokenOneID);
-        address address2 = ownerOf(_tokenTwoID);
-        
-        transferFrom(address1, address2, _tokenOneID);
-        // The following line FAILS, since msg.sender != address2!!!
-        //transferFrom(address2, address1, _tokenOneID);
-    }
-    
-
-//
 
 // Write a function to Transfer a Star. The function should transfer a star from the address of the caller.
 // The function should accept 2 arguments, the address to transfer the star to, and the token ID of the star.
