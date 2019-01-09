@@ -32,13 +32,14 @@ See `./app/index.html`
 
 ## Project Criteria Section 5: Add Your Token to your Metamask Wallet
 
-Front end working in development network:
+*Front end working in development network:*
 
-![Alt text](img/Front end working - dev network.png)
+![Front end working - dev networkt](img/Front%20end%20working%20-%20dev%20network.png)
 
-Token successfully added to MetaMask in development network:
 
-![1546968336574](/home/batman/.config/Typora/typora-user-images/1546968336574.png)
+*Token successfully added to MetaMask in development network:*
+
+![Token in MetaMask - dev networ](/PROJECT5_ethereum_star_notary/img/Token%20in%20MetaMask%20-%20dev%20network.png)
 
 ## Project Criteria Section 6: Add a Readme.md file
 
