@@ -96,43 +96,43 @@ contract SupplyChain {
 
   // Define a modifier that checks if an item.state of a upc is Processed
   modifier processed(uint _upc) {
-
+    require(items[_upc].itemState == State.Processed);
     _;
   }
   
   // Define a modifier that checks if an item.state of a upc is Packed
   modifier packed(uint _upc) {
-
+    require(items[_upc].itemState == State.Packed);
     _;
   }
 
   // Define a modifier that checks if an item.state of a upc is ForSale
   modifier forSale(uint _upc) {
-
+    require(items[_upc].itemState == State.ForSale);
     _;
   }
 
   // Define a modifier that checks if an item.state of a upc is Sold
   modifier sold(uint _upc) {
-
+    require(items[_upc].itemState == State.Sold);
     _;
   }
   
   // Define a modifier that checks if an item.state of a upc is Shipped
   modifier shipped(uint _upc) {
-
+    require(items[_upc].itemState == State.Shipped);
     _;
   }
 
   // Define a modifier that checks if an item.state of a upc is Received
   modifier received(uint _upc) {
-
+    require(items[_upc].itemState == State.Received);
     _;
   }
 
   // Define a modifier that checks if an item.state of a upc is Purchased
   modifier purchased(uint _upc) {
-    
+    require(items[_upc].itemState == State.Purchased);
     _;
   }
 
@@ -344,7 +344,7 @@ contract SupplyChain {
   productNotes = _item.productNotes;
   productPrice = _item.productPrice;
   itemState = uint(_item.itemState);
-  processorID = _item.processorID;
+  distributorID = _item.processorID;
   retailerID = _item.retailerID;
   consumerID = _item.consumerID;
     
@@ -363,3 +363,19 @@ contract SupplyChain {
   );
   }
 }
+
+    // uint    sku;  
+    // uint    upc; 
+    // address ownerID;  
+    // address originFarmerID; 
+    // string  originFarmName; 
+    // string  originFarmInformation;  
+    // string  originFarmLatitude; 
+    // string  originFarmLongitude;  
+    // uint    productID;  
+    // string  productNotes; 
+    // uint    productPrice; 
+    // State   itemState;  
+    // address distributorID;  
+    // address retailerID; 
+    // address consumerID; 
