@@ -1,6 +1,13 @@
 pragma solidity ^0.4.24;
+
+import "../coffeeaccesscontrol/FarmerRole.sol";
+import "../coffeeaccesscontrol/DistributorRole.sol";
+import "../coffeeaccesscontrol/RetailerRole.sol";
+import "../coffeeaccesscontrol/ConsumerRole.sol";
+
+
 // Define a contract 'Supplychain'
-contract SupplyChain {
+contract SupplyChain is FarmerRole{
 
   // Define 'owner'
   address owner;
@@ -153,6 +160,7 @@ contract SupplyChain {
   }
 
   // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
+  // This instantiates the item in the blockchain
   function harvestItem(uint _upc, address _originFarmerID, string _originFarmName, string _originFarmInformation, string  _originFarmLatitude, string  _originFarmLongitude, string  _productNotes) public 
   {
     // Add the new item as part of Harvest
@@ -186,7 +194,9 @@ contract SupplyChain {
   // Call modifier to check if upc has passed previous supply chain stage
   harvested(_upc) 
   // Call modifier to verify caller of this function
+  
   verifyCaller(msg.sender) 
+  // verifyCaller(items[_upc].originFarmerID) 
   {
     // Update the appropriate fields
     items[_upc].itemState = State.Processed;
@@ -198,9 +208,10 @@ contract SupplyChain {
   // Define a function 'packItem' that allows a farmer to mark an item 'Packed'
   function packItem(uint _upc) public 
   // Call modifier to check if upc has passed previous supply chain stage
-  
+  processed(_upc) 
+
   // Call modifier to verify caller of this function
-  
+  verifyCaller(msg.sender)
   {
     // Update the appropriate fields
     

@@ -75,10 +75,8 @@ contract('SupplyChain', function(accounts) {
         assert.equal(_resultBuffer[8], defaultConsumerID, 'Error: consumerID should not be set at this point')
     }
 
-
-
-
-
+    // (Step 0)
+    // Setup all roles? 
 
     // 1st Test
     it("Testing smart contract function harvestItem() that allows a farmer to harvest coffee", async() => {
@@ -95,6 +93,7 @@ contract('SupplyChain', function(accounts) {
 
         // Mark an item as Harvested by calling function harvestItem()
         await supplyChain.harvestItem(upc, originFarmerID, originFarmName, originFarmInformation, originFarmLatitude, originFarmLongitude, productNotes)
+
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
         // const resultBufferTwo = await supplyChain.fetchItemBufferTwo.call(upc)
