@@ -87,12 +87,33 @@ contract('SupplyChain', function(accounts) {
         
         // Watch the emitted event Harvested()
         var event = supplyChain.Harvested()
+        // await event.watch((err, res) => {
+        //     eventEmitted = true
+        // })
+        
+        // Register the farmer
+        await supplyChain.registerFarmer(originFarmerID, {from:ownerID});
+        // await supplyChain.registerFarmer(originFarmerID, {from:originFarmerID}); // This fails, since only owner can register actors
+
+        // console.log(`${thisResult}`);
+        
+        // Mark an item as Harvested by calling function harvestItem()
+        await supplyChain.harvestItem(
+            upc, 
+            originFarmerID, 
+            originFarmName, 
+            originFarmInformation, 
+            originFarmLatitude, 
+            originFarmLongitude, 
+            productNotes,
+            {from:originFarmerID} // Ensure only farmer can harvest! Uncomment for testing 
+            // {from:ownerID} // owner is always a farmer, since they instantiate the contract
+            // {from:distributorID}  // This fails the test since distributorID is not registered
+            )
+
         await event.watch((err, res) => {
             eventEmitted = true
         })
-
-        // Mark an item as Harvested by calling function harvestItem()
-        await supplyChain.harvestItem(upc, originFarmerID, originFarmName, originFarmInformation, originFarmLatitude, originFarmLongitude, productNotes)
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
