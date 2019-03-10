@@ -97,7 +97,7 @@ contract('SupplyChain', function(accounts) {
         await supplyChain.harvestItem(upc, originFarmerID, originFarmName, originFarmInformation, originFarmLatitude, originFarmLongitude, productNotes)
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
-        const resultBufferTwo = await supplyChain.fetchItemBufferTwo.call(upc)
+        // const resultBufferTwo = await supplyChain.fetchItemBufferTwo.call(upc)
 
         console.log("Harvest Item")
         console.log(resultBufferOne)
@@ -123,13 +123,13 @@ contract('SupplyChain', function(accounts) {
 
         // Mark an item as Processed by calling function processtItem()
         await supplyChain.processItem(upc)
-        
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
+        const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
 
         // Verify the result set
-        
+        _assertBufferOne(resultBufferOne)
+        assert.equal(eventEmitted, true, 'Invalid event emitted')             
     })    
 
     // 3rd Test
