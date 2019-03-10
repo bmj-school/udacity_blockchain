@@ -53,7 +53,7 @@ contract SupplyChain {
   }
 
   // Define 8 events with the same 8 state values and accept 'upc' as input argument
-  event Harvested(uint upc);
+  event Harvested(uint upc, uint sku);
   event Processed(uint upc);
   event Packed(uint upc);
   event ForSale(uint upc);
@@ -169,14 +169,16 @@ contract SupplyChain {
         productNotes: _productNotes,
         productPrice: 0,
         itemState: defaultState,
-        processorID: address(0),
+        distributorID: address(0),
         retailerID: address(0),
         consumerID: address(0)
     });     
+
+    // Emit the appropriate event
+    emit Harvested(_upc, sku); 
+
     // Increment sku
     sku = sku + 1;
-    // Emit the appropriate event
-    emit Harvested(_upc); 
   }
 
   // Define a function 'processtItem' that allows a farmer to mark an item 'Processed'
@@ -291,8 +293,19 @@ contract SupplyChain {
   string  originFarmLongitude
   ) 
   {
+
   // Assign values to the 8 parameters
-  
+  Item storage _item = items[_upc]; // Get the Item
+
+  itemSKU = _item.sku;
+  itemUPC = _item.upc;
+  ownerID = _item.ownerID;
+  originFarmerID = _item.originFarmerID;
+  originFarmName = _item.originFarmName;
+  originFarmInformation = _item.originFarmInformation;
+  originFarmLatitude = _item.originFarmLatitude;
+  originFarmLongitude = _item.originFarmLongitude;
+    
     
   return 
   (
@@ -321,8 +334,20 @@ contract SupplyChain {
   address consumerID
   ) 
   {
-    // Assign values to the 9 parameters
   
+  // Assign values to the 9 parameters
+  Item storage _item = items[_upc];
+
+  itemSKU = _item.sku;
+  itemUPC = _item.upc;
+  productID = _item.productID;
+  productNotes = _item.productNotes;
+  productPrice = _item.productPrice;
+  itemState = uint(_item.itemState);
+  processorID = _item.processorID;
+  retailerID = _item.retailerID;
+  consumerID = _item.consumerID;
+    
     
   return 
   (
