@@ -344,7 +344,7 @@ contract SupplyChain {
   productNotes = _item.productNotes;
   productPrice = _item.productPrice;
   itemState = uint(_item.itemState);
-  distributorID = _item.processorID;
+  distributorID = _item.distributorID;
   retailerID = _item.retailerID;
   consumerID = _item.consumerID;
     
