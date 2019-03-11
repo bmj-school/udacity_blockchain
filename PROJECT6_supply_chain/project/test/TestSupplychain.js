@@ -19,14 +19,15 @@ contract('SupplyChain', function(accounts) {
     const originFarmLongitude = "144.341490"
     var productID = sku + upc
     const productNotes = "Best beans for Espresso"
-    const productPrice = web3.toWei(1, "ether")
+    const productPrice = web3.toWei(5, "ether")
     var itemState = 0
     const distributorID = accounts[2]
     const retailerID = accounts[3]
     const consumerID = accounts[4]
     const emptyAddress = '0x00000000000000000000000000000000000000'
 
-    const testPrice = 5;
+    const overPayPrice = web3.toWei(6, "ether")
+    const underPayPrice = web3.toWei(3, "ether")
 
     ///Available Accounts
     ///==================
@@ -237,7 +238,7 @@ contract('SupplyChain', function(accounts) {
     // 4th Test
     it("Testing smart contract function sellItem() that allows a farmer to sell coffee", async() => {
         // Verify access control by ensuring that distributor cannot buy direct from farmer
-        await truffleAssert.reverts(supplyChain.sellItem(upc, testPrice, {from:retailerID}), "Sender not authorized.");
+        await truffleAssert.reverts(supplyChain.sellItem(upc, productPrice, {from:retailerID}), "Sender not authorized.");
 
         var eventEmitted = false        
         
@@ -248,7 +249,7 @@ contract('SupplyChain', function(accounts) {
         })        
         
         // Mark an item as ForSale by calling function sellItem()
-        await supplyChain.sellItem(upc, testPrice, {from:originFarmerID})
+        await supplyChain.sellItem(upc, productPrice, {from:originFarmerID})
         
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
@@ -260,10 +261,11 @@ contract('SupplyChain', function(accounts) {
 
     // 5th Test
     it("Testing smart contract function buyItem() that allows a distributor to buy coffee", async() => {
-        let overPayValue = testPrice + 10
+        // Verify access control by ensuring that retailer cannot buy.
+        await truffleAssert.reverts(supplyChain.buyItem(upc, {from:retailerID, value: productPrice, gasPrice: 0}), "Sender not authorized.");
 
-        // Verify access control by ensuring that retailer cannot  for sale.
-        // await truffleAssert.reverts(supplyChain.buyItem(upc, {from:retailerID, value: overPayValue, gasPrice: 0}), "Sender not authorized.");
+        // Verify underpayment reverts
+        await truffleAssert.reverts(supplyChain.buyItem(upc, {from:distributorID, value: underPayPrice, gasPrice: 0}), "Insufficient value transfer to cover price.");
         
         // Declare and Initialize a variable for event
         var eventEmitted = false        
@@ -275,7 +277,8 @@ contract('SupplyChain', function(accounts) {
         })     
         
         // Mark an item as Sold by calling function buyItem()
-        await supplyChain.buyItem(upc, {from:distributorID, value: overPayValue, gasPrice: 0}) 
+        // await supplyChain.buyItem(upc, {from:distributorID, value: productPrice, gasPrice: 0}) 
+        await supplyChain.buyItem(upc, {from:distributorID, value: overPayPrice, gasPrice: 0}) 
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc) 

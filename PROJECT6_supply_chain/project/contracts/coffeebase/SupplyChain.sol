@@ -83,14 +83,22 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
 
   // Define a modifier that checks if the paid amount is sufficient to cover the price
   modifier paidEnough(uint _price) { 
-    require(msg.value >= _price); 
+    require(msg.value >= _price, "Insufficient value transfer to cover price."); 
     _;
   }
   
   // Define a modifier that checks the price and refunds the remaining balance
-  modifier checkValue(uint _price) {
+  // modifier checkValue(uint _price) {
+  //   uint amountToReturn = msg.value - _price;
+  //   msg.sender.transfer(amountToReturn);
+  //   _;
+  // }
+  // msg.sender.transfer(amountToReturn);
+
+  modifier checkValue(uint _upc) {
+    uint _price = items[_upc].productPrice;
     uint amountToReturn = msg.value - _price;
-    msg.sender.transfer(amountToReturn);
+    items[_upc].ownerID.transfer(amountToReturn);
     _;
   }
 
@@ -265,14 +273,23 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
     paidEnough(items[_upc].productPrice)
 
     // Call modifer to send any excess ether back to buyer
-    checkValue(items[_upc].productPrice)
+    // checkValue(items[_upc].productPrice)
+    checkValue(_upc)
     {
       // Update the appropriate fields - ownerID, distributorID, itemState
+      address sellerFarmerID = items[_upc].ownerID;
       items[_upc].ownerID = msg.sender;
       items[_upc].distributorID = msg.sender;
       items[_upc].itemState = State.Sold;
 
+      // // Transfer excess
+      // if(msg.value > starCost) {
+      //     msg.sender.transfer(msg.value - items[_upc].productPrice);
+      // }
+
       // Transfer money to farmer
+      // items[_upc].originFarmerID.transfer(msg.value);
+      sellerFarmerID.transfer(items[_upc].productPrice);
       
       // emit the appropriate event
       emit Sold(_upc);
@@ -402,19 +419,3 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
   );
   }
 }
-
-    // uint    sku;  
-    // uint    upc; 
-    // address ownerID;  
-    // address originFarmerID; 
-    // string  originFarmName; 
-    // string  originFarmInformation;  
-    // string  originFarmLatitude; 
-    // string  originFarmLongitude;  
-    // uint    productID;  
-    // string  productNotes; 
-    // uint    productPrice; 
-    // State   itemState;  
-    // address distributorID;  
-    // address retailerID; 
-    // address consumerID; 
