@@ -26,6 +26,8 @@ contract('SupplyChain', function(accounts) {
     const consumerID = accounts[4]
     const emptyAddress = '0x00000000000000000000000000000000000000'
 
+    const testPrice = 5;
+
     ///Available Accounts
     ///==================
     ///(0) 0x27d8d15cbc94527cadf5ec14b69519ae23288b95
@@ -234,22 +236,26 @@ contract('SupplyChain', function(accounts) {
 
     // 4th Test
     it("Testing smart contract function sellItem() that allows a farmer to sell coffee", async() => {
-        // const supplyChain = await SupplyChain.deployed()
-        
-        // Declare and Initialize a variable for event
-        
-        
-        // Watch the emitted event ForSale()
-        
+        // Verify access control by ensuring that distributor cannot place for sale.
+        await truffleAssert.reverts(supplyChain.sellItem(upc, testPrice, {from:distributorID}), "Sender not authorized.");
 
+        var eventEmitted = false        
+        
+        // Watch the emitted event 
+        var event = supplyChain.ForSale()
+        await event.watch((err, res) => {
+            eventEmitted = true
+        })        
+        
         // Mark an item as ForSale by calling function sellItem()
+        await supplyChain.sellItem(upc, testPrice, {from:originFarmerID})
         
-
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
+        const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
 
         // Verify the result set
-          
+        _assertBufferOne(resultBufferOne)
+        assert.equal(eventEmitted, true, 'Invalid event emitted')             
     })    
 
     // 5th Test
