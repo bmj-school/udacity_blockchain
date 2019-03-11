@@ -47,8 +47,8 @@ contract('SupplyChain', function(accounts) {
     // Utility function to check Buffer One
     var _assertBufferOne = function(_resultBuffer, _ownerID) {
         var defaultOwnerID = _ownerID ? _ownerID : originFarmerID;
-        assert.equal(_resultBuffer[0], sku, 'Error: Invalid item SKU')
-        assert.equal(_resultBuffer[1], upc, 'Error: Invalid item UPC')
+        assert.equal(_resultBuffer[0], sku, `Error: Invalid item SKU ${_resultBuffer[0]}`)
+        assert.equal(_resultBuffer[1], upc, `Error: Invalid item UPC ${_resultBuffer[1]}`)
         assert.equal(_resultBuffer[2], defaultOwnerID, 'Error: Missing or Invalid ownerID')
         assert.equal(_resultBuffer[3], originFarmerID, 'Error: Missing or Invalid originFarmerID')
         assert.equal(_resultBuffer[4], originFarmName, 'Error: Missing or Invalid originFarmName')
@@ -67,33 +67,33 @@ contract('SupplyChain', function(accounts) {
         var defaultRetailerID = _retailerID ? _retailerID : 0;
         var defaultConsumerID = _consumerID ? _consumerID : 0;
 
-        assert.equal(_resultBuffer[0], sku, 'Error: Invalid item SKU')
-        assert.equal(_resultBuffer[1], upc, 'Error: Invalid item UPC')
-        assert.equal(_resultBuffer[2], defaultProductID, 'Error: Invalid productID')
-        assert.equal(_resultBuffer[3], defaultProductNotes, 'Error: Invalid productNotes')
-        assert.equal(_resultBuffer[4], defaultPrice, 'Error: Invalid product price')
-        assert.equal(_resultBuffer[5], defaultState, 'Error: Invalid item State')
-        assert.equal(_resultBuffer[6], defaultProcessorID, 'Error: processorID should not be set at this point')
-        assert.equal(_resultBuffer[7], defaultRetailerID, 'Error: retailerID should not be set at this point')
-        assert.equal(_resultBuffer[8], defaultConsumerID, 'Error: consumerID should not be set at this point')
+        assert.equal(_resultBuffer[0], sku, `Error: Invalid item SKU ${_resultBuffer[0]}`)
+        assert.equal(_resultBuffer[1], upc, `Error: Invalid item UPC ${_resultBuffer[1]}`)
+        assert.equal(_resultBuffer[2], defaultProductID, `Error: Invalid productID ${_resultBuffer[2]}`)
+        assert.equal(_resultBuffer[3], defaultProductNotes, `Error: Invalid productNotes ${_resultBuffer[3]}`)
+        assert.equal(_resultBuffer[4], defaultPrice, `Error: Invalid product price ${_resultBuffer[4]}`)
+        assert.equal(_resultBuffer[5], defaultState, `Error: Invalid item State ${_resultBuffer[5]}`)
+        assert.equal(_resultBuffer[6], defaultProcessorID, `Error: processorID should not be set at this point ${_resultBuffer[6]}`)
+        assert.equal(_resultBuffer[7], defaultRetailerID, `Error: retailerID should not be set at this point ${_resultBuffer[7]}`)
+        assert.equal(_resultBuffer[8], defaultConsumerID, `Error: consumerID should not be set at this point ${_resultBuffer[8]}`)
     }
 
     // (Step 0)
     // Setup all roles
     beforeEach( async() => {
-        console.log("\t\tFresh deployement contract owner is deployer address", accounts[0])
+        // console.log("\t\tFresh deployement contract owner is deployer address", accounts[0])
         supplyChain = await SupplyChain.new({from:ownerID})
       
-        console.log("\t\tRegistering Farmer", accounts[1])
+        // console.log("\t\tRegistering Farmer", accounts[1])
         await supplyChain.registerFarmer(originFarmerID, {from:ownerID})
         
-        console.log("\t\tRegistering Distributor", accounts[2])
+        // console.log("\t\tRegistering Distributor", accounts[2])
         await supplyChain.registerDistributor(distributorID, {from:ownerID})
 
-        console.log("\t\tRegistering Retailer", accounts[3])
+        // console.log("\t\tRegistering Retailer", accounts[3])
         await supplyChain.registerRetailer(retailerID, {from:ownerID})
 
-        console.log("\t\tRegistering Consumer", accounts[4])
+        // console.log("\t\tRegistering Consumer", accounts[4])
         await supplyChain.registerConsumer(consumerID, {from:ownerID})
         
     });
@@ -117,8 +117,6 @@ contract('SupplyChain', function(accounts) {
             originFarmLongitude, 
             productNotes,
             {from:originFarmerID} // Ensure only farmer can harvest! Uncomment for testing 
-            // {from:ownerID} // owner is always a farmer, since they instantiate the contract
-            // {from:distributorID}  // This fails the test since distributorID is not registered
             )
 
         await event.watch((err, res) => {
@@ -137,9 +135,42 @@ contract('SupplyChain', function(accounts) {
         assert.equal(eventEmitted, true, 'Invalid event emitted')        
     })    
 
+
+    // 1.5st Test
+    it("Testing smart contract function harvestItem() that disallows a distributor to harvest coffee", async() => {
+        // TODO: Best pattern for asserting errors? Reverts?         
+        try { 
+            await supplyChain.harvestItem(
+                    upc, 
+                    originFarmerID, 
+                    originFarmName, 
+                    originFarmInformation, 
+                    originFarmLatitude, 
+                    originFarmLongitude, 
+                    productNotes,
+                    {from:distributorID}  // This fails the test since distributorID is not registered
+                )
+        } catch (error) { 
+            assert( /invalid opcode|revert/.test(error), 'the error message should be invalid opcode or revert' ) 
+        }
+    })   
+
     // 2nd Test
     it("Testing smart contract function processItem() that allows a farmer to process coffee", async() => {
-        
+
+        // Rebuild the state, instantiate the item again
+        await supplyChain.harvestItem(
+            upc, 
+            originFarmerID, 
+            originFarmName, 
+            originFarmInformation, 
+            originFarmLatitude, 
+            originFarmLongitude, 
+            productNotes,
+            {from:originFarmerID} 
+            )
+
+
         // Declare and Initialize a variable for event
         var eventEmitted = false        
         
@@ -150,7 +181,7 @@ contract('SupplyChain', function(accounts) {
         })        
 
         // Mark an item as Processed by calling function processtItem()
-        await supplyChain.processItem(upc)
+        await supplyChain.processItem(upc, {from:originFarmerID})
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
