@@ -16,6 +16,7 @@
   "dependencies": {
     "babel-register": "^6.26.0",
     "truffle": "^4.1.15",
+    "truffle-assertions": "^0.8.0",
     "truffle-hdwallet-provider": "^1.0.5"
   }
 }
