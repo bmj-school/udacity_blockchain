@@ -102,9 +102,10 @@ contract('SupplyChain', function(accounts) {
     });
     */
     beforeEach( async() => {
-        // console.log("\t\tFresh deployement contract owner is deployer address", accounts[0])
+        // Deploy the smart contract once
         supplyChain = await SupplyChain.deployed({from:ownerID})
-
+        
+        // Register each role, unless it's already registered
         if (!(await supplyChain.isFarmer(originFarmerID))) {
             console.log("\t\tRegistering Farmer", accounts[1])
             await supplyChain.registerFarmer(originFarmerID, {from:ownerID})
@@ -115,11 +116,15 @@ contract('SupplyChain', function(accounts) {
             await supplyChain.registerDistributor(distributorID, {from:ownerID})
         }
 
-        // // console.log("\t\tRegistering Retailer", accounts[3])
-        // await supplyChain.registerRetailer(retailerID, {from:ownerID})
+        if (!(await supplyChain.isRetailer(retailerID))) {
+            console.log("\t\tRegistering Retailer", accounts[3])
+            await supplyChain.registerRetailer(retailerID, {from:ownerID})
+        }
 
-        // // console.log("\t\tRegistering Consumer", accounts[4])
-        // await supplyChain.registerConsumer(consumerID, {from:ownerID})
+        if (!(await supplyChain.isConsumer(consumerID))) {
+            console.log("\t\tRegistering Consumer", accounts[4])
+            await supplyChain.registerConsumer(consumerID, {from:ownerID})
+        }
         
     });
 
@@ -179,6 +184,9 @@ contract('SupplyChain', function(accounts) {
     // 2nd Test
     it("Testing smart contract function processItem() that allows a farmer to process coffee", async() => {
 
+        // Verify access control by ensuring that distributor cannot process.
+        await truffleAssert.reverts(supplyChain.processItem(upc, {from:distributorID}), "Sender not authorized.");
+
         // Declare and Initialize a variable for event
         var eventEmitted = false        
         
@@ -197,6 +205,7 @@ contract('SupplyChain', function(accounts) {
         // Verify the result set
         _assertBufferOne(resultBufferOne)
         assert.equal(eventEmitted, true, 'Invalid event emitted')             
+
     })    
 
     // 3rd Test

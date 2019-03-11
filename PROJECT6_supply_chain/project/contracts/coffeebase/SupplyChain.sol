@@ -97,7 +97,7 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
 
   // Define a modifier that checks if an item.state of a upc is Harvested
   modifier harvested(uint _upc) {
-    require(items[_upc].itemState == State.Harvested);
+    require(items[_upc].itemState == State.Harvested, "Not harvested");
     _;
   }
 
@@ -206,21 +206,21 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
     sku = sku + 1;
   }
 
+
   // Define a function 'processtItem' that allows a farmer to mark an item 'Processed'
   function processItem(uint _upc) public 
-  // Call modifier to check if upc has passed previous supply chain stage
-  harvested(_upc) 
-  // Call modifier to verify caller of this function
-  
-  verifyCaller(msg.sender) 
-  // verifyCaller(items[_upc].originFarmerID) 
-  {
-    // Update the appropriate fields
-    items[_upc].itemState = State.Processed;
+    // Call modifier to check if upc has passed previous supply chain stage
+    harvested(_upc) 
+    // Call modifier to verify caller of this function
+    // Access Control
+    onlyFarmer()
+    {
+      // Update the appropriate fields
+      items[_upc].itemState = State.Processed;
 
-    // Emit the appropriate event
-    emit Processed(_upc);    
-  }
+      // Emit the appropriate event
+      emit Processed(_upc);    
+    }
 
   // Define a function 'packItem' that allows a farmer to mark an item 'Packed'
   function packItem(uint _upc) public 
