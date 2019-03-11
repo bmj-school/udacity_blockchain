@@ -27,26 +27,28 @@ contract DistributorRole {
 
   // Define a function 'isDistributor' to check this role
   function isDistributor(address account) public view returns (bool) {
-
+    return distributors.has(account);
   }
 
   // Define a function 'addDistributor' that adds this role
   function addDistributor(address account) public onlyDistributor {
-
+    _addDistributor(account);
   }
 
   // Define a function 'renounceDistributor' to renounce this role
   function renounceDistributor() public {
-
+    _removeDistributor(msg.sender);
   }
 
   // Define an internal function '_addDistributor' to add this role, called by 'addDistributor'
   function _addDistributor(address account) internal {
-
+    distributors.add(account);
+    emit DistributorAdded(account);
   }
 
   // Define an internal function '_removeDistributor' to remove this role, called by 'removeDistributor'
   function _removeDistributor(address account) internal {
-
+    distributors.remove(account);
+    emit DistributorRemoved(account);
   }
 }
