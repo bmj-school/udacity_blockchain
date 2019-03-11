@@ -236,8 +236,8 @@ contract('SupplyChain', function(accounts) {
 
     // 4th Test
     it("Testing smart contract function sellItem() that allows a farmer to sell coffee", async() => {
-        // Verify access control by ensuring that distributor cannot place for sale.
-        await truffleAssert.reverts(supplyChain.sellItem(upc, testPrice, {from:distributorID}), "Sender not authorized.");
+        // Verify access control by ensuring that distributor cannot buy direct from farmer
+        await truffleAssert.reverts(supplyChain.sellItem(upc, testPrice, {from:retailerID}), "Sender not authorized.");
 
         var eventEmitted = false        
         
@@ -260,23 +260,29 @@ contract('SupplyChain', function(accounts) {
 
     // 5th Test
     it("Testing smart contract function buyItem() that allows a distributor to buy coffee", async() => {
-        // const supplyChain = await SupplyChain.deployed()
+        let overPayValue = testPrice + 10
+
+        // Verify access control by ensuring that retailer cannot  for sale.
+        // await truffleAssert.reverts(supplyChain.buyItem(upc, {from:retailerID, value: overPayValue, gasPrice: 0}), "Sender not authorized.");
         
         // Declare and Initialize a variable for event
+        var eventEmitted = false        
         
+        // Watch the emitted event 
+        var event = supplyChain.Sold()
+        await event.watch((err, res) => {
+            eventEmitted = true
+        })     
         
-        // Watch the emitted event Sold()
-        // var event = supplyChain.Sold()
-        
-
         // Mark an item as Sold by calling function buyItem()
-        
+        await supplyChain.buyItem(upc, {from:distributorID, value: overPayValue, gasPrice: 0}) 
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
+        const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc) 
 
         // Verify the result set
-        
+        _assertBufferOne(resultBufferOne, distributorID)
+        assert.equal(eventEmitted, true, 'Invalid event emitted')   
     })    
 
     // 6th Test
