@@ -80,6 +80,7 @@ contract('SupplyChain', function(accounts) {
 
     // (Step 0)
     // Setup all roles
+    /*
     beforeEach( async() => {
         // console.log("\t\tFresh deployement contract owner is deployer address", accounts[0])
         supplyChain = await SupplyChain.new({from:ownerID})
@@ -97,6 +98,29 @@ contract('SupplyChain', function(accounts) {
         await supplyChain.registerConsumer(consumerID, {from:ownerID})
         
     });
+    */
+    beforeEach( async() => {
+        // console.log("\t\tFresh deployement contract owner is deployer address", accounts[0])
+        supplyChain = await SupplyChain.deployed({from:ownerID})
+
+        if (!(await supplyChain.isFarmer(originFarmerID))) {
+            console.log("\t\tRegistering Farmer", accounts[1])
+            await supplyChain.registerFarmer(originFarmerID, {from:ownerID})
+        }
+       
+        if (!(await supplyChain.isDistributor(distributorID))) {
+            console.log("\t\tRegistering Distributor", accounts[2])
+            await supplyChain.registerDistributor(distributorID, {from:ownerID})
+        }        
+
+        // // console.log("\t\tRegistering Retailer", accounts[3])
+        // await supplyChain.registerRetailer(retailerID, {from:ownerID})
+
+        // // console.log("\t\tRegistering Consumer", accounts[4])
+        // await supplyChain.registerConsumer(consumerID, {from:ownerID})
+        
+    });
+
 
     // 1st Test
     it("Testing smart contract function harvestItem() that allows a farmer to harvest coffee", async() => {
@@ -157,19 +181,6 @@ contract('SupplyChain', function(accounts) {
 
     // 2nd Test
     it("Testing smart contract function processItem() that allows a farmer to process coffee", async() => {
-
-        // Rebuild the state, instantiate the item again
-        await supplyChain.harvestItem(
-            upc, 
-            originFarmerID, 
-            originFarmName, 
-            originFarmInformation, 
-            originFarmLatitude, 
-            originFarmLongitude, 
-            productNotes,
-            {from:originFarmerID} 
-            )
-
 
         // Declare and Initialize a variable for event
         var eventEmitted = false        
