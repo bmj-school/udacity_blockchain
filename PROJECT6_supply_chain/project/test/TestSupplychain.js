@@ -325,19 +325,21 @@ contract('SupplyChain', function(accounts) {
 
     // 7th Test
     it("Testing smart contract function receiveItem() that allows a retailer to mark coffee received", async() => {
-        // const supplyChain = await SupplyChain.deployed()
         
-        // Declare and Initialize a variable for event
+        var eventEmitted = false        
         
-        
-        // Watch the emitted event Received()
-        
+        var event = supplyChain.Received()
+        await event.watch((err, res) => {
+            eventEmitted = true
+        })
+
+        await supplyChain.receiveItem(upc, {from:retailerID})
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
+        const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)  
 
-        // Verify the result set
-             
+        _assertBufferOne(resultBufferOne, retailerID)
+        assert.equal(eventEmitted, true, 'Invalid event emitted')   
     })    
 
     // 8th Test

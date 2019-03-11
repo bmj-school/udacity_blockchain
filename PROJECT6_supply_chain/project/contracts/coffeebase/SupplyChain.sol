@@ -326,10 +326,12 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
 
     {
       // Update the appropriate fields - ownerID, retailerID, itemState
-      
+      items[_upc].ownerID = msg.sender;
+      items[_upc].retailerID = msg.sender;
+      items[_upc].itemState = State.Received;
+
       // Emit the appropriate event
-      emit Recieved(_upc)
-      
+      emit Received(_upc);
     }
 
   // Define a function 'purchaseItem' that allows the consumer to mark an item 'Purchased'
