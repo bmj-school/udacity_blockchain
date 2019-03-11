@@ -7,7 +7,7 @@ import "../coffeeaccesscontrol/ConsumerRole.sol";
 
 
 // Define a contract 'Supplychain'
-contract SupplyChain is FarmerRole{
+contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole {
 
   // Define 'owner'
   address owner;
@@ -36,7 +36,7 @@ contract SupplyChain is FarmerRole{
     Shipped,    // 5
     Received,   // 6
     Purchased   // 7
-    }
+  }
 
   State constant defaultState = State.Harvested;
 
@@ -71,13 +71,13 @@ contract SupplyChain is FarmerRole{
 
   // Define a modifer that checks to see if msg.sender == owner of the contract
   modifier onlyOwner() {
-    require(msg.sender == owner);
+    require(msg.sender == owner, "Incorrect role.");
     _;
   }
 
   // Define a modifer that verifies the Caller
   modifier verifyCaller (address _address) {
-    require(msg.sender == _address); 
+    require(msg.sender == _address, "Incorrect role."); 
     _;
   }
 
@@ -159,10 +159,20 @@ contract SupplyChain is FarmerRole{
     }
   }
 
-  // Only the administrator (owner) can add addresses into the Roles
+  // Only the administrator (owner) can add addresses into the Roles, using the following methods
   function registerFarmer(address farmerID) public onlyOwner() {
     addFarmer(farmerID);
   }
+  function registerDistributor(address acct_addr) public onlyOwner() {
+    addDistributor(acct_addr);
+  }
+  function registerRetailer(address acct_addr) public onlyOwner() {
+    addRetailer(acct_addr);
+  }
+  function registerConsumer(address acct_addr) public onlyOwner() {
+    addConsumer(acct_addr);
+  }
+
 
   // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
   // This instantiates the item in the blockchain
