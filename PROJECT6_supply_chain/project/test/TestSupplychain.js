@@ -167,7 +167,6 @@ contract('SupplyChain', function(accounts) {
         truffleAssert.eventEmitted(tx, 'Processed', (ev) => {
             return true;
             }, 'Contract should return the correct message.');
-
         
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
@@ -228,12 +227,11 @@ contract('SupplyChain', function(accounts) {
         await truffleAssert.reverts(supplyChain.buyItem(upc, {from:distributorID, value: underPayPrice, gasPrice: 0}), "Insufficient value transfer to cover price.");
         
         // Mark an item as Sold by calling function buyItem()
-        // await supplyChain.buyItem(upc, {from:distributorID, value: productPrice, gasPrice: 0}) 
         tx = await supplyChain.buyItem(upc, {from:distributorID, value: overPayPrice, gasPrice: 0}) 
         let buyerEndBalance = await web3.eth.getBalance(distributorID)
         let farmerEndBalance = await web3.eth.getBalance(originFarmerID)
-        // console.log(typeof(productPrice));
         
+        // Assert correct ending balances for both parties
         assert.strictEqual(buyerStartBalance - buyerEndBalance, parseInt(productPrice))
         assert.strictEqual(farmerEndBalance - farmerStartBalance, parseInt(productPrice))
 
@@ -241,8 +239,6 @@ contract('SupplyChain', function(accounts) {
             return true;
             }, 'Contract should return the correct message.');
  
-
-
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc) 
 
@@ -277,7 +273,6 @@ contract('SupplyChain', function(accounts) {
  
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)  
-
         _assertBufferOne(resultBufferOne, retailerID)
     })    
 
@@ -293,9 +288,7 @@ contract('SupplyChain', function(accounts) {
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)  
-
         _assertBufferOne(resultBufferOne, consumerID)
-        
     })    
 
     // 9th Test
