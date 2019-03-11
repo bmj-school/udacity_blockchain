@@ -344,43 +344,40 @@ contract('SupplyChain', function(accounts) {
 
     // 8th Test
     it("Testing smart contract function purchaseItem() that allows a consumer to purchase coffee", async() => {
-        // const supplyChain = await SupplyChain.deployed()
+        var eventEmitted = false        
         
-        // Declare and Initialize a variable for event
-        
-        
-        // Watch the emitted event Purchased()
-        
+        var event = supplyChain.Purchased()
+        await event.watch((err, res) => {
+            eventEmitted = true
+        })
 
-        // Mark an item as Sold by calling function buyItem()
-        
+        await supplyChain.purchaseItem(upc, {from:consumerID})
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
+        const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)  
 
-        // Verify the result set
+        _assertBufferOne(resultBufferOne, consumerID)
+        assert.equal(eventEmitted, true, 'Invalid event emitted')   
         
     })    
 
     // 9th Test
     it("Testing smart contract function fetchItemBufferOne() that allows anyone to fetch item details from blockchain", async() => {
-        // const supplyChain = await SupplyChain.deployed()
-
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
+        const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
         
         // Verify the result set:
-        
+        _assertBufferOne(resultBufferOne, consumerID);
     })
 
     // 10th Test
     it("Testing smart contract function fetchItemBufferTwo() that allows anyone to fetch item details from blockchain", async() => {
-        // const supplyChain = await SupplyChain.deployed()
-
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
+        const resultBufferTwo = await supplyChain.fetchItemBufferTwo.call(upc)
         
         // Verify the result set:
+        _assertBufferTwo(resultBufferTwo, productID, productNotes, productPrice, 7, distributorID, retailerID, consumerID)  
+
         
     })
 
