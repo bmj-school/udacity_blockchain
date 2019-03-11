@@ -1,4 +1,80 @@
+
+
+# Roles
+
+- **Administrator**: The deployer of the contracts, (owner). The **Administrator** has access to all roles. (Useful for testing deployed dApp.)
+- **Farmer**: 
+- **Distributor**: 
+- **Retailer**: 
+- **Consumer**: 
+
+# Versions
+
+truffle v
+
+Solidity v
+
+# Quickstart - Local testing 
+
+## Unit testing
+
+Ensure all packages are installed `npm install`
+
+Run `truffle test`. 
+
+## Start Blockchain 
+
+Start Ganache CLI on `localhost:8545`
+
+Compile contracts `truffle compile`
+
+Verify that `truffle.js` is configured to use the running Ganache. 
+
+```javascript
+module.exports = {
+  networks: {
+    development: {
+      host: "127.0.0.1",
+      port: 8545,
+      network_id: "*" // Match any network id
+    }
+  }
+};
+```
+
+Migrate with `truffle migrate`.
+
+## Start dApp
+
+Start the web UI and browser sync with `npm run dev`
+
+## Connect metamask
+
+Login to metamask. 
+
+Configure and select the `localhost:8545` network. 
+
+Verify owner account is imported. 
+
+Import other accounts (roles) with private keys. 
+
+# Unit testing strategy
+
+Uses [truffle-assertions](https://www.npmjs.com/package/truffle-assertions) package for clean assertion of `revert` and `eventEmitted`.
+
+Uses `beforeEach` to setup each test. Ensures contract is deployed, and if actors are not registered, to register the test accounts. 
+
+Ensure proper roles by testing with incorrect roles, and asserting revert.
+
+Ensure proper balances after purchase in both underpaying, and overpaying case.
+
 # Supply chain & data auditing
+
+
+
+
+
+
 
 This repository containts an Ethereum DApp that demonstrates a Supply Chain flow between a Seller and Buyer. The user story is similar to any commonly used supply chain process. A Seller can add items to the inventory system stored in the blockchain. A Buyer can purchase such items from the inventory system. Additionally a Seller can mark an item as Shipped, and similarly a Buyer can mark an item as Received.
 
