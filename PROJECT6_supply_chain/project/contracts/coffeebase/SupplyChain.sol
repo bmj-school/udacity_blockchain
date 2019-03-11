@@ -194,9 +194,9 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
         productNotes: _productNotes,
         productPrice: 0,
         itemState: defaultState,
-        distributorID: address(0),
-        retailerID: address(0),
-        consumerID: address(0)
+        distributorID: address(0), // Null address
+        retailerID: address(0), // Null address
+        consumerID: address(0) // Null address 
     });     
 
     // Emit the appropriate event
@@ -212,7 +212,6 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
     // Call modifier to check if upc has passed previous supply chain stage
     harvested(_upc) 
     // Call modifier to verify caller of this function
-    // Access Control
     onlyFarmer()
     {
       // Update the appropriate fields
@@ -224,30 +223,33 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
 
   // Define a function 'packItem' that allows a farmer to mark an item 'Packed'
   function packItem(uint _upc) public 
-  // Call modifier to check if upc has passed previous supply chain stage
-  processed(_upc) 
+    // Call modifier to check if upc has passed previous supply chain stage
+    processed(_upc) 
 
-  // Call modifier to verify caller of this function
-  verifyCaller(msg.sender)
-  {
-    // Update the appropriate fields
-    
-    // Emit the appropriate event
-    
-  }
+    // Call modifier to verify caller of this function
+    onlyFarmer()
+    {
+      // Update the appropriate fields
+      items[_upc].itemState = State.Packed; 
+
+      // Emit the appropriate event
+      emit Packed(_upc);
+    }
 
   // Define a function 'sellItem' that allows a farmer to mark an item 'ForSale'
   function sellItem(uint _upc, uint _price) public 
-  // Call modifier to check if upc has passed previous supply chain stage
+    // Call modifier to check if upc has passed previous supply chain stage
+    packed(_upc) 
   
-  // Call modifier to verify caller of this function
-  
-  {
-    // Update the appropriate fields
-    
-    // Emit the appropriate event
-    
-  }
+    // Call modifier to verify caller of this function
+    onlyFarmer()
+    {
+      // Update the appropriate fields
+      items[_upc].itemState = State.ForSale; 
+
+      // Emit the appropriate event
+      emit ForSale(_upc);
+    }
 
   // Define a function 'buyItem' that allows the disributor to mark an item 'Sold'
   // Use the above defined modifiers to check if the item is available for sale, if the buyer has paid enough, 

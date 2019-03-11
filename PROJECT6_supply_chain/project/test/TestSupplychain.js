@@ -205,28 +205,31 @@ contract('SupplyChain', function(accounts) {
         // Verify the result set
         _assertBufferOne(resultBufferOne)
         assert.equal(eventEmitted, true, 'Invalid event emitted')             
-
     })    
 
     // 3rd Test
     it("Testing smart contract function packItem() that allows a farmer to pack coffee", async() => {
+        // Verify access control by ensuring that distributor cannot pack.
+        await truffleAssert.reverts(supplyChain.packItem(upc, {from:distributorID}), "Sender not authorized.");
+
         // Declare and Initialize a variable for event
         var eventEmitted = false        
         
-        // Watch the emitted event Processed()
+        // Watch the emitted event 
         var event = supplyChain.Packed()
         await event.watch((err, res) => {
             eventEmitted = true
         })        
 
         // Mark an item as Packed by calling function packItem()
-        
+        await supplyChain.packItem(upc, {from:originFarmerID})
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
-        
+        const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
 
         // Verify the result set
-        
+        _assertBufferOne(resultBufferOne)
+        assert.equal(eventEmitted, true, 'Invalid event emitted')             
     })    
 
     // 4th Test
