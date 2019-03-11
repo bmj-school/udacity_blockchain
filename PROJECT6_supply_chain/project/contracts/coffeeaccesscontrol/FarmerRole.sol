@@ -15,7 +15,7 @@ contract FarmerRole {
   Roles.Role private farmers;
 
   // In the constructor make the address that deploys this contract the 1st farmer
-  // Therefore the deployer 
+  // Therefore the deployer is the controller of this access control list
   constructor() public {
     _addFarmer(msg.sender);
   }
