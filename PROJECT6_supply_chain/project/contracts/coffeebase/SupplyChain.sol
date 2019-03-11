@@ -301,28 +301,36 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
   // Use the above modifers to check if the item is sold
   function shipItem(uint _upc) public 
     // Call modifier to check if upc has passed previous supply chain stage
+    sold(_upc)
     
     // Call modifier to verify caller of this function
-    
+    onlyDistributor()
+
     {
-    // Update the appropriate fields
-    
-    // Emit the appropriate event
-    
-  }
+      // Update the appropriate fields
+      items[_upc].itemState = State.Shipped;
+      
+      // Emit the appropriate event
+      emit Shipped(_upc);
+      
+    }
 
   // Define a function 'receiveItem' that allows the retailer to mark an item 'Received'
   // Use the above modifiers to check if the item is shipped
   function receiveItem(uint _upc) public 
     // Call modifier to check if upc has passed previous supply chain stage
+    shipped(_upc)
     
     // Access Control List enforced by calling Smart Contract / DApp
+    onlyRetailer()
+
     {
-    // Update the appropriate fields - ownerID, retailerID, itemState
-    
-    // Emit the appropriate event
-    
-  }
+      // Update the appropriate fields - ownerID, retailerID, itemState
+      
+      // Emit the appropriate event
+      emit Recieved(_upc)
+      
+    }
 
   // Define a function 'purchaseItem' that allows the consumer to mark an item 'Purchased'
   // Use the above modifiers to check if the item is received
