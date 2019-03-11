@@ -26,7 +26,7 @@ contract('SupplyChain', function(accounts) {
     const consumerID = accounts[4]
     const emptyAddress = '0x00000000000000000000000000000000000000'
 
-    const overPayPrice = web3.toWei(6, "ether")
+    const overPayPrice = web3.toWei(8, "ether")
     const underPayPrice = web3.toWei(3, "ether")
 
     ///Available Accounts
@@ -250,6 +250,8 @@ contract('SupplyChain', function(accounts) {
         
         // Mark an item as ForSale by calling function sellItem()
         await supplyChain.sellItem(upc, productPrice, {from:originFarmerID})
+        console.log(`Product placed for sale at price ${productPrice}`);
+        
         
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc)
@@ -261,6 +263,10 @@ contract('SupplyChain', function(accounts) {
 
     // 5th Test
     it("Testing smart contract function buyItem() that allows a distributor to buy coffee", async() => {
+
+        let buyerStartBalance = await web3.eth.getBalance(distributorID)
+        let farmerStartBalance = await web3.eth.getBalance(originFarmerID)
+
         // Verify access control by ensuring that retailer cannot buy.
         await truffleAssert.reverts(supplyChain.buyItem(upc, {from:retailerID, value: productPrice, gasPrice: 0}), "Sender not authorized.");
 
@@ -279,6 +285,12 @@ contract('SupplyChain', function(accounts) {
         // Mark an item as Sold by calling function buyItem()
         // await supplyChain.buyItem(upc, {from:distributorID, value: productPrice, gasPrice: 0}) 
         await supplyChain.buyItem(upc, {from:distributorID, value: overPayPrice, gasPrice: 0}) 
+        let buyerEndBalance = await web3.eth.getBalance(distributorID)
+        let farmerEndBalance = await web3.eth.getBalance(originFarmerID)
+        // console.log(typeof(productPrice));
+        
+        assert.strictEqual(buyerStartBalance - buyerEndBalance, parseInt(productPrice))
+        assert.strictEqual(farmerEndBalance - farmerStartBalance, parseInt(productPrice))
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferOne = await supplyChain.fetchItemBufferOne.call(upc) 

@@ -274,7 +274,7 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
 
     // Call modifer to send any excess ether back to buyer
     // checkValue(items[_upc].productPrice)
-    checkValue(_upc)
+    // checkValue(_upc)
     {
       // Update the appropriate fields - ownerID, distributorID, itemState
       address sellerFarmerID = items[_upc].ownerID;
@@ -282,10 +282,11 @@ contract SupplyChain is FarmerRole, DistributorRole, RetailerRole, ConsumerRole 
       items[_upc].distributorID = msg.sender;
       items[_upc].itemState = State.Sold;
 
-      // // Transfer excess
-      // if(msg.value > starCost) {
-      //     msg.sender.transfer(msg.value - items[_upc].productPrice);
-      // }
+      // TODO: Couldn't get the checkValue mod to work.... 
+      // Transfer excess back to buyer here instead
+      if(msg.value > items[_upc].productPrice) {
+          msg.sender.transfer(msg.value - items[_upc].productPrice);
+      }
 
       // Transfer money to farmer
       // items[_upc].originFarmerID.transfer(msg.value);
