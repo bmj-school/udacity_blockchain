@@ -5,7 +5,7 @@ require('babel-register')
 // Infura should be used in the truffle.config file for deployment to Rinkeby.
 
 const HDWalletProvider = require('truffle-hdwallet-provider');
-const infuraKey = "2665f353b5e945559a1087ca832189a7";
+const infuraKey = "8e82a9e891cd4f76ace92546b57f7278";
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 

@@ -88,6 +88,9 @@ Import other accounts (roles) with private keys.
 
 # Part 4 - Deployment to test net
 
+1. Login to Infura
+2. Create new project - Coffee Supply Chain
+
 # Part 5 - Modify client code to interact with smart contract
 
 # Part 6 - Optional: Implement Infura to store product image
