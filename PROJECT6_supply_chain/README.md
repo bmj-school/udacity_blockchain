@@ -1,10 +1,24 @@
 
 
+## Versions 
+
 - node version number : v11.6.0
-- Truffle version number : 4.1.15
+- Truffle version number : v4.1.15 (core: 4.1.15)
   - Extra library, truffle-assertions : v0.8.0
-- solidity pragma : 0.4.24
+- solidity compiler : v0.4.25 (solc-js)
 - web3 version number : 
+
+## Contracts
+
+SupplyChain : https://rinkeby.etherscan.io/address/0xd885beb5b9d5233ff8991ca8a9b4418d535c6978
+
+FarmerRole : https://rinkeby.etherscan.io/address/0xd46231152721926f981270947dd035aaaf5d2c0e
+
+DistributorRole : https://rinkeby.etherscan.io/address/0x2d0a49f9d7c6101cc33d28457d12739cca91d98c
+
+RetailerRole : https://rinkeby.etherscan.io/address/0xe5412b84ffa2f856054800bf46359ee9369a8b64
+
+ConsumerRole : https://rinkeby.etherscan.io/address/0xdeaf5b241d65e5b1739642657500cf94c3e458c6
 
 # Part 1 - write-ups
 
@@ -12,9 +26,15 @@
 
 ## 1) Project write-up - UML
 
+(Same as boilerplate)
+
 ## 2) Project write-up - Libraries
 
+One additional library used for testing, see relevant section. 
+
 ## 3) Project write-up - IPFS
+
+Not used. 
 
 # Part 2 - smart contracts
 
@@ -22,11 +42,11 @@ See `./project/contracts`
 
 ### Roles
 
-- **Administrator**: The deployer of the contracts, (owner). The **Administrator** has access to all roles. (Useful for testing deployed dApp.). Added extra registration methods on SupplyChain.sol. 
-- **Farmer**: 
-- **Distributor**: 
-- **Retailer**: 
-- **Consumer**: 
+- ***Administrator/Owner**: The deployer of the contracts, (owner). Has admin access to all roles (add/remove). (Useful for testing deployed dApp.). Added extra registration methods on SupplyChain.sol. 
+- **Farmer**: As in boilerplate code. 
+- **Distributor**: As in boilerplate code. 
+- **Retailer**: As in boilerplate code. 
+- **Consumer**: As in boilerplate code. 
 
 # Part 3 - Test coverage
 
@@ -90,6 +110,69 @@ Import other accounts (roles) with private keys.
 
 1. Login to Infura
 2. Create new project - Coffee Supply Chain
+3. Change the endpoint to Rinkeby 
+4. URL of the endpoint for Rinkeby: https://rinkeby.infura.io/v3/8e82a9e891cd4f76ace92546b57f7278 
+5. Settings `truffle.js`
+
+```
+require('babel-register')
+
+const HDWalletProvider = require('truffle-hdwallet-provider');
+const infuraKey = "8e82a9e891cd4f76ace92546b57f7278";
+const fs = require('fs');
+const mnemonic = fs.readFileSync(".secret").toString().trim();
+
+rinkeby: {
+  provider: () => new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/${infuraKey}`),
+  network_id: 4,       // Ropsten's id
+  gas: 5500000,        // Ropsten has a lower block limit than mainnet
+  confirmations: 2,    // # of confs to wait between deployments. (default: 0)
+  timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
+  skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
+},
+```
+6. Store mnemonic in .secret and gitignore
+7. Confirm the deployment scripts in `/migrations`
+8. Fund the Rinkeby account
+9. `truffle compile`
+10. `truffle migrate --network rinkeby`
+
+Result: 
+
+
+
+```
+Using network 'rinkeby'.
+
+Running migration: 1_initial_migration.js
+  Deploying Migrations...
+  ... 0xa3176b6269ac83d88b666187d0c0d90b82604805765874a14e797b12961e9a1d
+  Migrations: 0xf1f53bf8d25c65d5675e8ce26a1e7113f95588f7
+Saving successful migration to network...
+  ... 0xd08407b795f53cacc03e8e11a5b5e0a46921fab0a4eeda294d16bdf1ffc19cba
+Saving artifacts...
+Running migration: 2_deploy_contracts.js
+  Deploying FarmerRole...
+  ... 0x2d8aa9a6a2a1a99e04ef48023abcf2c4ac2f28784b6ec7b75137203298bbb417
+  FarmerRole: 0xd46231152721926f981270947dd035aaaf5d2c0e
+  Deploying DistributorRole...
+  ... 0x704ee8770e898027082742a07ee12ad3b42d95452f786bc0997c9929e9bcfadf
+  DistributorRole: 0x2d0a49f9d7c6101cc33d28457d12739cca91d98c
+  Deploying RetailerRole...
+  ... 0x34e28fcfea7fe2c270d97dbd1fb5bd13d33e4c4658b646786902fe147c0deb4e
+  RetailerRole: 0xe5412b84ffa2f856054800bf46359ee9369a8b64
+  Deploying ConsumerRole...
+  ... 0x24046b8e2ebbce19c3b5bc49d4039242bce04527c7cd6d23605e59877d59fefa
+  ConsumerRole: 0xdeaf5b241d65e5b1739642657500cf94c3e458c6
+  Deploying SupplyChain...
+  ... 0x158605379d233168f4abe6b990b58eb30f52ad5c77212eb31e5ca8259e353188
+  SupplyChain: 0xd885beb5b9d5233ff8991ca8a9b4418d535c6978
+Saving successful migration to network...
+  ... 0x26a0b6af24c8e829a4c465fbee53afdd0f28486751cdc8c167a0127ec3b415e9
+Saving artifacts...
+```
+
+
 
 # Part 5 - Modify client code to interact with smart contract
 
