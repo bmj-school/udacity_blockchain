@@ -1,28 +1,56 @@
 
 
-# Roles
+- node version number : v11.6.0
+- Truffle version number : 4.1.15
+  - Extra library, truffle-assertions : v0.8.0
+- solidity pragma : 0.4.24
+- web3 version number : 
 
-- **Administrator**: The deployer of the contracts, (owner). The **Administrator** has access to all roles. (Useful for testing deployed dApp.)
+# Part 1 - write-ups
+
+
+
+## 1) Project write-up - UML
+
+## 2) Project write-up - Libraries
+
+## 3) Project write-up - IPFS
+
+# Part 2 - smart contracts
+
+See `./project/contracts`
+
+### Roles
+
+- **Administrator**: The deployer of the contracts, (owner). The **Administrator** has access to all roles. (Useful for testing deployed dApp.). Added extra registration methods on SupplyChain.sol. 
 - **Farmer**: 
 - **Distributor**: 
 - **Retailer**: 
 - **Consumer**: 
 
-# Versions
+# Part 3 - Test coverage
 
-truffle v
+## Truffle testing
 
-Solidity v
-
-# Quickstart - Local testing 
-
-## Unit testing
+See `./project/tests`
 
 Ensure all packages are installed `npm install`
 
 Run `truffle test`. 
 
-## Start Blockchain 
+## Extra testing features
+
+Uses [truffle-assertions](https://www.npmjs.com/package/truffle-assertions) package for clean assertion of `revert` and `eventEmitted`.
+
+Uses `beforeEach` to setup each test. Ensures contract is deployed, and if actors are not registered, to register the test accounts. 
+
+Proper roles enforced by testing with incorrect roles, and asserting revert.
+
+Proper balances enforced after purchase in both underpaying, and overpaying case.
+
+## User Guide: Local testing, including front-end
+
+### Start Blockchain 
 
 Start Ganache CLI on `localhost:8545`
 
@@ -44,11 +72,11 @@ module.exports = {
 
 Migrate with `truffle migrate`.
 
-## Start dApp
+### Start dApp
 
 Start the web UI and browser sync with `npm run dev`
 
-## Connect metamask
+### Connect metamask
 
 Login to metamask. 
 
@@ -58,15 +86,17 @@ Verify owner account is imported.
 
 Import other accounts (roles) with private keys. 
 
+# Part 4 - Deployment to test net
+
+# Part 5 - Modify client code to interact with smart contract
+
+# Part 6 - Optional: Implement Infura to store product image
+
+
+
 # Unit testing strategy
 
-Uses [truffle-assertions](https://www.npmjs.com/package/truffle-assertions) package for clean assertion of `revert` and `eventEmitted`.
 
-Uses `beforeEach` to setup each test. Ensures contract is deployed, and if actors are not registered, to register the test accounts. 
-
-Ensure proper roles by testing with incorrect roles, and asserting revert.
-
-Ensure proper balances after purchase in both underpaying, and overpaying case.
 
 # Supply chain & data auditing
 
