@@ -42,7 +42,7 @@ See `./project/contracts`
 
 ### Roles
 
-- ***Administrator/Owner**: The deployer of the contracts, (owner). Has admin access to all roles (add/remove). (Useful for testing deployed dApp.). Added extra registration methods on SupplyChain.sol. 
+- **Administrator/Owner**: The deployer of the contracts, (owner). Has admin access to all roles (add/remove). (Useful for testing deployed dApp.). Added extra registration methods on SupplyChain.sol. 
 - **Farmer**: As in boilerplate code. 
 - **Distributor**: As in boilerplate code. 
 - **Retailer**: As in boilerplate code. 
@@ -139,8 +139,6 @@ rinkeby: {
 
 Result: 
 
-
-
 ```
 Using network 'rinkeby'.
 
@@ -178,11 +176,15 @@ Saving artifacts...
 
 # Part 6 - Optional: Implement Infura to store product image
 
+(not implemented)
+
+# 
 
 
-# Unit testing strategy
 
 
+
+# **Boilerplate readme below**
 
 # Supply chain & data auditing
 
