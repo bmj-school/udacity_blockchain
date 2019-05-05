@@ -2,7 +2,10 @@
 var Test = require('../config/testConfig.js');
 var BigNumber = require('bignumber.js');
 
+// TODO: Include the reference to the Data app (address) ? 
+
 contract('Flight Surety Tests', async (accounts) => {
+
 
   var config;
   before('setup contract', async () => {

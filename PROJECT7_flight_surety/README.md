@@ -1,3 +1,15 @@
+# Notes
+
+## Ganache testing
+
+Start ganache with the same seed phrase as specified in truffle configuration `truffle.js`. 
+
+## Faster testing: 
+
+Run `truffle develop` to start the development blockchain (not ganache)
+
+At the develop console, run `test` to run all tests, or `test ./test/testscript.js` to run a single test.
+
 # FlightSurety
 
 FlightSurety is a sample application project for Udacity's Blockchain course.
@@ -9,6 +21,7 @@ This repository contains Smart Contract code in Solidity (using Truffle), tests 
 To install, download or clone the repo, then:
 
 `npm install`
+
 `truffle compile`
 
 ## Develop Client
@@ -16,11 +29,13 @@ To install, download or clone the repo, then:
 To run truffle tests:
 
 `truffle test ./test/flightSurety.js`
+
 `truffle test ./test/oracles.js`
 
 To use the dapp:
 
 `truffle migrate`
+
 `npm run dapp`
 
 To view dapp:
@@ -30,6 +45,7 @@ To view dapp:
 ## Develop Server
 
 `npm run server`
+
 `truffle test ./test/oracles.js`
 
 ## Deploy

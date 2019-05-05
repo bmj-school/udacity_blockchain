@@ -6,6 +6,10 @@ pragma solidity ^0.4.25;
 
 import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 
+
+// TODO: Include the reference to the Data app (address)
+
+
 /************************************************** */
 /* FlightSurety Smart Contract                      */
 /************************************************** */
@@ -126,7 +130,9 @@ contract FlightSuretyApp {
     
    /**
     * @dev Called after oracle has updated flight status
-    *
+    * Trigger after 
+    * If on time, then close insurance claims
+    * Otherwise, pay out insured (CODE 20)
     */  
     function processFlightStatus
                                 (
@@ -142,6 +148,7 @@ contract FlightSuretyApp {
 
 
     // Generate a request for oracles to fetch flight information
+    // Trigger from UI
     function fetchFlightStatus
                         (
                             address airline,
