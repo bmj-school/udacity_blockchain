@@ -1,10 +1,19 @@
 
+// Simple logging util
+var path = require('path');
+var scriptName = path.basename(__filename);
+function log(_string){
+    console.log(`${scriptName}: ${_string}`);
+}
+
+// Begin
 var FlightSuretyApp = artifacts.require("FlightSuretyApp");
 var FlightSuretyData = artifacts.require("FlightSuretyData");
 var BigNumber = require('bignumber.js');
 
 var Config = async function(accounts) {
-    console.log('Preparing test configuration environment...');
+    log('Preparing test configuration environment...')
+
      
     // These test addresses are useful when you need to add
     // multiple users in test scripts
@@ -23,15 +32,16 @@ var Config = async function(accounts) {
 
     let owner = accounts[0];
     let firstAirline = accounts[1];
+    log(`owner = ${owner}`)
+    log(`firstAirline = ${firstAirline}`)
 
     let flightSuretyData = await FlightSuretyData.new();
     let flightSuretyApp = await FlightSuretyApp.new();
-    console.log(`flightSuretyData = ${flightSuretyData}`);
-    console.log(`flightSuretyApp = ${flightSuretyApp}`);
+    log(`flightSuretyApp = ${flightSuretyApp}`)
+    log(`flightSuretyData = ${flightSuretyData}`)
     
 
-    
-    console.log('Test configuration environment loaded.');
+    log('Test configuration environment loaded.');
     return {
         owner: owner,
         firstAirline: firstAirline,

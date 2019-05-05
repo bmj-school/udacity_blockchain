@@ -11,7 +11,42 @@ contract FlightSuretyData {
 
     address private contractOwner;                                      // Account used to deploy contract
     bool private operational = true;                                    // Blocks all state changes throughout the contract if false
+    mapping(address => bool) private authorizedContracts;
 
+
+    /* AIRLINES
+    Each airline is represented by their public address
+    */
+    enum RegistrationState 
+    { 
+        Proposed,  // 0
+        Voted,  // 1
+        Registered     // 2
+        // ForSale,    // 3
+        // Sold,       // 4
+        // Shipped,    // 5
+        // Received,   // 6
+        // Purchased   // 7
+        }
+    struct Airline {
+        string name;
+        // uint8 statusCode;
+        // uint256 updatedTimestamp;        
+        // address airline;
+    }
+    mapping(address => Airline) private airlines;
+
+
+    /* FLIGHTS
+    */
+    struct Flight {
+        bool isRegistered;
+        uint8 statusCode;
+        uint256 updatedTimestamp;        
+        address airline;
+    }
+    mapping(bytes32 => Flight) private flights;
+    // FLIGHTS
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
     /********************************************************************************************/
@@ -56,6 +91,14 @@ contract FlightSuretyData {
         _;
     }
 
+    /**
+    * @dev Modifier that requires function caller to be authorized caller.
+    */
+    modifier requireCallerAuthorized()
+    {
+        require(authorizedContracts[msg.sender] == 1, "Caller is not authorized caller");
+        _;
+    }
     /********************************************************************************************/
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
@@ -181,6 +224,31 @@ contract FlightSuretyData {
         fund();
     }
 
+    /** MJ
+    * @dev 
+    */   
+    function authorizeCaller
+                            (
+                                address contractAddress
+                            )
+                            external
+                            requireContractOwner
+    {
+        authorizedContracts[contractAddress] = 1;
+    }
+
+    /** MJ
+    * @dev 
+    */   
+    function deauthorizeCaller
+                            (
+                                address contractAddress
+                            )
+                            external
+                            requireContractOwner
+    {
+        delete authorizedContracts[contractAddress];
+    }
 
 }
 
