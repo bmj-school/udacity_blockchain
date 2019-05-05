@@ -96,7 +96,7 @@ contract FlightSuretyData {
     */
     modifier requireCallerAuthorized()
     {
-        require(authorizedContracts[msg.sender] == 1, "Caller is not authorized caller");
+        require(authorizedContracts[msg.sender] == true, "Caller is not authorized caller");
         _;
     }
     /********************************************************************************************/
@@ -234,7 +234,7 @@ contract FlightSuretyData {
                             external
                             requireContractOwner
     {
-        authorizedContracts[contractAddress] = 1;
+        authorizedContracts[contractAddress] = true;
     }
 
     /** MJ
