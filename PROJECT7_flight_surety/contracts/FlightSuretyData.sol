@@ -33,6 +33,8 @@ contract FlightSuretyData {
         // uint8 statusCode;
         // uint256 updatedTimestamp;        
         address airlineAddress;
+        bool approved; // This is set to True for the first 4 airlines, and then by voting
+        address[] votes; // This is the list of airlines who have voted this airline in
     }
 
     mapping(address => Airline) private airlines;
@@ -51,7 +53,7 @@ contract FlightSuretyData {
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
     /********************************************************************************************/
-    event AirlineRegistered(address airlineAddress, string name);
+    event AirlineRegistered(address airlineAddress, string name, bool approved, uint256 votes);
 
     /********************************************************************************************/
     /*                                       CONSTUCTOR                                         */
@@ -69,10 +71,12 @@ contract FlightSuretyData {
         // Create first Airline 
         airlines[_airlineAddress] = Airline({
             name: _airlineName, 
-            airlineAddress: _airlineAddress
+            airlineAddress: _airlineAddress,
+            approved: true,
+            votes: new address[](0)
             });        
         airlineAddresses.push(_airlineAddress);
-        emit AirlineRegistered(_airlineAddress, _airlineName);
+        // emit AirlineRegistered(_airlineAddress, _airlineName);
 
         // registerAirline(_airlineName, _airlineAddress);
     }
@@ -166,12 +170,20 @@ contract FlightSuretyData {
     */   
     function registerAirline ( string _airlineName, address _airlineAddress) external
     {
-        airlines[_airlineAddress] = Airline({
-            name: _airlineName, 
-            airlineAddress: _airlineAddress
-            });        
-        airlineAddresses.push(_airlineAddress);
-        emit AirlineRegistered(_airlineAddress, _airlineName);
+        // Case 1: Only existing airlines can register new airlines
+        if (airlineAddresses.length <= 4){
+            require(addressInList(airlineAddresses, msg.sender), 'Only existing airlines can register new');
+            airlines[_airlineAddress] = Airline({
+                name: _airlineName, 
+                airlineAddress: _airlineAddress,
+                approved: true,
+                votes: new address[](0)
+                });        
+            airlineAddresses.push(_airlineAddress);
+            emit AirlineRegistered(_airlineAddress, _airlineName, airlines[_airlineAddress].approved, airlines[_airlineAddress].votes.length);
+        } else if (airlineAddresses.length > 4) {
+            
+        }
     }
 
     function getNumAirlines ( )
@@ -182,8 +194,8 @@ contract FlightSuretyData {
         return airlineAddresses.length;
     }
 
-    function getAirline ( address _address )  external view requireAirlineExists(_address) returns(string, address)  {
-        return (airlines[_address].name, airlines[_address].airlineAddress);
+    function getAirline ( address _address )  external view requireAirlineExists(_address) returns(string, address, bool, uint256)  {
+        return (airlines[_address].name, airlines[_address].airlineAddress, airlines[_address].approved, airlines[_address].votes.length);
     }
 
    /**
