@@ -35,7 +35,7 @@ var Config = async function(accounts) {
     log(`owner = ${owner}`)
     log(`firstAirline = ${firstAirline}`)
 
-    let flightSuretyData = await FlightSuretyData.new();
+    let flightSuretyData = await FlightSuretyData.new('Genesis Air', firstAirline);
     let flightSuretyApp = await FlightSuretyApp.new();
     log(`flightSuretyApp = ${flightSuretyApp}`)
     log(`flightSuretyData = ${flightSuretyData}`)

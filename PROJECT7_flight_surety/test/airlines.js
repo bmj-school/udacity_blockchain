@@ -12,8 +12,8 @@ log('Starting airlines.js tests, top of script.');
 var Test = require('../config/testConfig.js');
 
 
-
 contract('Airline Requirement Tests', async (accounts) => {
+
   log('airlines.js: Initiating contract')
   var config;
   before('setup contract', async () => {
@@ -21,10 +21,15 @@ contract('Airline Requirement Tests', async (accounts) => {
     // await config.flightSuretyData.authorizeCaller(config.flightSuretyApp.address);
   });
 
+
   it(`First airline is registered when contract is deployed`, async function () {
     // Therefore, constructor should register an airline
-    assert.equal(true, true, "message");
-
+    // log(config.firstAirline);
+    numAirlines = await config.flightSuretyData.getNumAirlines();
+    assert.equal(numAirlines, 1, "One airline registered");
+    
+    
+    
 
   });
 

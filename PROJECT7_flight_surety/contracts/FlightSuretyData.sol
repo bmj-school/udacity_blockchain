@@ -32,9 +32,11 @@ contract FlightSuretyData {
         string name;
         // uint8 statusCode;
         // uint256 updatedTimestamp;        
-        // address airline;
+        address airlineAddress;
     }
+
     mapping(address => Airline) private airlines;
+    address[] airlineAddresses;
 
 
     /* FLIGHTS
@@ -46,22 +48,33 @@ contract FlightSuretyData {
         address airline;
     }
     mapping(bytes32 => Flight) private flights;
-    // FLIGHTS
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
     /********************************************************************************************/
+    event AirlineRegistered(address airlineAddress, string name);
 
+    /********************************************************************************************/
+    /*                                       CONSTUCTOR                                         */
+    /********************************************************************************************/
 
     /**
     * @dev Constructor
     *      The deploying account becomes contractOwner
+    *      The deploying account must register the first airline
     */
-    constructor
-                                (
-                                ) 
-                                public 
+    constructor ( string _airlineName, address _airlineAddress) public 
     {
         contractOwner = msg.sender;
+
+        // Create first Airline 
+        airlines[_airlineAddress] = Airline({
+            name: _airlineName, 
+            airlineAddress: _airlineAddress
+            });        
+        airlineAddresses.push(_airlineAddress);
+        emit AirlineRegistered(_airlineAddress, _airlineName);
+
+        // registerAirline(_airlineName, _airlineAddress);
     }
 
     /********************************************************************************************/
@@ -99,6 +112,16 @@ contract FlightSuretyData {
         require(authorizedContracts[msg.sender] == true, "Caller is not authorized caller");
         _;
     }
+
+    /**
+     * Modifier that requires an airline to be registered.
+     */
+    modifier requireAirlineExists(address _airlineAddress)
+    {
+        bool exists = addressInList(airlineAddresses, _airlineAddress);
+        require(exists, "Airline address does not exist in this contract");
+        _;
+    }    
     /********************************************************************************************/
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
@@ -141,14 +164,27 @@ contract FlightSuretyData {
     *      Can only be called from FlightSuretyApp contract
     *
     */   
-    function registerAirline
-                            (   
-                            )
-                            external
-                            pure
+    function registerAirline ( string _airlineName, address _airlineAddress) external
     {
+        airlines[_airlineAddress] = Airline({
+            name: _airlineName, 
+            airlineAddress: _airlineAddress
+            });        
+        airlineAddresses.push(_airlineAddress);
+        emit AirlineRegistered(_airlineAddress, _airlineName);
     }
 
+    function getNumAirlines ( )
+        external
+        view
+        returns(uint airlineCount)
+    {
+        return airlineAddresses.length;
+    }
+
+    function getAirline ( address _address )  external view requireAirlineExists(_address) returns(string)  {
+        return airlines[_address].name;
+    }
 
    /**
     * @dev Buy insurance for a flight
@@ -248,6 +284,22 @@ contract FlightSuretyData {
                             requireContractOwner
     {
         delete authorizedContracts[contractAddress];
+    }
+
+
+    /**
+    * @dev This checks if an address appears in the list of addresses.
+    */ 
+    function addressInList ( address[] memory addresses, address addressToCheck) internal pure returns(bool)
+    {
+        bool exists = false;
+        for(uint c = 0; c < addresses.length; c++) {
+            if (addresses[c] == addressToCheck) {
+                exists = true;
+                break;
+            }
+        }
+        return exists;
     }
 
 }
