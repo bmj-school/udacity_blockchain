@@ -23,14 +23,12 @@ contract('Airline Requirement Tests', async (accounts) => {
 
 
   it(`First airline is registered when contract is deployed`, async function () {
-    // Therefore, constructor should register an airline
-    // log(config.firstAirline);
+    // Constructor should register an airline
     numAirlines = await config.flightSuretyData.getNumAirlines();
     assert.equal(numAirlines, 1, "One airline registered");
-    
-    
-    
-
+    thisAirline = await config.flightSuretyData.getAirline(config.firstAirline) 
+    log(`First airline name: ${thisAirline[0]}`)
+    assert.equal(thisAirline[1], config.firstAirline, 'First airline not matching configuration')
   });
 
   it(`Only existing airline may register a new airline until there are at least four airlines registered`, async function () {

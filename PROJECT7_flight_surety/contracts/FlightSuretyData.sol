@@ -182,8 +182,8 @@ contract FlightSuretyData {
         return airlineAddresses.length;
     }
 
-    function getAirline ( address _address )  external view requireAirlineExists(_address) returns(string)  {
-        return airlines[_address].name;
+    function getAirline ( address _address )  external view requireAirlineExists(_address) returns(string, address)  {
+        return (airlines[_address].name, airlines[_address].airlineAddress);
     }
 
    /**
