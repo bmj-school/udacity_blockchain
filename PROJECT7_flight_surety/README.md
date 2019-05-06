@@ -18,23 +18,37 @@ Constructor can't call a function?
         // Purchased   // 7
     }
 
-
+# Smart contract development
 ## Ganache testing
-
 Start ganache with the same seed phrase as specified in truffle configuration `truffle.js`.
 
-## Faster testing:
+`ganache-cli -p 8545 --gasLimit 10000000 -m "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat"`
 
+## Faster testing
 Run `truffle develop` to start the development blockchain (not ganache)
 
 At the develop console, run `test` to run all tests, or `test ./test/testscript.js` to run a single test.
 
-# FlightSurety
+# Server development
+The server simulates the oracle information.
+
+# Front end development
+
+```
+"test": "truffle test ./test/flightSurety.js",
+"dapp": "webpack-dev-server --mode development --config webpack.config.dapp.js",
+"dapp:prod": "webpack --mode production  --config webpack.config.dapp.js",
+"server": "rm -rf ./build/server && webpack --config webpack.config.server.js"
+```
+
+
+
+
+# FlightSurety (Boilerplate code section)
 
 FlightSurety is a sample application project for Udacity's Blockchain course.
 
 ## Install
-
 This repository contains Smart Contract code in Solidity (using Truffle), tests (also using Truffle), dApp scaffolding (using HTML, CSS and JS) and server app scaffolding.
 
 To install, download or clone the repo, then:
