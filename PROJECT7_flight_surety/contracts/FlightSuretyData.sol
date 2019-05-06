@@ -124,6 +124,12 @@ contract FlightSuretyData {
         require(exists, "Airline address does not exist in this contract");
         _;
     }
+
+    modifier requireAirlineRegistered(address _airlineAddress)
+    {
+        require(airlines[_airlineAddress].registrationState == RegistrationState.Registered);
+        _;
+    }
     /********************************************************************************************/
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
@@ -187,7 +193,9 @@ contract FlightSuretyData {
                 registrationState: RegistrationState.Proposed,
                 votes: new address[](0)
                 });
+            // The sponsoring airline automatically votes 
             airlineAddresses.push(_airlineAddress);
+            airlines[_airlineAddress].votes.push(msg.sender);
             emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
         }
     }
@@ -207,6 +215,13 @@ contract FlightSuretyData {
                 airlines[_address].votes.length
         );
     }
+
+
+    function vote (address _address) external requireAirlineExists(_address) requireAirlineExists(msg.sender) {
+        require(!addressInList(airlines[_address].votes, msg.sender), 'You have already voted for this airline');
+        airlines[_address].votes.push(msg.sender);
+    }
+
 
    /**
     * @dev Buy insurance for a flight

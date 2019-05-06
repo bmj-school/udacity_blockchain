@@ -58,8 +58,21 @@ contract('Airline Requirement Tests', async (accounts) => {
 
 
   it(`Registration of fifth and subsequent airlines requires multi-party consensus of 50% of registered airlines`, async function () {
-    assert.equal(true, true, "message");
-      
+    log(`Number of airlines: ${await config.flightSuretyData.getNumAirlines()}`)
+
+    // Go ahead and register 5th
+    tx = await config.flightSuretyData.registerAirline('Airline 5', config.testAirlineAccounts[4], {from: config.testAirlineAccounts[2]})
+    log(`Fifth airline: ${await config.flightSuretyData.getAirline(config.testAirlineAccounts[4])}`)
+    
+    await config.flightSuretyData.vote(config.testAirlineAccounts[4], {from: config.testAirlineAccounts[2]})
+    log(`Fifth airline: ${await config.flightSuretyData.getAirline(config.testAirlineAccounts[4])}`)
+
+    await truffleAssert.reverts(
+      config.flightSuretyData.vote(config.testAirlineAccounts[4], {from: config.testAirlineAccounts[2]}),
+      'You have already voted for this airline'
+    )
+
+    log(`Fifth airline: ${await config.flightSuretyData.getAirline(config.testAirlineAccounts[4])}`)
   });
 
   it(`Airline can be registered, but does not participate in contract until it submits funding of 10 ether`, async function () {
