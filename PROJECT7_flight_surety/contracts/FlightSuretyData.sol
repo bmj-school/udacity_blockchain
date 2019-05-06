@@ -16,6 +16,7 @@ contract FlightSuretyData {
 
     /* AIRLINES
     Each airline is represented by their public address
+    Airlines have various status codes to represent their state in the contract.
     */
     enum RegistrationState
     {
@@ -31,10 +32,8 @@ contract FlightSuretyData {
 
     struct Airline {
         string name;
-        // uint8 statusCode;
-        // uint256 updatedTimestamp;
         address airlineAddress;
-        RegistrationState registrationState; // This is set to True for the first 4 airlines, and then by voting
+        RegistrationState registrationState; // This is set to register for the first 4 airlines, and then by voting
         address[] votes; // This is the list of addresses who have voted for this airline
     }
 
@@ -78,8 +77,6 @@ contract FlightSuretyData {
             votes: new address[](0)
             });
         airlineAddresses.push(_airlineAddress);
-
-        // registerAirline(_airlineName, _airlineAddress);
     }
 
     /********************************************************************************************/

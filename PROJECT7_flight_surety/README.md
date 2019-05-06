@@ -1,10 +1,29 @@
 # Notes
+Constructor can't call a function?
+
+## Governance
+    /* AIRLINES
+    Each airline is represented by their public address
+    Airlines have various status codes to represent their state in the contract.
+    */
+    enum RegistrationState
+    {
+        Proposed,  // 0
+        Registered // 1
+        // Rejected    // 2
+        // ForSale,    // 3
+        // Sold,       // 4
+        // Shipped,    // 5
+        // Received,   // 6
+        // Purchased   // 7
+    }
+
 
 ## Ganache testing
 
-Start ganache with the same seed phrase as specified in truffle configuration `truffle.js`. 
+Start ganache with the same seed phrase as specified in truffle configuration `truffle.js`.
 
-## Faster testing: 
+## Faster testing:
 
 Run `truffle develop` to start the development blockchain (not ganache)
 
