@@ -10,12 +10,6 @@ Constructor can't call a function?
     {
         Proposed,  // 0
         Registered // 1
-        // Rejected    // 2
-        // ForSale,    // 3
-        // Sold,       // 4
-        // Shipped,    // 5
-        // Received,   // 6
-        // Purchased   // 7
     }
 
 # Smart contract development
@@ -40,7 +34,6 @@ The server simulates the oracle information.
 "dapp:prod": "webpack --mode production  --config webpack.config.dapp.js",
 "server": "rm -rf ./build/server && webpack --config webpack.config.server.js"
 ```
-
 
 
 
