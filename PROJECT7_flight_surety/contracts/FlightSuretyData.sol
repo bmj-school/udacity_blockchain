@@ -17,24 +17,25 @@ contract FlightSuretyData {
     /* AIRLINES
     Each airline is represented by their public address
     */
-    enum RegistrationState 
-    { 
+    enum RegistrationState
+    {
         Proposed,  // 0
-        Voted,  // 1
-        Registered     // 2
+        Registered // 1
+        // Rejected    // 2
         // ForSale,    // 3
         // Sold,       // 4
         // Shipped,    // 5
         // Received,   // 6
         // Purchased   // 7
-        }
+    }
+
     struct Airline {
         string name;
         // uint8 statusCode;
-        // uint256 updatedTimestamp;        
+        // uint256 updatedTimestamp;
         address airlineAddress;
-        bool approved; // This is set to True for the first 4 airlines, and then by voting
-        address[] votes; // This is the list of airlines who have voted this airline in
+        RegistrationState registrationState; // This is set to True for the first 4 airlines, and then by voting
+        address[] votes; // This is the list of addresses who have voted for this airline
     }
 
     mapping(address => Airline) private airlines;
@@ -46,14 +47,15 @@ contract FlightSuretyData {
     struct Flight {
         bool isRegistered;
         uint8 statusCode;
-        uint256 updatedTimestamp;        
+        uint256 updatedTimestamp;
         address airline;
     }
     mapping(bytes32 => Flight) private flights;
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
     /********************************************************************************************/
-    event AirlineRegistered(address airlineAddress, string name, bool approved, uint256 votes);
+    event AirlineRegistered(address airlineAddress, string name, uint registrationState, uint256 numVotes);
+    event AirlineStatus(address airlineAddress, string name, uint256 registrationState, uint256 numVotes);
 
     /********************************************************************************************/
     /*                                       CONSTUCTOR                                         */
@@ -64,19 +66,18 @@ contract FlightSuretyData {
     *      The deploying account becomes contractOwner
     *      The deploying account must register the first airline
     */
-    constructor ( string _airlineName, address _airlineAddress) public 
+    constructor (string _airlineName, address _airlineAddress) public
     {
         contractOwner = msg.sender;
 
-        // Create first Airline 
+        // Create first Airline
         airlines[_airlineAddress] = Airline({
-            name: _airlineName, 
+            name: _airlineName,
             airlineAddress: _airlineAddress,
-            approved: true,
+            registrationState: RegistrationState.Registered,
             votes: new address[](0)
-            });        
+            });
         airlineAddresses.push(_airlineAddress);
-        // emit AirlineRegistered(_airlineAddress, _airlineName);
 
         // registerAirline(_airlineName, _airlineAddress);
     }
@@ -90,10 +91,10 @@ contract FlightSuretyData {
 
     /**
     * @dev Modifier that requires the "operational" boolean variable to be "true"
-    *      This is used on all state changing functions to pause the contract in 
+    *      This is used on all state changing functions to pause the contract in
     *      the event there is an issue that needs to be fixed
     */
-    modifier requireIsOperational() 
+    modifier requireIsOperational()
     {
         require(operational, "Contract is currently not operational");
         _;  // All modifiers require an "_" which indicates where the function body will be added
@@ -125,7 +126,7 @@ contract FlightSuretyData {
         bool exists = addressInList(airlineAddresses, _airlineAddress);
         require(exists, "Airline address does not exist in this contract");
         _;
-    }    
+    }
     /********************************************************************************************/
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
@@ -134,11 +135,11 @@ contract FlightSuretyData {
     * @dev Get operating status of contract
     *
     * @return A bool that is the current operating status
-    */      
-    function isOperational() 
-                            public 
-                            view 
-                            returns(bool) 
+    */
+    function isOperational()
+                            public
+                            view
+                            returns(bool)
     {
         return operational;
     }
@@ -148,13 +149,13 @@ contract FlightSuretyData {
     * @dev Sets contract operations on/off
     *
     * When operational mode is disabled, all write transactions except for this one will fail
-    */    
+    */
     function setOperatingStatus
                             (
                                 bool mode
-                            ) 
+                            )
                             external
-                            requireContractOwner 
+                            requireContractOwner
     {
         operational = mode;
     }
@@ -167,22 +168,30 @@ contract FlightSuretyData {
     * @dev Add an airline to the registration queue
     *      Can only be called from FlightSuretyApp contract
     *
-    */   
-    function registerAirline ( string _airlineName, address _airlineAddress) external
+    */
+    function registerAirline(string _airlineName, address _airlineAddress) external
     {
         // Case 1: Only existing airlines can register new airlines
         if (airlineAddresses.length <= 4){
-            require(addressInList(airlineAddresses, msg.sender), 'Only existing airlines can register new');
+            require(addressInList(airlineAddresses, msg.sender), 'Only existing airlines can register new airlines');
             airlines[_airlineAddress] = Airline({
-                name: _airlineName, 
+                name: _airlineName,
                 airlineAddress: _airlineAddress,
-                approved: true,
+                registrationState: RegistrationState.Registered,
                 votes: new address[](0)
-                });        
+                });
             airlineAddresses.push(_airlineAddress);
-            emit AirlineRegistered(_airlineAddress, _airlineName, airlines[_airlineAddress].approved, airlines[_airlineAddress].votes.length);
+            emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
         } else if (airlineAddresses.length > 4) {
-            
+            require(addressInList(airlineAddresses, msg.sender), 'Only existing airlines can propose new airlines');
+            airlines[_airlineAddress] = Airline({
+                name: _airlineName,
+                airlineAddress: _airlineAddress,
+                registrationState: RegistrationState.Proposed,
+                votes: new address[](0)
+                });
+            airlineAddresses.push(_airlineAddress);
+            emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
         }
     }
 
@@ -194,16 +203,20 @@ contract FlightSuretyData {
         return airlineAddresses.length;
     }
 
-    function getAirline ( address _address )  external view requireAirlineExists(_address) returns(string, address, bool, uint256)  {
-        return (airlines[_address].name, airlines[_address].airlineAddress, airlines[_address].approved, airlines[_address].votes.length);
+    function getAirline ( address _address )  external view requireAirlineExists(_address) returns(string, address, uint, uint256)  {
+        return (airlines[_address].name,
+                airlines[_address].airlineAddress,
+                uint(airlines[_address].registrationState),
+                airlines[_address].votes.length
+        );
     }
 
    /**
     * @dev Buy insurance for a flight
     *
-    */   
+    */
     function buy
-                            (                             
+                            (
                             )
                             external
                             payable
@@ -212,7 +225,7 @@ contract FlightSuretyData {
     }
 
     /**
-     *  @dev Credits payouts to insurees
+    * @dev Credits payouts to insurees
     */
     function creditInsurees
                                 (
@@ -221,10 +234,10 @@ contract FlightSuretyData {
                                 pure
     {
     }
-    
+
 
     /**
-     *  @dev Transfers eligible payout funds to insuree
+     * @dev Transfers eligible payout funds to insuree
      *
     */
     function pay
@@ -239,9 +252,9 @@ contract FlightSuretyData {
     * @dev Initial funding for the insurance. Unless there are too many delayed flights
     *      resulting in insurance payouts, the contract should be self-sustaining
     *
-    */   
+    */
     function fund
-                            (   
+                            (
                             )
                             public
                             payable
@@ -256,7 +269,7 @@ contract FlightSuretyData {
                         )
                         pure
                         internal
-                        returns(bytes32) 
+                        returns(bytes32)
     {
         return keccak256(abi.encodePacked(airline, flight, timestamp));
     }
@@ -265,16 +278,16 @@ contract FlightSuretyData {
     * @dev Fallback function for funding smart contract.
     *
     */
-    function() 
-                            external 
-                            payable 
+    function()
+                            external
+                            payable
     {
         fund();
     }
 
-    /** MJ
-    * @dev 
-    */   
+    /**
+    * @dev asdf
+    */
     function authorizeCaller
                             (
                                 address contractAddress
@@ -285,9 +298,9 @@ contract FlightSuretyData {
         authorizedContracts[contractAddress] = true;
     }
 
-    /** MJ
-    * @dev 
-    */   
+    /**
+    * @dev asdf
+    */
     function deauthorizeCaller
                             (
                                 address contractAddress
@@ -301,7 +314,7 @@ contract FlightSuretyData {
 
     /**
     * @dev This checks if an address appears in the list of addresses.
-    */ 
+    */
     function addressInList ( address[] memory addresses, address addressToCheck) internal pure returns(bool)
     {
         bool exists = false;
