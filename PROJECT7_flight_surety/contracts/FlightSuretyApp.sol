@@ -31,8 +31,6 @@ contract FlightSuretyApp {
     address private contractOwner;          // Account used to deploy contract
 
 
-
-
     /********************************************************************************************/
     /*                                       FUNCTION MODIFIERS                                 */
     /********************************************************************************************/

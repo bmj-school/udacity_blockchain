@@ -13,7 +13,7 @@ contract FlightSuretyData {
     bool private operational = true;                                    // Blocks all state changes throughout the contract if false
     mapping(address => bool) private authorizedContracts;
 
-
+    uint public airlineAnte = 10 ether;       
     /* AIRLINES
     Each airline is represented by their public address
     Airlines have various status codes to represent their state in the contract.
@@ -40,6 +40,7 @@ contract FlightSuretyData {
 
     mapping(address => Airline) private airlines;
     address[] airlineAddresses;
+    address[] registeredAirlines;
 
 
     /* FLIGHTS
@@ -58,6 +59,7 @@ contract FlightSuretyData {
     event AirlineProposed(address airlineAddress, string name, address sponsor);
     event AirlineStatus(address airlineAddress, string name, uint256 registrationState, uint256 numVotes);
     event Funded(address airlineAddress);
+    event VotedIn(address airlineAddress);
 
     /********************************************************************************************/
     /*                                       CONSTUCTOR                                         */
@@ -80,6 +82,7 @@ contract FlightSuretyData {
             votes: new address[](0)
             });
         airlineAddresses.push(_airlineAddress);
+        registeredAirlines.push(_airlineAddress);
     }
 
     /********************************************************************************************/
@@ -139,6 +142,11 @@ contract FlightSuretyData {
         require(airlines[_airlineAddress].registrationState == RegistrationState.Funded);
         _;
     }
+
+    modifier requireSufficientAnte() {
+        require(msg.value >= airlineAnte, "Minimum funding level not met");
+        _;
+    }
     /********************************************************************************************/
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
@@ -193,6 +201,7 @@ contract FlightSuretyData {
                 votes: new address[](0)
                 });
             airlineAddresses.push(_airlineAddress);
+            registeredAirlines.push(_airlineAddress);
             emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
 
         // Case 2: > 4 airlines
@@ -205,10 +214,9 @@ contract FlightSuretyData {
                 votes: new address[](0)
                 });
             // The sponsoring airline automatically votes 
-            emit AirlineProposed(_airlineAddress, _airlineName, msg.sender);
             airlines[_airlineAddress].votes.push(msg.sender);
             airlineAddresses.push(_airlineAddress);
-            // emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
+            emit AirlineProposed(_airlineAddress, _airlineName, msg.sender);
         }
     }
 
@@ -228,10 +236,30 @@ contract FlightSuretyData {
         );
     }
 
+    function getNumRegisteredAirlines() external view returns (uint) {
+        return registeredAirlines.length;
+    }
 
-    function vote (address _address) external requireAirlineExists(_address) requireAirlineExists(msg.sender) {
+    function getVoteThreshold() external view returns (uint) {
+        return registeredAirlines.length.div(2);
+    }
+
+    function vote (address _address) external requireAirlineExists(_address) requireAirlineExists(msg.sender) returns(uint) {
         require(!addressInList(airlines[_address].votes, msg.sender), 'You have already voted for this airline');
         airlines[_address].votes.push(msg.sender);
+        
+        // Check the votes
+        uint votes = airlines[_address].votes.length;
+        uint voteThreshold = registeredAirlines.length.div(2);
+        if (airlines[_address].votes.length > voteThreshold) {
+            airlines[_address].registrationState = RegistrationState.Registered;
+            registeredAirlines.push(_address);
+            emit VotedIn(_address);
+            return voteThreshold;
+        }
+        else {
+            return voteThreshold;
+        }
     }
 
 

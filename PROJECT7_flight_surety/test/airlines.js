@@ -59,7 +59,8 @@ contract('Airline Requirement Tests', async (accounts) => {
 
   it(`Registration of fifth and subsequent airlines requires multi-party consensus of 50% of registered airlines`, async function () {
     log(`Number of airlines: ${await config.flightSuretyData.getNumAirlines()}`)
-    // Go ahead and propose a 5th
+
+    // Go ahead and propose a 5th airline, sponsor automatically votes
     tx = await config.flightSuretyData.registerAirline('Airline 5', config.testAirlineAccounts[4], {from: config.testAirlineAccounts[2]})
     truffleAssert.eventEmitted(tx, 'AirlineProposed');
     thisAirline = await config.flightSuretyData.getAirline(config.testAirlineAccounts[4])
@@ -76,10 +77,15 @@ contract('Airline Requirement Tests', async (accounts) => {
     thisAirline = await config.flightSuretyData.getAirline(config.testAirlineAccounts[4])
     log(`Fifth airline, another vote: name=${thisAirline[0]}, state=${thisAirline[2]}, votes=${thisAirline[3]}`)
     
-    // Add another vote
-    await config.flightSuretyData.vote(config.testAirlineAccounts[4], {from: config.testAirlineAccounts[1]})
+    // Add another vote, assert voted
+    tx = await config.flightSuretyData.vote(config.testAirlineAccounts[4], {from: config.testAirlineAccounts[1]})
+    
+    truffleAssert.eventEmitted(tx, 'VotedIn');
     thisAirline = await config.flightSuretyData.getAirline(config.testAirlineAccounts[4])
     log(`Fifth airline, another vote: name=${thisAirline[0]}, state=${thisAirline[2]}, votes=${thisAirline[3]}`)
+
+    assert.equal(thisAirline[2], 1, 'This airline should be status=registered')
+    assert.equal(await config.flightSuretyData.getNumRegisteredAirlines(), 5, '5 airlines should be registered')
   });
 
   it(`Airline can be registered, but does not participate in contract until it submits funding of 10 ether`, async function () {
