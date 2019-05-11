@@ -21,7 +21,8 @@ contract FlightSuretyData {
     enum RegistrationState
     {
         Proposed,  // 0
-        Registered // 1
+        Registered, // 1
+        Funded
         // Rejected    // 2
         // ForSale,    // 3
         // Sold,       // 4
@@ -54,7 +55,9 @@ contract FlightSuretyData {
     /*                                       EVENT DEFINITIONS                                  */
     /********************************************************************************************/
     event AirlineRegistered(address airlineAddress, string name, uint registrationState, uint256 numVotes);
+    event AirlineProposed(address airlineAddress, string name, address sponsor);
     event AirlineStatus(address airlineAddress, string name, uint256 registrationState, uint256 numVotes);
+    event Funded(address airlineAddress);
 
     /********************************************************************************************/
     /*                                       CONSTUCTOR                                         */
@@ -130,6 +133,12 @@ contract FlightSuretyData {
         require(airlines[_airlineAddress].registrationState == RegistrationState.Registered);
         _;
     }
+
+    modifier requireAirlineFunded(address _airlineAddress)
+    {
+        require(airlines[_airlineAddress].registrationState == RegistrationState.Funded);
+        _;
+    }
     /********************************************************************************************/
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
@@ -174,8 +183,8 @@ contract FlightSuretyData {
     */
     function registerAirline(string _airlineName, address _airlineAddress) external
     {
-        // Case 1: Only existing airlines can register new airlines
-        if (airlineAddresses.length <= 4){
+        // Case 1: Only existing airlines can register new airlines, <= 4 airlines
+        if (airlineAddresses.length < 4){
             require(addressInList(airlineAddresses, msg.sender), 'Only existing airlines can register new airlines');
             airlines[_airlineAddress] = Airline({
                 name: _airlineName,
@@ -185,7 +194,9 @@ contract FlightSuretyData {
                 });
             airlineAddresses.push(_airlineAddress);
             emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
-        } else if (airlineAddresses.length > 4) {
+
+        // Case 2: > 4 airlines
+        } else if (airlineAddresses.length >= 4) {
             require(addressInList(airlineAddresses, msg.sender), 'Only existing airlines can propose new airlines');
             airlines[_airlineAddress] = Airline({
                 name: _airlineName,
@@ -194,9 +205,10 @@ contract FlightSuretyData {
                 votes: new address[](0)
                 });
             // The sponsoring airline automatically votes 
-            airlineAddresses.push(_airlineAddress);
+            emit AirlineProposed(_airlineAddress, _airlineName, msg.sender);
             airlines[_airlineAddress].votes.push(msg.sender);
-            emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
+            airlineAddresses.push(_airlineAddress);
+            // emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
         }
     }
 

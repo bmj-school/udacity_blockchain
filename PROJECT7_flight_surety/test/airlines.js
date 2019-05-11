@@ -50,7 +50,7 @@ contract('Airline Requirement Tests', async (accounts) => {
       "Only existing airlines can register new"
       )
 
-    // Go ahead and register 4
+    // Go ahead and register 4 from a registered airline
     tx = await config.flightSuretyData.registerAirline('Airline 4', config.testAirlineAccounts[3], {from: config.testAirlineAccounts[2]})
     log(`Fourth airline: ${await config.flightSuretyData.getAirline(config.testAirlineAccounts[3]) }`)
     
@@ -59,20 +59,27 @@ contract('Airline Requirement Tests', async (accounts) => {
 
   it(`Registration of fifth and subsequent airlines requires multi-party consensus of 50% of registered airlines`, async function () {
     log(`Number of airlines: ${await config.flightSuretyData.getNumAirlines()}`)
-
-    // Go ahead and register 5th
+    // Go ahead and propose a 5th
     tx = await config.flightSuretyData.registerAirline('Airline 5', config.testAirlineAccounts[4], {from: config.testAirlineAccounts[2]})
-    log(`Fifth airline: ${await config.flightSuretyData.getAirline(config.testAirlineAccounts[4])}`)
-    
-    await config.flightSuretyData.vote(config.testAirlineAccounts[4], {from: config.testAirlineAccounts[2]})
-    log(`Fifth airline: ${await config.flightSuretyData.getAirline(config.testAirlineAccounts[4])}`)
+    truffleAssert.eventEmitted(tx, 'AirlineProposed');
+    thisAirline = await config.flightSuretyData.getAirline(config.testAirlineAccounts[4])
+    log(`Fifth airline, sponsor is first vote: name=${thisAirline[0]}, state=${thisAirline[2]}, votes=${thisAirline[3]}`)
 
+    // Try and vote again
     await truffleAssert.reverts(
       config.flightSuretyData.vote(config.testAirlineAccounts[4], {from: config.testAirlineAccounts[2]}),
       'You have already voted for this airline'
     )
 
-    log(`Fifth airline: ${await config.flightSuretyData.getAirline(config.testAirlineAccounts[4])}`)
+    // Add another vote
+    await config.flightSuretyData.vote(config.testAirlineAccounts[4], {from: config.testAirlineAccounts[3]})
+    thisAirline = await config.flightSuretyData.getAirline(config.testAirlineAccounts[4])
+    log(`Fifth airline, another vote: name=${thisAirline[0]}, state=${thisAirline[2]}, votes=${thisAirline[3]}`)
+    
+    // Add another vote
+    await config.flightSuretyData.vote(config.testAirlineAccounts[4], {from: config.testAirlineAccounts[1]})
+    thisAirline = await config.flightSuretyData.getAirline(config.testAirlineAccounts[4])
+    log(`Fifth airline, another vote: name=${thisAirline[0]}, state=${thisAirline[2]}, votes=${thisAirline[3]}`)
   });
 
   it(`Airline can be registered, but does not participate in contract until it submits funding of 10 ether`, async function () {
