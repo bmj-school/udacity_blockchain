@@ -8,7 +8,8 @@ function log(_string){
 
 // Begin
 var FlightSuretyApp = artifacts.require("FlightSuretyApp");
-var FlightSuretyData = artifacts.require("FlightSuretyData");
+var AirlineData = artifacts.require("AirlineData");
+var FlightData = artifacts.require("FlightData");
 var BigNumber = require('bignumber.js');
 
 var Config = async function(accounts) {
@@ -52,10 +53,10 @@ var Config = async function(accounts) {
         log(`\t other: ${addr}`)
     }
 
-    let flightSuretyData = await FlightSuretyData.new('Genesis Air', testAirlineAccounts[0]);
+    let airlineData = await AirlineData.new('Genesis Air', testAirlineAccounts[0]);
     let flightSuretyApp = await FlightSuretyApp.new();
     log(`flightSuretyApp = ${flightSuretyApp}`)
-    log(`flightSuretyData = ${flightSuretyData}`)
+    log(`flightSuretyData = ${airlineData}`)
 
 
     log('Test configuration environment loaded.');
@@ -64,7 +65,7 @@ var Config = async function(accounts) {
         weiMultiple: (new BigNumber(10)).pow(18),
         testAirlineAccounts: testAirlineAccounts,
         testOtherAccounts: testOtherAccounts,
-        flightSuretyData: flightSuretyData,
+        airlineData: airlineData,
         flightSuretyApp: flightSuretyApp
     }
 }
