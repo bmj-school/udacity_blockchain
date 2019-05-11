@@ -2,7 +2,7 @@ pragma solidity ^0.4.25;
 
 import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 
-contract FlightSuretyData {
+contract AirlineData {
     using SafeMath for uint256;
 
     /********************************************************************************************/
@@ -43,15 +43,6 @@ contract FlightSuretyData {
     address[] registeredAirlines;
 
 
-    /* FLIGHTS
-    */
-    struct Flight {
-        bool isRegistered;
-        uint8 statusCode;
-        uint256 updatedTimestamp;
-        address airline;
-    }
-    mapping(bytes32 => Flight) private flights;
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
     /********************************************************************************************/
@@ -156,11 +147,7 @@ contract FlightSuretyData {
     *
     * @return A bool that is the current operating status
     */
-    function isOperational()
-                            public
-                            view
-                            returns(bool)
-    {
+    function isOperational() public view returns(bool) {
         return operational;
     }
 
@@ -170,15 +157,25 @@ contract FlightSuretyData {
     *
     * When operational mode is disabled, all write transactions except for this one will fail
     */
-    function setOperatingStatus
-                            (
-                                bool mode
-                            )
-                            external
-                            requireContractOwner
-    {
+    function setOperatingStatus ( bool mode) external requireContractOwner {
         operational = mode;
     }
+
+    /**
+    * @dev This checks if an address appears in the list of addresses.
+    */
+    function addressInList ( address[] memory addresses, address addressToCheck) internal pure returns(bool)
+    {
+        bool exists = false;
+        for(uint c = 0; c < addresses.length; c++) {
+            if (addresses[c] == addressToCheck) {
+                exists = true;
+                break;
+            }
+        }
+        return exists;
+    }
+
 
     /********************************************************************************************/
     /*                                     SMART CONTRACT FUNCTIONS                             */
@@ -262,44 +259,6 @@ contract FlightSuretyData {
         }
     }
 
-
-   /**
-    * @dev Buy insurance for a flight
-    *
-    */
-    function buy
-                            (
-                            )
-                            external
-                            payable
-    {
-
-    }
-
-    /**
-    * @dev Credits payouts to insurees
-    */
-    function creditInsurees
-                                (
-                                )
-                                external
-                                pure
-    {
-    }
-
-
-    /**
-     * @dev Transfers eligible payout funds to insuree
-     *
-    */
-    function pay
-                            (
-                            )
-                            external
-                            pure
-    {
-    }
-
    /**
     * @dev Initial funding for the insurance. Unless there are too many delayed flights
     *      resulting in insurance payouts, the contract should be self-sustaining
@@ -311,19 +270,6 @@ contract FlightSuretyData {
                             public
                             payable
     {
-    }
-
-    function getFlightKey
-                        (
-                            address airline,
-                            string memory flight,
-                            uint256 timestamp
-                        )
-                        pure
-                        internal
-                        returns(bytes32)
-    {
-        return keccak256(abi.encodePacked(airline, flight, timestamp));
     }
 
     /**
@@ -338,7 +284,7 @@ contract FlightSuretyData {
     }
 
     /**
-    * @dev asdf
+    * @dev note
     */
     function authorizeCaller
                             (
@@ -351,7 +297,7 @@ contract FlightSuretyData {
     }
 
     /**
-    * @dev asdf
+    * @dev note
     */
     function deauthorizeCaller
                             (
@@ -364,20 +310,6 @@ contract FlightSuretyData {
     }
 
 
-    /**
-    * @dev This checks if an address appears in the list of addresses.
-    */
-    function addressInList ( address[] memory addresses, address addressToCheck) internal pure returns(bool)
-    {
-        bool exists = false;
-        for(uint c = 0; c < addresses.length; c++) {
-            if (addresses[c] == addressToCheck) {
-                exists = true;
-                break;
-            }
-        }
-        return exists;
-    }
 
 }
 

@@ -91,6 +91,8 @@ contract('Airline Requirement Tests', async (accounts) => {
   it(`Airline can be registered, but does not participate in contract until it submits funding of 10 ether`, async function () {
     assert.equal(true, true, "message");
 
+    
+
   });
 
 });
