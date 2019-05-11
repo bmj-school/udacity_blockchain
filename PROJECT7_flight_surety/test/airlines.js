@@ -2,7 +2,7 @@
 var path = require('path');
 var scriptName = path.basename(__filename);
 function log(_string){
-    console.log(`${scriptName}: ${_string}`);
+    // console.log(`${scriptName}: ${_string}`);
 }
 
 // Begin main test script
@@ -89,8 +89,6 @@ contract('Airline Requirement Tests', async (accounts) => {
 
   it(`Airline can be registered, but does not participate in contract until it submits funding of 10 ether`, async function () {
     assert.equal(true, true, "message");
-
-
 
   });
 

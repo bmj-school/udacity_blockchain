@@ -1,13 +1,21 @@
 
 var Test = require('../config/testConfig.js');
-//var BigNumber = require('bignumber.js');
+var BigNumber = require('bignumber.js');
+var path = require('path');
+var scriptName = path.basename(__filename);
+function log(_string){
+  console.log(`${scriptName}: ${_string}`);
+}
 
 contract('Oracles', async (accounts) => {
-
+  log('oracles.js: Initiating contract')
   const TEST_ORACLES_COUNT = 20;
   var config;
+
   before('setup contract', async () => {
     config = await Test.Config(accounts);
+    log(`config: ${config}`)
+    log(`config.flightSuretyApp: ${config.flightSuretyApp}`)
 
     // Watch contract events
     const STATUS_CODE_UNKNOWN = 0;
@@ -16,12 +24,12 @@ contract('Oracles', async (accounts) => {
     const STATUS_CODE_LATE_WEATHER = 30;
     const STATUS_CODE_LATE_TECHNICAL = 40;
     const STATUS_CODE_LATE_OTHER = 50;
-
   });
 
 
   it('can register oracles', async () => {
-    
+    log(`First test. config=${config}`)
+    log(`First test. config.flightSuretyApp=${config.flightSuretyApp}`)
     // ARRANGE
     let fee = await config.flightSuretyApp.REGISTRATION_FEE.call();
 
