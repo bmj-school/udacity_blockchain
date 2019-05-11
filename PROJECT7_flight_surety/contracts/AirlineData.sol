@@ -43,7 +43,7 @@ contract AirlineData {
     event AirlineRegistered(address airlineAddress, string name, uint registrationState, uint256 numVotes);
     event AirlineProposed(address airlineAddress, string name, address sponsor);
     event AirlineStatus(address airlineAddress, string name, uint256 registrationState, uint256 numVotes);
-    event Funded(address airlineAddress);
+    event AirlineFunded(address airlineAddress);
     event VotedIn(address airlineAddress);
 
     /********************************************************************************************/
@@ -273,9 +273,10 @@ contract AirlineData {
         }
     }
 
-    function fundAirline () external payable requireAirlineRegistered(msg.sender) requireSufficientFund() {
-        
-        emit Funded(msg.sender);
+    function fundAirline () external payable requireAirlineRegistered(msg.sender) requireSufficientFund() 
+    {   
+        airlines[msg.sender].registrationState = RegistrationState.Funded;
+        emit AirlineFunded(msg.sender);
     }
 
 }
