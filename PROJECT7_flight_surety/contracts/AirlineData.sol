@@ -20,15 +20,9 @@ contract AirlineData {
     */
     enum RegistrationState
     {
-        Proposed,  // 0
-        Registered, // 1
-        Funded
-        // Rejected    // 2
-        // ForSale,    // 3
-        // Sold,       // 4
-        // Shipped,    // 5
-        // Received,   // 6
-        // Purchased   // 7
+        Proposed,       // 0
+        Registered,     // 1
+        Funded          // 2
     }
 
     struct Airline {
@@ -280,8 +274,8 @@ contract AirlineData {
         }
     }
 
-    function fundAirline () external {
-
+    function fundAirline () external payable {
+        emit Funded(msg.sender); 
     }
 
 }
