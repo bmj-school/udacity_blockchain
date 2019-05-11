@@ -10,6 +10,7 @@ function log(_string){
 var FlightSuretyApp = artifacts.require("FlightSuretyApp");
 var AirlineData = artifacts.require("AirlineData");
 var FlightData = artifacts.require("FlightData");
+
 var BigNumber = require('bignumber.js');
 
 var Config = async function(accounts) {
@@ -41,7 +42,7 @@ var Config = async function(accounts) {
 
     let airlineData = await AirlineData.new('Genesis Air', testAirlineAccounts[0]);
     let flightData = await FlightData.new();
-    let flightSuretyApp = await FlightSuretyApp.new();
+    let flightSuretyApp = await FlightSuretyApp.new(airlineData.address, flightData.address);
     log(`flightSuretyApp = ${flightSuretyApp}`)
     log(`airlineData = ${airlineData}`)
     log(`flightData = ${flightData}`)
