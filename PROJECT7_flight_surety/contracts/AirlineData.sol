@@ -264,11 +264,7 @@ contract AirlineData {
     *      resulting in insurance payouts, the contract should be self-sustaining
     *
     */
-    function fund
-                            (
-                            )
-                            public
-                            payable
+    function fund () public payable
     {
     }
 
@@ -276,22 +272,14 @@ contract AirlineData {
     * @dev Fallback function for funding smart contract.
     *
     */
-    function()
-                            external
-                            payable
-    {
+    function() external payable {
         fund();
     }
 
     /**
     * @dev note
     */
-    function authorizeCaller
-                            (
-                                address contractAddress
-                            )
-                            external
-                            requireContractOwner
+    function authorizeCaller ( address contractAddress) external requireContractOwner
     {
         authorizedContracts[contractAddress] = true;
     }
@@ -299,17 +287,10 @@ contract AirlineData {
     /**
     * @dev note
     */
-    function deauthorizeCaller
-                            (
-                                address contractAddress
-                            )
-                            external
-                            requireContractOwner
+    function deauthorizeCaller ( address contractAddress) external requireContractOwner
     {
         delete authorizedContracts[contractAddress];
     }
-
-
 
 }
 

@@ -13,8 +13,6 @@ contract FlightData {
     bool private operational = true;                                    // Blocks all state changes throughout the contract if false
     mapping(address => bool) private authorizedContracts;
 
-
-
     /* FLIGHTS
     */
     struct Flight {
@@ -38,7 +36,7 @@ contract FlightData {
     * @dev Constructor
     *      
     */
-    constructor (string _airlineName, address _airlineAddress) public
+    constructor () public
     {
         contractOwner = msg.sender;
 
@@ -89,10 +87,7 @@ contract FlightData {
     *
     * @return A bool that is the current operating status
     */
-    function isOperational()
-                            public
-                            view
-                            returns(bool)
+    function isOperational() public view returns(bool)
     {
         return operational;
     }
@@ -102,12 +97,7 @@ contract FlightData {
     *
     * When operational mode is disabled, all write transactions except for this one will fail
     */
-    function setOperatingStatus
-                            (
-                                bool mode
-                            )
-                            external
-                            requireContractOwner
+    function setOperatingStatus ( bool mode) external requireContractOwner
     {
         operational = mode;
     }
@@ -120,11 +110,7 @@ contract FlightData {
     * @dev Buy insurance for a flight
     *
     */
-    function buy
-                            (
-                            )
-                            external
-                            payable
+    function buy () external payable
     {
 
     }
@@ -132,11 +118,7 @@ contract FlightData {
     /**
     * @dev Credits payouts to insurees
     */
-    function creditInsurees
-                                (
-                                )
-                                external
-                                pure
+    function creditInsurees () external pure
     {
     }
 
@@ -158,23 +140,11 @@ contract FlightData {
     *      resulting in insurance payouts, the contract should be self-sustaining
     *
     */
-    function fund
-                            (
-                            )
-                            public
-                            payable
+    function fund () public payable
     {
     }
 
-    function getFlightKey
-                        (
-                            address airline,
-                            string memory flight,
-                            uint256 timestamp
-                        )
-                        pure
-                        internal
-                        returns(bytes32)
+    function getFlightKey ( address airline, string memory flight, uint256 timestamp) pure internal returns(bytes32)
     {
         return keccak256(abi.encodePacked(airline, flight, timestamp));
     }
@@ -183,9 +153,7 @@ contract FlightData {
     * @dev Fallback function for funding smart contract.
     *
     */
-    function()
-                            external
-                            payable
+    function() external payable
     {
         fund();
     }
