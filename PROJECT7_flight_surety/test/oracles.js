@@ -4,7 +4,7 @@ var BigNumber = require('bignumber.js');
 var path = require('path');
 var scriptName = path.basename(__filename);
 function log(_string){
-  console.log(`${scriptName}: ${_string}`);
+  // console.log(`${scriptName}: ${_string}`);
 }
 
 contract('Oracles', async (accounts) => {
