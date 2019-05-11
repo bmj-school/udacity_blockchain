@@ -1,5 +1,12 @@
-# Notes
-Constructor can't call a function?
+# Flight Surety project - overview
+
+
+## Architecture
+The data persistence smart contracts have been refactored; 
+- `AirlineData` for the Airlines (voting, status, etc.)
+- `FlightData` for the flights and passengers
+
+The testing suite reflects this, with unit testing on each contract seperated. 
 
 ## Governance
     /* AIRLINES
@@ -13,6 +20,11 @@ Constructor can't call a function?
     }
 
 # Smart contract development
+## Notes
+NB: Do not use HDWalletProvider! Major errors with multiple deployments, very slow with Ganache, etc.
+
+Follow up - Constructor can't call a function?
+
 ## Ganache testing
 Start ganache with the same seed phrase as specified in truffle configuration `truffle.js`.
 
