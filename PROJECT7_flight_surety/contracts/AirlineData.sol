@@ -128,7 +128,7 @@ contract AirlineData {
         _;
     }
 
-    modifier requireSufficientAnte() {
+    modifier requireSufficientFund() {
         require(msg.value >= airlineAnte, "Minimum funding level not met");
         _;
     }
@@ -259,9 +259,8 @@ contract AirlineData {
     function vote (address _address) external requireAirlineExists(_address) requireAirlineExists(msg.sender) returns(uint) {
         require(!addressInList(airlines[_address].votes, msg.sender), 'You have already voted for this airline');
         airlines[_address].votes.push(msg.sender);
-        
-        // Check the votes
-        // uint votes = airlines[_address].votes.length;
+
+
         uint voteThreshold = registeredAirlines.length.div(2);
         if (airlines[_address].votes.length > voteThreshold) {
             airlines[_address].registrationState = RegistrationState.Registered;
@@ -274,8 +273,9 @@ contract AirlineData {
         }
     }
 
-    function fundAirline () external payable {
-        emit Funded(msg.sender); 
+    function fundAirline () external payable requireAirlineRegistered(msg.sender) requireSufficientFund() {
+        
+        emit Funded(msg.sender);
     }
 
 }

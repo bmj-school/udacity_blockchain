@@ -88,7 +88,14 @@ contract('Airline Requirement Tests', async (accounts) => {
   });
 
   it(`Airline can be registered, but does not participate in contract until it submits funding of 10 ether`, async function () {
-    assert.equal(true, true, "message");
+    // Only registered airlines can fund
+
+    await truffleAssert.reverts(
+      config.airlineData.fundAirline({from: config.testAirlineAccounts[2], value: 1}),
+      'Minimum funding level not met'
+    )
+    let fundingAmount = web3.toWei(10, "ether")
+    await config.airlineData.fundAirline({from: config.testAirlineAccounts[2], value: fundingAmount})
 
   });
 
