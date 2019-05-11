@@ -151,7 +151,6 @@ contract AirlineData {
         return operational;
     }
 
-
     /**
     * @dev Sets contract operations on/off
     *
@@ -176,6 +175,46 @@ contract AirlineData {
         return exists;
     }
 
+    function getNumAirlines ( ) external view returns(uint airlineCount)
+    {
+        return airlineAddresses.length;
+    }
+
+    function getNumRegisteredAirlines() external view returns (uint) {
+        return registeredAirlines.length;
+    }
+
+    function getVoteThreshold() external view returns (uint) {
+        return registeredAirlines.length.div(2);
+    }
+
+
+    function authorizeCaller ( address contractAddress) external requireContractOwner
+    {
+        authorizedContracts[contractAddress] = true;
+    }
+
+    function deauthorizeCaller ( address contractAddress) external requireContractOwner
+    {
+        delete authorizedContracts[contractAddress];
+    }
+
+   /**
+    * @dev Initial funding for the insurance. Unless there are too many delayed flights
+    *      resulting in insurance payouts, the contract should be self-sustaining
+    *
+    */
+    function fund () public payable
+    {
+    }
+
+    /**
+    * @dev Fallback function for funding smart contract.
+    *
+    */
+    function() external payable {
+        fund();
+    }
 
     /********************************************************************************************/
     /*                                     SMART CONTRACT FUNCTIONS                             */
@@ -183,8 +222,6 @@ contract AirlineData {
 
    /**
     * @dev Add an airline to the registration queue
-    *      Can only be called from FlightSuretyApp contract
-    *
     */
     function registerAirline(string _airlineName, address _airlineAddress) external
     {
@@ -217,14 +254,6 @@ contract AirlineData {
         }
     }
 
-    function getNumAirlines ( )
-        external
-        view
-        returns(uint airlineCount)
-    {
-        return airlineAddresses.length;
-    }
-
     function getAirline ( address _address )  external view requireAirlineExists(_address) returns(string, address, uint, uint256)  {
         return (airlines[_address].name,
                 airlines[_address].airlineAddress,
@@ -233,20 +262,12 @@ contract AirlineData {
         );
     }
 
-    function getNumRegisteredAirlines() external view returns (uint) {
-        return registeredAirlines.length;
-    }
-
-    function getVoteThreshold() external view returns (uint) {
-        return registeredAirlines.length.div(2);
-    }
-
     function vote (address _address) external requireAirlineExists(_address) requireAirlineExists(msg.sender) returns(uint) {
         require(!addressInList(airlines[_address].votes, msg.sender), 'You have already voted for this airline');
         airlines[_address].votes.push(msg.sender);
         
         // Check the votes
-        uint votes = airlines[_address].votes.length;
+        // uint votes = airlines[_address].votes.length;
         uint voteThreshold = registeredAirlines.length.div(2);
         if (airlines[_address].votes.length > voteThreshold) {
             airlines[_address].registrationState = RegistrationState.Registered;
@@ -259,38 +280,8 @@ contract AirlineData {
         }
     }
 
-   /**
-    * @dev Initial funding for the insurance. Unless there are too many delayed flights
-    *      resulting in insurance payouts, the contract should be self-sustaining
-    *
-    */
-    function fund () public payable
-    {
-    }
+    function fundAirline () external {
 
-    /**
-    * @dev Fallback function for funding smart contract.
-    *
-    */
-    function() external payable {
-        fund();
-    }
-
-    /**
-    * @dev note
-    */
-    function authorizeCaller ( address contractAddress) external requireContractOwner
-    {
-        authorizedContracts[contractAddress] = true;
-    }
-
-    /**
-    * @dev note
-    */
-    function deauthorizeCaller ( address contractAddress) external requireContractOwner
-    {
-        delete authorizedContracts[contractAddress];
     }
 
 }
-
