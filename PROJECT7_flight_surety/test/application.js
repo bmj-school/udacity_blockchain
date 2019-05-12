@@ -1,4 +1,6 @@
 // Simple logging util
+const sha3 = require('js-sha3').keccak_256
+
 var path = require('path');
 var scriptName = path.basename(__filename);
 function log(_string){
@@ -40,9 +42,9 @@ contract('Application Requirement Tests', async (accounts) => {
   it(`Only existing airline may register a new airline until there are at least four airlines registered`, async function () {
     // Register 2
     tx = await config.flightSuretyApp.registerAirline('Airline 2', config.testAirlineAccounts[1], {from: config.testAirlineAccounts[0]})
-    // log(tx)
-    truffleAssert.eventEmitted(tx, 'AirlineRegistered', (ev) => { return ev.airlineAddress === config.testAirlineAccounts[1] });
-    // assert.equal(await config.flightData.getNumAirlines(), 2, "Two are not registered");
+    truffleAssert.eventEmitted(tx, 'AirlineRegisteredApp', (ev) => { return ev.airlineAddress === config.testAirlineAccounts[1] });
+    assert.equal(await config.airlineData.getNumAirlines(), 2, "There should be 2 registered");
+
 /*
     // Register 3
     tx = await config.flightSuretyApp.registerAirline('Airline 3', config.testAirlineAccounts[2], {from: config.testAirlineAccounts[1]})
@@ -60,6 +62,36 @@ contract('Application Requirement Tests', async (accounts) => {
     tx = await config.flightSuretyApp.registerAirline('Airline 4', config.testAirlineAccounts[3], {from: config.testAirlineAccounts[2]})
     log(`Fourth airline: ${await config.flightSuretyApp.getData(config.testAirlineAccounts[3]) }`)
     */
+
+/* Below code attempted to get event from the second contract... 
+    // log(tx)
+    truffleAssert.prettyPrintEmittedEvents(tx);
+    // log(tx.logs[0]);
+
+    let evString = "AirlineRegisteredData(airlineAddress: 0xc5fdf4076b8f3a5357c5e395ab970b5b54098fef, name: Airline 2 , registrationState: 1, numVotes: 1)"
+    const tx = await instance.someFunction(();
+    let event = tx.receipt.logs.some(l => { return l.topics[0] == '0x' + sha3(evString) });
+    assert.ok(event, "Stored event not emitted");
+
+    const contract = new web3.eth.Contract(config.airlineData.abi, config.airlineData.address);
+    const contract = web3.eth.contract(config.airlineData.abi, config.airlineData.address);
+    log("EVENTS")
+    log(config.airlineData.getPastEvents())
+
+    config.airlineData.events.getPastEvents({
+      fromBlock: 0,
+      toBlock: 'latest'
+    }, (err, event) => {
+      console.log(err, event)
+    })
+
+    const contract = await web3.eth.Contract(config.airlineData);
+
+    Now get evens depending on what you need
+    contract.getPastEvents("allEvents", {fromBlock: 0, toBlock: "latest"})
+    .then(console.log)  
+*/
+
   });
 
 

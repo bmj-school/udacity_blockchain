@@ -41,7 +41,8 @@ contract AirlineData {
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
     /********************************************************************************************/
-    event AirlineRegistered(address airlineAddress, string name, uint registrationState, uint256 numVotes);
+    // event AirlineRegistered(address airlineAddress, string name, uint registrationState, uint256 numVotes);
+    event AirlineRegisteredData(address airlineAddress, string name, uint registrationState, uint256 numVotes);
     event AirlineProposed(address airlineAddress, string name, address sponsor);
     event VotedIn(address airlineAddress);
     event AirlineFunded(address airlineAddress);
@@ -234,7 +235,7 @@ contract AirlineData {
                 registrationState: RegistrationState.Registered,
                 votes: new address[](0)
                 });
-            emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
+            emit AirlineRegisteredData(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
             airlineAddresses.push(_airlineAddress);
             registeredAirlines.push(_airlineAddress);
 
@@ -251,7 +252,7 @@ contract AirlineData {
             airlines[_airlineAddress].votes.push(_sponsor);
             airlineAddresses.push(_airlineAddress);
             registeredAirlines.push(_airlineAddress);
-            emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
+            emit AirlineRegisteredData(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
 
         // Case 3: > 4 airlines
         } else if (airlineAddresses.length >= 4) {
@@ -292,7 +293,7 @@ contract AirlineData {
             airlines[_airlineAddress].votes.push(msg.sender);
             airlineAddresses.push(_airlineAddress);
             registeredAirlines.push(_airlineAddress);
-            emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
+            emit AirlineRegisteredData(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
 
         // Case 3: > 4 airlines
         } else if (airlineAddresses.length >= 4) {

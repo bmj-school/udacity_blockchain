@@ -43,7 +43,7 @@ contract FlightSuretyApp {
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
     /********************************************************************************************/
-    event AirlineRegistered(address airlineAddress, uint registrationState, uint256 numVotes);
+    event AirlineRegisteredApp(address airlineAddress, uint registrationState, uint256 numVotes);
     event AirlineProposed(address airlineAddress, string name, address sponsor);
     event VotedIn(address airlineAddress);
     event AirlineFunded(address airlineAddress);
@@ -122,7 +122,7 @@ contract FlightSuretyApp {
         
         // (thisAddress, thisName, thisState, thisVotes) = airlineData.getAirline(_airlineAddress);
         (, thisAddress, thisState, thisVotes) = airlineData.getAirline(_airlineAddress); // string, address, uint, uint256 
-        emit AirlineRegistered(
+        emit AirlineRegisteredApp(
             thisAddress,
             thisState,
             thisVotes
