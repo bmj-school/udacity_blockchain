@@ -1,6 +1,5 @@
 # Flight Surety project - overview
 
-
 ## Architecture
 The data persistence smart contracts have been refactored; 
 - `AirlineData` for the Airlines (voting, status, etc.)
@@ -9,20 +8,19 @@ The data persistence smart contracts have been refactored;
 The testing suite reflects this, with unit testing on each contract seperated. 
 - `test\application.js` Integration test, representing the DAPP
     - `test\airlines.js` Unit test, for airline data
-    - `test\flights.js` Unit test, for passengers and flights
+    - `test\flights.js` Unit test, for passengers and flights data
 
 The upgradeability is enforced through the interface contracts found in `FlightSuretyApp.sol`. 
 
 ## Governance
-    /* AIRLINES
-    Each airline is represented by their public address
-    Airlines have various status codes to represent their state in the contract.
-    */
-    enum RegistrationState
-    {
-        Proposed,  // 0
-        Registered // 1
-    }
+### Airlines
+Each airline is represented by their public address. 
+Airlines have various status codes to represent their state in the contract.
+- Proposed
+- Registered
+- Funded
+
+### Passengers
 
 # Smart contract development
 ## Notes

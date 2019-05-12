@@ -18,6 +18,13 @@ contract('Airline Requirement Tests', async (accounts) => {
   var config;
   before('setup contract', async () => {
     config = await Test.Config(accounts);
+
+    // Give airlines permission to call the contract directly, for testing
+    config.airlineData.authorizeCaller(config.testAirlineAccounts[0], {from: config.owner}) 
+    config.airlineData.authorizeCaller(config.testAirlineAccounts[1], {from: config.owner}) 
+    config.airlineData.authorizeCaller(config.testAirlineAccounts[2], {from: config.owner}) 
+    config.airlineData.authorizeCaller(config.testAirlineAccounts[3], {from: config.owner}) 
+    config.airlineData.authorizeCaller(config.testAirlineAccounts[4], {from: config.owner}) 
   });
 
 

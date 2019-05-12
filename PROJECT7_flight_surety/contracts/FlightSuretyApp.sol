@@ -96,9 +96,9 @@ contract FlightSuretyApp {
     * @dev Add an airline to the registration queue
     *
     */
-    function registerAirline (string _airlineName, address _airlineAddress) external pure returns(bool success, uint256 votes)
+    function registerAirline (string _airlineName, address _airlineAddress) external returns(bool success, uint256 votes)
     {
-        airlineData.registerAirline(string _airlineName, address _airlineAddress);
+        airlineData.registerAirline(_airlineName, _airlineAddress);
         return (success, 0);
     }
 
@@ -107,11 +107,7 @@ contract FlightSuretyApp {
     * @dev Register a future flight for insuring.
     *
     */
-    function registerFlight
-                                (
-                                )
-                                external
-                                pure
+    function registerFlight () external pure
     {
 
     }
@@ -122,16 +118,9 @@ contract FlightSuretyApp {
     * If on time, then close insurance claims
     * Otherwise, pay out insured (CODE 20)
     */
-    function processFlightStatus
-                                (
-                                    address airline,
-                                    string memory flight,
-                                    uint256 timestamp,
-                                    uint8 statusCode
-                                )
-                                internal
-                                pure
+    function processFlightStatus ( address airline, string memory flight, uint256 timestamp, uint8 statusCode) internal pure 
     {
+
     }
 
 

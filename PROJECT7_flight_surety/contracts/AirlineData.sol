@@ -182,7 +182,7 @@ contract AirlineData {
         return registeredAirlines.length.div(2);
     }
 
-
+    // Authorization
     function authorizeCaller ( address contractAddress) external requireContractOwner
     {
         authorizedContracts[contractAddress] = true;
@@ -217,7 +217,7 @@ contract AirlineData {
    /**
     * @dev Add an airline to the registration queue
     */
-    function registerAirline(string _airlineName, address _airlineAddress) external
+    function registerAirline(string _airlineName, address _airlineAddress) external requireCallerAuthorized
     {
         // Case 1: Only existing airlines can register new airlines, <= 4 airlines
         if (airlineAddresses.length < 4){
