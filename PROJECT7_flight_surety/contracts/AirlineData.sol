@@ -320,7 +320,12 @@ contract AirlineData {
     }
 
 
-    function vote(address _voter, address _address) external requireAirlineExists(_address) requireAirlineExists(msg.sender) requireCallerAuthorized returns(uint) {
+    function vote(address _voter, address _address) external 
+        requireAirlineExists(_address) 
+        requireAirlineExists(_voter) 
+        requireCallerAuthorized returns(uint) 
+        {
+
         require(!addressInList(airlines[_address].votes, _voter), 'You have already voted for this airline');
         airlines[_address].votes.push(_voter);
 
