@@ -7,6 +7,11 @@ The data persistence smart contracts have been refactored;
 - `FlightData` for the flights and passengers
 
 The testing suite reflects this, with unit testing on each contract seperated. 
+- `test\application.js` Integration test, representing the DAPP
+    - `test\airlines.js` Unit test, for airline data
+    - `test\flights.js` Unit test, for passengers and flights
+
+The upgradeability is enforced through the interface contracts found in `FlightSuretyApp.sol`. 
 
 ## Governance
     /* AIRLINES
