@@ -109,14 +109,13 @@ contract('Application Requirement Tests', async (accounts) => {
       'You have already voted for this airline'
     )
 
-/*
     // Add another vote
-    await config.airlineData.vote(config.testAirlineAccounts[4], {from: config.testAirlineAccounts[3]})
+    await config.flightSuretyApp.vote(config.testAirlineAccounts[4], {from: config.testAirlineAccounts[3]})
     thisAirline = await config.airlineData.getAirline(config.testAirlineAccounts[4])
     log(`Fifth airline, another vote: name=${thisAirline[0]}, state=${thisAirline[2]}, votes=${thisAirline[3]}`)
     
     // Add another vote, assert voted
-    tx = await config.airlineData.vote(config.testAirlineAccounts[4], {from: config.testAirlineAccounts[1]})
+    tx = await config.flightSuretyApp.vote(config.testAirlineAccounts[4], {from: config.testAirlineAccounts[1]})
     
     truffleAssert.eventEmitted(tx, 'VotedIn');
     thisAirline = await config.airlineData.getAirline(config.testAirlineAccounts[4])
@@ -124,7 +123,7 @@ contract('Application Requirement Tests', async (accounts) => {
 
     assert.equal(thisAirline[2], 1, 'This airline should be status=registered')
     assert.equal(await config.airlineData.getNumRegisteredAirlines(), 5, '5 airlines should be registered')
-    */
+    log(`Fifth voted in: name=${thisAirline[0]}, state=${thisAirline[2]}, votes=${thisAirline[3]}`)
   });
 
   it(`Airline can be registered, but does not participate in contract until it submits funding of 10 ether`, async function () {
