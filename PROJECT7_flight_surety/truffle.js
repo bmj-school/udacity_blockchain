@@ -1,3 +1,5 @@
+OBSELETE - SEE https://github.com/MarcusJones/udacity_blockchain_project7
+
 var HDWalletProvider = require("truffle-hdwallet-provider");
 var mnemonic = "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat";
 // var mnemonic = "spirit supply whale amount human item harsh scare congress discover talent hamster";
