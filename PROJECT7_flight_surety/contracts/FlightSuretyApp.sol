@@ -33,11 +33,17 @@ contract FlightSuretyApp {
 
     address private contractOwner;          // Account used to deploy contract
 
+    // struct Airline {
+    //     string name;
+    //     address airlineAddress;
+    //     uint registrationState; 
+    //     address[] votes; 
+    // }
 
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
     /********************************************************************************************/
-    event AirlineRegistered(address airlineAddress, string name, uint registrationState, uint256 numVotes);
+    event AirlineRegistered(address airlineAddress, uint registrationState, uint256 numVotes);
     event AirlineProposed(address airlineAddress, string name, address sponsor);
     event VotedIn(address airlineAddress);
     event AirlineFunded(address airlineAddress);
@@ -109,12 +115,18 @@ contract FlightSuretyApp {
     {
         airlineData.registerAirlineData(msg.sender, _airlineName, _airlineAddress);
 
+        // string thisName = "TODO FIX";
+        address thisAddress;
+        uint thisState;
+        uint256 thisVotes;
         
-        AirlineRegistered(
-            _airlineAddress,
-            _airlineName, 
-            uint(airlineData.airlines[_airlineAddress].registrationState), 
-            airlineData.airlines[_airlineAddress].votes.length);
+        // (thisAddress, thisName, thisState, thisVotes) = airlineData.getAirline(_airlineAddress);
+        (, thisAddress, thisState, thisVotes) = airlineData.getAirline(_airlineAddress); // string, address, uint, uint256 
+        emit AirlineRegistered(
+            thisAddress,
+            thisState,
+            thisVotes
+        );
 
         return (success, 0);
     }
@@ -341,6 +353,7 @@ contract FlightSuretyApp {
 contract AirlineData {
     // function registerAirline(string _airlineName, address _airlineAddress) external;
     function registerAirlineData(address _sponsor, string _airlineName, address _airlineAddress) external;
+    function getAirline(address _airlineAddress) external view returns (string, address, uint, uint256);
 }
 
 contract FlightData {

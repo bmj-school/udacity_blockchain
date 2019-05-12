@@ -183,6 +183,11 @@ contract AirlineData {
         return registeredAirlines.length.div(2);
     }
 
+    // function getAirline(address _airlineAddress) external view requireAirlineExists returns (address, string, uint, uint)  {
+    //     return (_airlineAddress, airlines[_airlineAddress]._airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
+    // }
+
+
     // Authorization
     function authorizeCaller ( address contractAddress) external requireContractOwner
     {
