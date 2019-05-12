@@ -20,6 +20,8 @@ contract('Application Requirement Tests', async (accounts) => {
 
   before('setup contract', async () => {
     config = await Test.Config(accounts);
+    // Authorize the DApp to modify data
+    config.airlineData.authorizeCaller(config.flightSuretyApp.address, {from: config.owner})
   });  
 
   it(`First test...`, async function () {
