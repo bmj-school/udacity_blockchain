@@ -31,7 +31,7 @@ Follow up - Constructor can't call a function?
 ## Ganache testing
 Start ganache with the same seed phrase as specified in truffle configuration `truffle.js`.
 
-`ganache-cli -p 8545 --gasLimit 10000000 -m "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat"`
+`ganache-cli -p 8545 --gasLimit 20000000 -m "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat"`
 
 ## Faster testing
 Run `truffle develop` to start the development blockchain (not ganache)

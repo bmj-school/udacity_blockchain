@@ -24,15 +24,13 @@ contract('Application Requirement Tests', async (accounts) => {
     config.airlineData.authorizeCaller(config.flightSuretyApp.address, {from: config.owner})
   });  
 
-  it(`First test...`, async function () {
-    assert.equal(true, true, "message");
-  });
-
-
   it(`First airline is registered when contract is deployed`, async function () {
     // Constructor should register an airline
     numAirlines = await config.airlineData.getNumAirlines();
     assert.equal(numAirlines, 1, "One airline registered");
+    thisAirline = await config.airlineData.getAirline(config.testAirlineAccounts[0]) 
+    log(`First airline: name=${thisAirline[0]}, address=${thisAirline[1]}, state=${thisAirline[2]}, votes=${thisAirline[3]}`)
+
     // thisAirline = await config.airlineData.getAirline(config.testAirlineAccounts[0]) 
     // log(`First airline name: ${thisAirline[0]}`)
     // assert.equal(thisAirline[1], config.testAirlineAccounts[0], 'First airline not matching configuration')
@@ -42,7 +40,7 @@ contract('Application Requirement Tests', async (accounts) => {
   it(`Only existing airline may register a new airline until there are at least four airlines registered`, async function () {
     // Register 2
     tx = await config.flightSuretyApp.registerAirline('Airline 2', config.testAirlineAccounts[1], {from: config.testAirlineAccounts[0]})
-    log(tx)
+    // log(tx)
     truffleAssert.eventEmitted(tx, 'AirlineRegistered', (ev) => { return ev.name === 'Airline 2' });
     assert.equal(await config.flightData.getNumAirlines(), 2, "Two are not registered");
 

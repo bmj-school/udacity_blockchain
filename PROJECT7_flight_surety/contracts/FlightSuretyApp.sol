@@ -98,7 +98,7 @@ contract FlightSuretyApp {
     */
     function registerAirline (string _airlineName, address _airlineAddress) external returns(bool success, uint256 votes)
     {
-        airlineData.registerAirline(_airlineName, _airlineAddress);
+        airlineData.registerAirlineData(msg.sender, _airlineName, _airlineAddress);
         return (success, 0);
     }
 
@@ -322,7 +322,8 @@ contract FlightSuretyApp {
 
 
 contract AirlineData {
-    function registerAirline(string _airlineName, address _airlineAddress) external;
+    // function registerAirline(string _airlineName, address _airlineAddress) external;
+    function registerAirlineData(address _sponsor, string _airlineName, address _airlineAddress) external;
 }
 
 contract FlightData {

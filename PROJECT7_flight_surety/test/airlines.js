@@ -33,7 +33,7 @@ contract('Airline Requirement Tests', async (accounts) => {
     numAirlines = await config.airlineData.getNumAirlines();
     assert.equal(numAirlines, 1, "One airline registered");
     thisAirline = await config.airlineData.getAirline(config.testAirlineAccounts[0]) 
-    log(`First airline name: ${thisAirline[0]}`)
+    log(`First airline: name=${thisAirline[0]}, address=${thisAirline[1]}, state=${thisAirline[2]}, votes=${thisAirline[3]}`)
     assert.equal(thisAirline[1], config.testAirlineAccounts[0], 'First airline not matching configuration')
   });
 

@@ -214,13 +214,67 @@ contract AirlineData {
     /*                                     SMART CONTRACT FUNCTIONS                             */
     /********************************************************************************************/
 
+
    /**
     * @dev Add an airline to the registration queue
     */
+    function registerAirlineData(address _sponsor, string _airlineName, address _airlineAddress) external requireCallerAuthorized
+    {
+        // Case 1 First airline is added without sponsorship required
+        if (airlineAddresses.length == 0){
+            airlines[_airlineAddress] = Airline({
+                name: _airlineName,
+                airlineAddress: _airlineAddress,
+                registrationState: RegistrationState.Registered,
+                votes: new address[](0)
+                });
+            emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
+            airlineAddresses.push(_airlineAddress);
+            registeredAirlines.push(_airlineAddress);
+
+        // Case 2 Only existing airlines can register new airlines, <= 4 airlines
+        } else if (airlineAddresses.length < 4){
+            require(addressInList(airlineAddresses, _sponsor), 'Only existing airlines can register new airlines');
+            airlines[_airlineAddress] = Airline({
+                name: _airlineName,
+                airlineAddress: _airlineAddress,
+                registrationState: RegistrationState.Registered,
+                votes: new address[](0)
+                });
+            // The sponsoring airline automatically votes 
+            airlines[_airlineAddress].votes.push(_sponsor);
+            airlineAddresses.push(_airlineAddress);
+            registeredAirlines.push(_airlineAddress);
+            emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
+
+        // Case 3: > 4 airlines
+        } else if (airlineAddresses.length >= 4) {
+            require(addressInList(airlineAddresses, _sponsor), 'Only existing airlines can propose new airlines');
+            airlines[_airlineAddress] = Airline({
+                name: _airlineName,
+                airlineAddress: _airlineAddress,
+                registrationState: RegistrationState.Proposed,
+                votes: new address[](0)
+                });
+            // The sponsoring airline automatically votes 
+            airlines[_airlineAddress].votes.push(_sponsor);
+            airlineAddresses.push(_airlineAddress);
+            emit AirlineProposed(_airlineAddress, _airlineName, _sponsor);
+        }
+    }
+
+   /**
+    * @dev Add an airline to the registration queue 
+    * TODO: This method is obselete, superced by registerAirlineData!
+    */
     function registerAirline(string _airlineName, address _airlineAddress) external requireCallerAuthorized
     {
-        // Case 1: Only existing airlines can register new airlines, <= 4 airlines
-        if (airlineAddresses.length < 4){
+        // Case 1 First airline is automatically added
+        if (airlineAddresses.length == 0){
+
+
+        // Case 2 Only existing airlines can register new airlines, <= 4 airlines
+        } else if (airlineAddresses.length < 4){
             require(addressInList(airlineAddresses, msg.sender), 'Only existing airlines can register new airlines');
             airlines[_airlineAddress] = Airline({
                 name: _airlineName,
@@ -228,11 +282,13 @@ contract AirlineData {
                 registrationState: RegistrationState.Registered,
                 votes: new address[](0)
                 });
+            // The sponsoring airline automatically votes 
+            airlines[_airlineAddress].votes.push(msg.sender);
             airlineAddresses.push(_airlineAddress);
             registeredAirlines.push(_airlineAddress);
             emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
 
-        // Case 2: > 4 airlines
+        // Case 3: > 4 airlines
         } else if (airlineAddresses.length >= 4) {
             require(addressInList(airlineAddresses, msg.sender), 'Only existing airlines can propose new airlines');
             airlines[_airlineAddress] = Airline({
