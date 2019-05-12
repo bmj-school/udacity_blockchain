@@ -19,6 +19,8 @@ contract FlightSuretyApp {
     AirlineData airlineData;
     FlightData flightData;
 
+    uint public AIRLINE_FUNDING_AMOUNT = 10 ether;       
+
     /********************************************************************************************/
     /*                                       DATA VARIABLES                                     */
     /********************************************************************************************/
@@ -77,6 +79,12 @@ contract FlightSuretyApp {
         _;
     }
 
+    modifier requireSufficientFund() {
+        require(msg.value >= AIRLINE_FUNDING_AMOUNT, "Minimum funding level not met");
+        _;
+    }
+    
+
     /********************************************************************************************/
     /*                                       CONSTRUCTOR                                        */
     /********************************************************************************************/
@@ -111,7 +119,7 @@ contract FlightSuretyApp {
     * @dev Add an airline to the registration queue
     *
     */
-    function registerAirline (string _airlineName, address _airlineAddress) external returns(bool success, uint256 votes)
+    function registerAirline (string _airlineName, address _airlineAddress) external requireIsOperational returns(bool success, uint256 votes)
     {
         airlineData.registerAirlineData(msg.sender, _airlineName, _airlineAddress);
 
@@ -131,10 +139,17 @@ contract FlightSuretyApp {
         return (success, 0);
     }
 
-    function vote(address newAirline) external
+    function vote(address newAirline) external requireIsOperational
     {
         airlineData.vote(msg.sender, newAirline);
     }    
+
+    function fund() public payable requireIsOperational requireSufficientFund
+    {
+        // address(flightSuretyData).transfer(msg.value);
+        airlineData.fundAirline(msg.sender);
+    }
+
 
    /**
     * @dev Register a future flight for insuring.
@@ -359,6 +374,7 @@ contract AirlineData {
     function registerAirlineData(address _sponsor, string _airlineName, address _airlineAddress) external;
     function getAirline(address _airlineAddress) external view returns (string, address, uint, uint256);
     function vote(address _voter, address _address) external returns(uint);
+    function fundAirline (address funder) external payable;
 }
 
 contract FlightData {

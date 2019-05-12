@@ -14,7 +14,7 @@ contract AirlineData {
     bool private operational = true;                                    // Blocks all state changes throughout the contract if false
     mapping(address => bool) private authorizedContracts;
 
-    uint public airlineAnte = 10 ether;       
+
     /* AIRLINES
     Each airline is represented by their public address
     Airlines have various status codes to represent their state in the contract.
@@ -130,10 +130,6 @@ contract AirlineData {
         _;
     }
 
-    modifier requireSufficientFund() {
-        require(msg.value >= airlineAnte, "Minimum funding level not met");
-        _;
-    }
     /********************************************************************************************/
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
@@ -359,10 +355,10 @@ contract AirlineData {
         }
     }
 
-    function fundAirline () external payable requireAirlineRegistered(msg.sender) requireSufficientFund() 
+    function fundAirline (address funder) external payable requireAirlineRegistered(funder) 
     {   
-        airlines[msg.sender].registrationState = RegistrationState.Funded;
-        emit AirlineFunded(msg.sender);
+        airlines[funder].registrationState = RegistrationState.Funded;
+        emit AirlineFunded(funder);
     }
 
 }
