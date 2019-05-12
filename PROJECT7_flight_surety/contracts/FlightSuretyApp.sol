@@ -131,6 +131,10 @@ contract FlightSuretyApp {
         return (success, 0);
     }
 
+    function vote(address newAirline) external
+    {
+        airlineData.vote(msg.sender, newAirline);
+    }    
 
    /**
     * @dev Register a future flight for insuring.
@@ -354,6 +358,7 @@ contract AirlineData {
     // function registerAirline(string _airlineName, address _airlineAddress) external;
     function registerAirlineData(address _sponsor, string _airlineName, address _airlineAddress) external;
     function getAirline(address _airlineAddress) external view returns (string, address, uint, uint256);
+    function vote(address _voter, address _address) external returns(uint);
 }
 
 contract FlightData {

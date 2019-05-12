@@ -274,7 +274,7 @@ contract AirlineData {
     * @dev Add an airline to the registration queue 
     * TODO: This method is obselete, superced by registerAirlineData!
     */
-    function registerAirline(string _airlineName, address _airlineAddress) external requireCallerAuthorized
+    function registerAirlineOld(string _airlineName, address _airlineAddress) external requireCallerAuthorized
     {
         // Case 1 First airline is automatically added
         if (airlineAddresses.length == 0){
@@ -319,7 +319,25 @@ contract AirlineData {
         );
     }
 
-    function vote (address _address) external requireAirlineExists(_address) requireAirlineExists(msg.sender) returns(uint) {
+
+    function vote(address _voter, address _address) external requireAirlineExists(_address) requireAirlineExists(msg.sender) requireCallerAuthorized returns(uint) {
+        require(!addressInList(airlines[_address].votes, _voter), 'You have already voted for this airline');
+        airlines[_address].votes.push(_voter);
+
+
+        uint voteThreshold = registeredAirlines.length.div(2);
+        if (airlines[_address].votes.length > voteThreshold) {
+            airlines[_address].registrationState = RegistrationState.Registered;
+            registeredAirlines.push(_address);
+            emit VotedIn(_address);
+            return voteThreshold;
+        }
+        else {
+            return voteThreshold;
+        }
+    }
+
+    function voteOld (address _address) external requireAirlineExists(_address) requireAirlineExists(msg.sender) returns(uint) {
         require(!addressInList(airlines[_address].votes, msg.sender), 'You have already voted for this airline');
         airlines[_address].votes.push(msg.sender);
 
