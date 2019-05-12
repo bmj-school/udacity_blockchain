@@ -14,7 +14,7 @@ contract AirlineData {
     bool private operational = true;                                    // Blocks all state changes throughout the contract if false
     mapping(address => bool) private authorizedContracts;
 
-    uint public airlineAnte = 10 ether;       
+
     /* AIRLINES
     Each airline is represented by their public address
     Airlines have various status codes to represent their state in the contract.
@@ -41,7 +41,8 @@ contract AirlineData {
     /********************************************************************************************/
     /*                                       EVENT DEFINITIONS                                  */
     /********************************************************************************************/
-    event AirlineRegistered(address airlineAddress, string name, uint registrationState, uint256 numVotes);
+    // event AirlineRegistered(address airlineAddress, string name, uint registrationState, uint256 numVotes);
+    event AirlineRegisteredData(address airlineAddress, string name, uint registrationState, uint256 numVotes);
     event AirlineProposed(address airlineAddress, string name, address sponsor);
     event VotedIn(address airlineAddress);
     event AirlineFunded(address airlineAddress);
@@ -129,10 +130,6 @@ contract AirlineData {
         _;
     }
 
-    modifier requireSufficientFund() {
-        require(msg.value >= airlineAnte, "Minimum funding level not met");
-        _;
-    }
     /********************************************************************************************/
     /*                                       UTILITY FUNCTIONS                                  */
     /********************************************************************************************/
@@ -234,7 +231,7 @@ contract AirlineData {
                 registrationState: RegistrationState.Registered,
                 votes: new address[](0)
                 });
-            emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
+            emit AirlineRegisteredData(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
             airlineAddresses.push(_airlineAddress);
             registeredAirlines.push(_airlineAddress);
 
@@ -251,7 +248,7 @@ contract AirlineData {
             airlines[_airlineAddress].votes.push(_sponsor);
             airlineAddresses.push(_airlineAddress);
             registeredAirlines.push(_airlineAddress);
-            emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
+            emit AirlineRegisteredData(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
 
         // Case 3: > 4 airlines
         } else if (airlineAddresses.length >= 4) {
@@ -273,7 +270,7 @@ contract AirlineData {
     * @dev Add an airline to the registration queue 
     * TODO: This method is obselete, superced by registerAirlineData!
     */
-    function registerAirline(string _airlineName, address _airlineAddress) external requireCallerAuthorized
+    function registerAirlineOld(string _airlineName, address _airlineAddress) external requireCallerAuthorized
     {
         // Case 1 First airline is automatically added
         if (airlineAddresses.length == 0){
@@ -292,7 +289,7 @@ contract AirlineData {
             airlines[_airlineAddress].votes.push(msg.sender);
             airlineAddresses.push(_airlineAddress);
             registeredAirlines.push(_airlineAddress);
-            emit AirlineRegistered(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
+            emit AirlineRegisteredData(_airlineAddress, _airlineName, uint(airlines[_airlineAddress].registrationState), airlines[_airlineAddress].votes.length);
 
         // Case 3: > 4 airlines
         } else if (airlineAddresses.length >= 4) {
@@ -318,7 +315,30 @@ contract AirlineData {
         );
     }
 
-    function vote (address _address) external requireAirlineExists(_address) requireAirlineExists(msg.sender) returns(uint) {
+
+    function vote(address _voter, address _address) external 
+        requireAirlineExists(_address) 
+        requireAirlineExists(_voter) 
+        requireCallerAuthorized returns(uint) 
+        {
+
+        require(!addressInList(airlines[_address].votes, _voter), 'You have already voted for this airline');
+        airlines[_address].votes.push(_voter);
+
+
+        uint voteThreshold = registeredAirlines.length.div(2);
+        if (airlines[_address].votes.length > voteThreshold) {
+            airlines[_address].registrationState = RegistrationState.Registered;
+            registeredAirlines.push(_address);
+            emit VotedIn(_address);
+            return voteThreshold;
+        }
+        else {
+            return voteThreshold;
+        }
+    }
+
+    function voteOld (address _address) external requireAirlineExists(_address) requireAirlineExists(msg.sender) returns(uint) {
         require(!addressInList(airlines[_address].votes, msg.sender), 'You have already voted for this airline');
         airlines[_address].votes.push(msg.sender);
 
@@ -335,10 +355,10 @@ contract AirlineData {
         }
     }
 
-    function fundAirline () external payable requireAirlineRegistered(msg.sender) requireSufficientFund() 
+    function fundAirline (address funder) external payable requireAirlineRegistered(funder) 
     {   
-        airlines[msg.sender].registrationState = RegistrationState.Funded;
-        emit AirlineFunded(msg.sender);
+        airlines[funder].registrationState = RegistrationState.Funded;
+        emit AirlineFunded(funder);
     }
 
 }

@@ -41,7 +41,7 @@ contract('Airline Requirement Tests', async (accounts) => {
   it(`Only existing airline may register a new airline until there are at least four airlines registered`, async function () {
     // Register 2
     tx = await config.airlineData.registerAirline('Airline 2', config.testAirlineAccounts[1], {from: config.testAirlineAccounts[0]})
-    truffleAssert.eventEmitted(tx, 'AirlineRegistered', (ev) => { return ev.name === 'Airline 2' });
+    truffleAssert.eventEmitted(tx, 'AirlineRegisteredData', (ev) => { return ev.name === 'Airline 2' });
     assert.equal(await config.airlineData.getNumAirlines(), 2, "Two are not registered");
 
     // Register 3
