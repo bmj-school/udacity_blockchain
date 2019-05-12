@@ -3,6 +3,7 @@ pragma solidity ^0.4.25;
 import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 contract AirlineData {
+    // TODO: Move the register and voting logic into DApp contract
     using SafeMath for uint256;
 
     /********************************************************************************************/
@@ -32,7 +33,7 @@ contract AirlineData {
         address[] votes; // This is the list of addresses who have voted for this airline
     }
 
-    mapping(address => Airline) private airlines;
+    mapping(address => Airline) public airlines;
     address[] airlineAddresses;
     address[] registeredAirlines;
 
@@ -42,9 +43,9 @@ contract AirlineData {
     /********************************************************************************************/
     event AirlineRegistered(address airlineAddress, string name, uint registrationState, uint256 numVotes);
     event AirlineProposed(address airlineAddress, string name, address sponsor);
-    event AirlineStatus(address airlineAddress, string name, uint256 registrationState, uint256 numVotes);
-    event AirlineFunded(address airlineAddress);
     event VotedIn(address airlineAddress);
+    event AirlineFunded(address airlineAddress);
+    event AirlineStatus(address airlineAddress, string name, uint256 registrationState, uint256 numVotes);
 
     /********************************************************************************************/
     /*                                       CONSTUCTOR                                         */

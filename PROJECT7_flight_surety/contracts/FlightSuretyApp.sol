@@ -35,6 +35,15 @@ contract FlightSuretyApp {
 
 
     /********************************************************************************************/
+    /*                                       EVENT DEFINITIONS                                  */
+    /********************************************************************************************/
+    event AirlineRegistered(address airlineAddress, string name, uint registrationState, uint256 numVotes);
+    event AirlineProposed(address airlineAddress, string name, address sponsor);
+    event VotedIn(address airlineAddress);
+    event AirlineFunded(address airlineAddress);
+
+
+    /********************************************************************************************/
     /*                                       FUNCTION MODIFIERS                                 */
     /********************************************************************************************/
 
@@ -99,6 +108,14 @@ contract FlightSuretyApp {
     function registerAirline (string _airlineName, address _airlineAddress) external returns(bool success, uint256 votes)
     {
         airlineData.registerAirlineData(msg.sender, _airlineName, _airlineAddress);
+
+        
+        AirlineRegistered(
+            _airlineAddress,
+            _airlineName, 
+            uint(airlineData.airlines[_airlineAddress].registrationState), 
+            airlineData.airlines[_airlineAddress].votes.length);
+
         return (success, 0);
     }
 
