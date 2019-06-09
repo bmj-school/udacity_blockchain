@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<script src="main.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>FlightSurety</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<!-- // TODO: onload refresh all! -->
+<!-- Airlines -->
+<div>
+	<h2>Airlines</h2>
+	<input type="button" value="<Update Airlines>" onclick="airlinesWrite()" />
+	<p>Currently registered airlines:</p>
+	<table class="table table-sm table-hover table-striped table-dark" style="text-align:center">
+		<thead>
+			<tr>
+				<th>Airline</th>
+				<th>Address</th>
+			</tr>
+		</thead>
+		<tbody id="airlinesTable">
+		</tbody>
+	</table>
+</div>
+
+<!-- Flights -->
+<div>
+	<h2>Flights</h2>
+	<input type="button" value="<Update Flights>" onclick="flightsDropdownWrite()" />
+	<h3 id="selectedFlight">Selected flight: None</h3>
+	
+	<select id="thisFlight" onchange="selectFlight()">
+		<option value="TP344">TP344</option>
+		<option value="TY444">TY444</option>
+		<option value="Z44">Z44</option>
+	</select>
+	<br>
+</div>
+
+<!-- Passengers -->
+<div>
+	<h2>Passengers</h2>
+</div>
+<div>
+	<h2>TESTING</h2>
+</div>
+<p>New para</p>
+<form>
+	Enter:<input type="text" id="number" name="number" />
+	<input type="button" value="buve" onclick="getCube()" />
+</form>
+
+<div>
+	<p>TESTING</p>
+	<form name="myForm">
+		<input type="button" value="comment" onclick="showCommentForm()">
+		<div id="mylocation"></div>
+	</form>
+</div>
