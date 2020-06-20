@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>FlightSurety</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">FlightSurety DAPP</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+
+    <main class="container">
+        <div id="display-wrapper" class="top-20">
+        </div>
+    </main>
+    <main class="container">
+         <div  class='flexbox'>
+            <div class='user-menu'>
+                <h3>Admin</h3>
+                <div class="action last">
+                  <label class="form">Contract Owner can Authorise users
+                    <input type="text" id="auth-user">                   
+                  </label>
+                  <btn class="btn btn-primary " id="authorise-user">Authorise User</btn>
+                </div>
+            </div>
+          </div>
+    </main>
+    <main class="container">
+            <div class='user-menu'>
+              <h3>Airline</h3>
+              <div class="action border-bottom">
+                <label class="form">Airline (address)
+                  <input type="text" id="regAirlineAddress">
+                </label>
+                  <btn class="btn btn-primary" id="register-airline">Register Airline</btn>
+              </div>
+              <div class="action last">
+                <label class="form">Amount
+                  <input type="number" id="fundAmount" min="10">
+                </label>
+                <btn class="btn btn-primary" id="fund">Fund Seed Money</btn>
+              </div>
+            </div>  
+    </main>
+    <main class="container">
+            <div class='user-menu'>
+              <h3>Flights</h3>
+              <div class="action border-bottom">
+                <label class="form">Flight Reference
+                  <input type="text" id="regFlightRef">
+                </label>
+                <label class="form">From
+                  <input type="text" id="regFlightFrom">
+                </label>
+                <label class="form">To
+                  <input type="text" id="regFlightTo">
+                </label>
+                <label class="form">Price (ETH)
+                  <input type="number" id="regFlightPrice" min='0'>
+                </label>
+                <label class="form">Take Off
+                  <input type="datetime-local" id="regFlightTakeOff">
+                </label>
+                <label class="form">Landing
+                  <input type="datetime-local" id="regFlightLanding">
+                </label>
+                <btn class="btn btn-primary" id="register-flight">Register Flight</btn>
+              </div>
+              
+            </div>
+    </main>
+    <main class="container">
+            <div class='user-menu'>
+              <h3>Purchase Insurance</h3>
+              <div class="action border-bottom">
+                <label class="form">Flight (FlightIndex - price - Origin - Destination - Start time - Land Time)
+                  <input list="flights" id="buyFlight">
+                  <datalist id="flights">
+                  </datalist>
+                </label>
+                <label class="form">Insurance amount
+                  <input type="number" id="buyAmount" min='0' max='1' step='0.1'>
+                </label>
+                <btn class="btn btn-primary" id="buy">Book Flight</btn>
+              </div>
+    </main>
+    <main class="container">
+              <div class="user-menu">
+                <h3>Claim Insurance</h3>
+                <div class="action last">
+                  <p>In case of flight delay, passengers get back 1.5 X the insurance fee paid at booking.<p>
+                  <p>Airlines can withdraw ticket prices paid to them</p>
+                  <btn class="btn btn-primary" id="pay">Claim</btn>
+                </div>
+              </div>
+            </div>
+    </main>
+    <main class="container">
+            <div class='user-menu'>
+              <h3>Oracles</h3>
+              <div class="action last">
+                <label class="form">Flight (Flight Code - Destination - Landing Time)
+                  <input list="oracle-requests" id="oracle-request">
+                  <datalist id="oracle-requests">
+                  </datalist>
+                </label>
+                <btn class="btn btn-primary" id="submit-oracle">Submit to Oracles</btn>
+              </div>
+            </div>
+          </div>
+    </main>
+
+</body>
+
+</html>

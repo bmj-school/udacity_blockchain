@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>FlightSurety</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">FlightSurety</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+
+    <main class="container">
+
+        <!--
+        <div id="display-wrapper" class="top-20">
+        </div>
+        -->
+        
+        <div id="display-wrapper" class="alert alert-success alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <!--
+            <h4 class="alert-heading">Info</h4>
+            <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+            <hr>
+            <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+            -->
+        </div>
+
+
+        <ul class="nav nav-tabs mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="pills-airline-tab" data-toggle="pill" href="#pills-airline" role="tab" aria-controls="pills-airline" aria-selected="true">Airline</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="pills-flight-tab" data-toggle="pill" href="#pills-flight" role="tab" aria-controls="pills-flight" aria-selected="false">Flight</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="pills-passenger-tab" data-toggle="pill" href="#pills-passenger" role="tab" aria-controls="pills-passenger" aria-selected="false">Passenger</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="pills-tabContent">
+            <!----------------->
+            <!-- AIRLINE TAB -->
+            <!----------------->
+            <div class="tab-pane fade show active" id="pills-airline" role="tabpanel" aria-labelledby="pills-airline-tab">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link active" id="v-pills-a-info-tab" data-toggle="pill" href="#v-pills-a-info" role="tab" aria-controls="v-pills-a-info" aria-selected="true">Info</a>
+                            <a class="nav-link" id="v-pills-a-register-tab" data-toggle="pill" href="#v-pills-a-register" role="tab" aria-controls="v-pills-a-register" aria-selected="false">Register</a>
+                            <a class="nav-link" id="v-pills-a-vote-tab" data-toggle="pill" href="#v-pills-a-vote" role="tab" aria-controls="v-pills-a-vote" aria-selected="false">Vote</a>
+                            <a class="nav-link" id="v-pills-a-fund-tab" data-toggle="pill" href="#v-pills-a-fund" role="tab" aria-controls="v-pills-a-fund" aria-selected="false">Fund</a>
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <!------------------>
+                            <!-- Info airline -->
+                            <!------------------>
+                            <div id="v-pills-a-info" class="tab-pane fade show active"role="tabpanel" aria-labelledby="v-pills-a-info-tab">
+                                <table class="table table-sm table-hover table-striped table-dark" style="text-align:center">
+                                    <thead>
+                                        <tr>
+                                        <th scope="col">Airline</th>
+                                        <th scope="col">Added</th>
+                                        <th scope="col">Voted</th>
+                                        <th scope="col">Funded</th>
+                                        <th scope="col">Registered</th>
+                                        <th scope="col">Remaining Votes Needed</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ai-table">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!---------------------->
+                            <!-- Register airline -->
+                            <!---------------------->
+                            <div id="v-pills-a-register" class="tab-pane fade"role="tabpanel" aria-labelledby="v-pills-a-register-tab">
+                                <div class="form-table">
+                                    <!-- Applicant airlines -->
+                                    <div id="ar-airlines-group" class="form-row">
+                                        <div class="form-label form-cell">
+                                            <label for="ar-airlines">Applicant Airline</label>
+                                        </div>
+                                        <div class="form-cell">
+                                            <select id="ar-airlines" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                    <!-- Registered airlines -->
+                                    <div id="ar-registered-airlines-group" class="form-row">
+                                        <div class="form-label form-cell">
+                                            <label for="ar-registered-airlines">Registered Airline</label>
+                                        </div>
+                                        <div class="form-cell">
+                                            <select id="ar-registered-airlines" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                    <!-- Register Button -->
+                                    <div class="form-row">
+                                        <btn id="ar-register-button" class="btn btn-primary">Register</btn>
+                                    </div>
+                                </div>
+                            </div>
+                            <!------------------>
+                            <!-- Vote airline -->
+                            <!------------------>
+                            <div id="v-pills-a-vote" class="tab-pane fade" role="tabpanel" aria-labelledby="v-pills-a-vote-tab">
+                                <div class="form-table">
+                                    <!-- Applicant airlines -->
+                                    <div id="av-airlines-group" class="form-row">
+                                        <div class="form-label form-cell">
+                                            <label for="av-airlines">Applicant Airline</label>
+                                        </div>
+                                        <div class="form-cell">
+                                            <select  id="av-airlines" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                    <!-- Registered airlines -->
+                                    <div id="av-registered-airlines-group" class="form-row top-20">
+                                        <div class="form-label form-cell">
+                                            <label for="av-registered-airlines">Registered Airline</label>
+                                        </div>
+                                        <div class="form-cell">
+                                            <select id="av-registered-airlines" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Vote button -->
+                                    <div class="form-row top-20">
+                                        <btn id="av-vote-button" class="btn btn-primary">Vote</btn>
+                                    </div>
+                                </div>
+                            </div>
+                            <!------------------>
+                            <!-- Fund airline -->
+                            <!------------------>
+                            <div id="v-pills-a-fund" class="tab-pane fade" role="tabpanel" aria-labelledby="v-pills-a-fund-tab">
+                                <div class="form-table">
+                                    <!-- Airlines that need funding -->
+                                    <div id="af-airline-group" class="form-row">
+                                        <div class="form-label form-cell">
+                                            <label for="af-airlines">Airline</label>
+                                        </div>
+                                        <div class="form-cell">
+                                            <select id="af-airlines" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Fund button -->
+                                    <div class="form-row">
+                                        <btn id="af-fund-button" class="btn btn-primary">Fund</btn>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <!---------------->
+            <!-- FLIGHT TAB -->
+            <!---------------->
+            <div id="pills-flight" class="tab-pane fade" role="tabpanel" aria-labelledby="pills-flight-tab">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link active" id="v-pills-f-register-tab" data-toggle="pill" href="#v-pills-f-register" role="tab" aria-controls="v-pills-f-register" aria-selected="true">Register</a>
+                            <a class="nav-link" id="v-pills-f-simulate-tab" data-toggle="pill" href="#v-pills-f-simulate" role="tab" aria-controls="v-pills-f-simulate" aria-selected="false">Simulate</a>
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div id="v-pills-tabContent" class="tab-content">
+                            <!--------------------->
+                            <!-- Register Flight -->
+                            <!--------------------->
+                            <div id="v-pills-f-register" class="tab-pane fade show active" role="tabpanel" aria-labelledby="v-pills-f-register-tab">
+                                <div class="form-table">
+                                    <!-- Airlines -->
+                                    <div id="fr-airline-group" class="form-row">
+                                        <div class="form-label form-cell">
+                                            <label for="fr-airlines">Airline</label>
+                                        </div>
+                                        <div class="form-cell">
+                                            <select id="fr-airlines" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Flight text field -->
+                                    <div class="form-row">
+                                        <div class="form-label form-cell">
+                                            <label for="fr-flight">Flight</label>
+                                        </div>
+                                        <div class="form-cell">
+                                            <input id="fr-flight" type="text">
+                                        </div>
+                                    </div>
+                                    <!-- Register button -->
+                                    <div class="form-row">
+                                        <btn id="fr-register-button" class="btn btn-primary">Register</btn>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Simulate Flight status -->
+                            <div id="v-pills-f-simulate" class="tab-pane fade" role="tabpanel" aria-labelledby="v-pills-f-simulate-tab">
+                                <div class="form-table">
+                                    <!-- Airlines -->
+                                    <div id="fs-airline-group" class="form-row">
+                                        <div class="form-label form-cell">
+                                            <label for="fs-airlines">Airline</label>
+                                        </div>
+                                        <div class="form-cell">
+                                            <select id="fs-airlines" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Flight -->
+                                    <div id="fs-flight-group" class="form-row">
+                                        <div class="form-label form-cell">
+                                            <label for="fs-flights">Flight</label>
+                                        </div>
+                                        <div class="form-cell">
+                                            <select id="fs-flights" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Buy button -->
+                                    <div class="form-row">
+                                        <btn id="fs-submit-oracle-button" class="btn btn-primary">Submit to Oracles</btn>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <!------------------->
+            <!-- PASSENGER TAB -->
+            <!------------------->
+            <div id="pills-passenger" class="tab-pane fade" role="tabpanel" aria-labelledby="pills-passenger-tab">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link active" id="v-pills-p-buy-tab" data-toggle="pill" href="#v-pills-p-buy" role="tab" aria-controls="v-pills-p-buy" aria-selected="true">Buy</a>
+                            <a class="nav-link" id="v-pills-p-payout-tab" data-toggle="pill" href="#v-pills-p-payout" role="tab" aria-controls="v-pills-p-payout" aria-selected="false">Payout</a>
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div id="v-pills-tabContent" class="tab-content">
+                            <!------------------->
+                            <!-- Buy insurance -->
+                            <!------------------->
+                            <div id="v-pills-p-buy" class="tab-pane fade show active" role="tabpanel" aria-labelledby="v-pills-p-buy-tab">
+                                <div class="form-table">
+                                    <!-- Passengers -->
+                                    <div id="pb-passenger-group" class="form-row">
+                                        <div class="form-label form-cell">
+                                            <label for="pb-passengers">Passenger</label>
+                                        </div>
+                                        <div class="form-cell">
+                                            <select id="pb-passengers" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Airlines -->
+                                    <div id="pb-airline-group" class="form-row">
+                                        <div class="form-label form-cell">
+                                            <label for="pb-airlines">Airline</label>
+                                        </div>
+                                        <div class="form-cell">
+                                            <select id="pb-airlines" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Flight -->
+                                    <div id="pb-flight-group" class="form-row">
+                                        <div class="form-label form-cell">
+                                            <label for="pb-flights">Flight</label>
+                                        </div>
+                                        <div class="form-cell">
+                                            <select id="pb-flights" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Amount -->
+                                    <div id="pb-amount-group" class="form-row">
+                                        <div class="form-label form-cell">
+                                            <label for="pb-amounts">Amount (in ether)</label>
+                                        </div>
+                                        <div class="form-cell">
+                                            <select id="pb-amounts" class="form-control">
+                                                <option value="-1">SELECT ONE</option>
+                                                <option value="0.25">0.25</option>
+                                                <option value="0.50">0.50</option>
+                                                <option value="0.75">0.75</option>
+                                                <option value="1.0">1.0</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Buy button -->
+                                    <div class="form-row">
+                                        <btn id="pb-buy-button" class="btn btn-primary">Buy</btn>
+                                    </div>
+                                </div>
+                            </div>
+                            <!------------>
+                            <!-- Payout -->
+                            <!------------>
+                            <div id="v-pills-p-payout" class="tab-pane fade" role="tabpanel" aria-labelledby="v-pills-p-payout-tab">
+                                <div class="form-table">
+                                    <!-- Passengers -->
+                                    <div id="pb-passenger-group" class="form-row">
+                                        <div class="form-label form-cell">
+                                            <label for="pp-passengers">Passenger</label>
+                                        </div>
+                                        <div class="form-cell">
+                                            <select id="pp-passengers" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Buttons -->
+                                    <div class="form-row">
+                                        <!-- Get Payout Balance -->
+                                        <div class="form-cell">
+                                            <btn id="pp-check-button" class="btn btn-primary">Check Payout</btn>&nbsp;
+                                        </div>
+                                        <!-- Withdraw Payout Balance -->
+                                        <div class="form-cell">
+                                            <btn id="pp-withdraw-button" class="btn btn-primary">Withdraw Payout</btn>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </main>
+</body>
+</html>
